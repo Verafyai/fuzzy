@@ -1,0 +1,17 @@
+[package]
+name = "example-vault"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "example_vault"
+crate-type = ["cdylib", "lib"]
+
+[features]
+# The clean control: requires the authority's signature on withdraw and refuses
+# to initialize a vault twice.
+fixed = []
+
+[dependencies]
+abi = { package = "tinysvm-abi", path = "../abi" }

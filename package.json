@@ -4,8 +4,15 @@
   "private": true,
   "description": "Fuzzy: pay-per-run security fuzzing for Solana programs, at fuzzy.verafy.ai",
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "fuzzy": "node bin/fuzzy.js"
+  },
+  "dependencies": {
+    "@solana/kit": "^8.6.0",
+    "litesvm": "^1.6.2"
   }
 }

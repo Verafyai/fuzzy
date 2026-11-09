@@ -1,0 +1,9 @@
+node_modules/
+.next/
+programs/target/
+programs/out/
+*-keypair.json
+reports/
+.env*
+!.env.example
+.vercel

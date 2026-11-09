@@ -1,0 +1,17 @@
+# Benchmark programs for Fuzzy. `example_vault` is deliberately vulnerable;
+# built with `--features fixed` it is the clean control. Zero dependencies:
+# `abi` reads the loader's input buffer (copied from Verafy Harness TinySVM).
+[workspace]
+members = ["abi", "example_vault"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[profile.release]
+overflow-checks = true
+codegen-units = 1
+lto = true
+panic = "abort"
