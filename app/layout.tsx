@@ -25,7 +25,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         {/* The canonical Verafy header: credits, checkout, sign-in and Google Analytics for every Verafy site. */}
         <Script src="https://www.verafy.ai/header/v1/verafy-header.js" strategy="afterInteractive" />
-        <verafy-header product="fuzzy" links="Certifications:/certifications, Method:/method" style={{ display: "block", minHeight: 64, background: "#0B0E12" }} />
+        <verafy-header product="fuzzy" links="Registry:/certifications, Method:/method, Docs:/docs" style={{ display: "block", minHeight: 64, background: "#0B0E12" }}>
+          <nav slot="menu" className="vh-menu" aria-label="Fuzzy">
+            <a href="/">Scan a program</a>
+            <a href="/certifications">Registry and certifications</a>
+            <a href="/method">Method</a>
+            <a href="/docs">Docs</a>
+            <a href="/docs#mcp">MCP server</a>
+            <a href="https://github.com/Verafyai/fuzzy">GitHub</a>
+            <a href="https://devnet.verafy.ai">Verafy Devnet</a>
+          </nav>
+        </verafy-header>
         {children}
         <footer className="page" style={{ paddingTop: 0, paddingBottom: 40 }}>
           <p className="muted" style={{ fontSize: 14, borderTop: "1px solid var(--border)", paddingTop: 20 }}>

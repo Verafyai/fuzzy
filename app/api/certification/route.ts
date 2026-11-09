@@ -19,7 +19,8 @@ export async function GET(request: NextRequest) {
   }
   try {
     const rpcUrl = process.env.DEVNET_RPC_URL || "https://api.devnet.solana.com";
-    return NextResponse.json({ network: "devnet", ...(await lookup(program, { rpcUrl })) }, { headers: CORS });
+    const programRpcUrl = process.env.MAINNET_RPC_URL || "https://api.mainnet-beta.solana.com";
+    return NextResponse.json({ network: "devnet", ...(await lookup(program, { rpcUrl, programRpcUrl })) }, { headers: CORS });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Lookup failed." }, { status: 502, headers: CORS });
   }

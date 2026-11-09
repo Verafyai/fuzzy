@@ -95,29 +95,39 @@ async function rpc(url, method, params) {
  * certification for exactly that build, and check the ruling is past its
  * challenge window.
  */
-export async function lookupCertification(program, { rpcUrl = 'https://api.devnet.solana.com', certificationProgram = CERTIFICATION_PROGRAM } = {}) {
-  const acct = await rpc(rpcUrl, 'getAccountInfo', [program, { encoding: 'base64' }]);
-  if (!acct?.value?.executable) return { program, certified: false, reason: 'not a program on this cluster' };
-  const raw = Buffer.from(acct.value.data[0], 'base64');
-  let programData = raw;
-  if (acct.value.owner === 'BPFLoaderUpgradeab1e11111111111111111111111') {
-    const pdAddr = k.getAddressDecoder().decode(raw.subarray(4, 36));
-    const pd = await rpc(rpcUrl, 'getAccountInfo', [pdAddr, { encoding: 'base64' }]);
-    programData = Buffer.from(pd.value.data[0], 'base64').subarray(45);
-  }
-  const bh = bytecodeHash(programData);
-  const address = await certificationAddress(program, bh, certificationProgram);
-  const cert = await rpc(rpcUrl, 'getAccountInfo', [address, { encoding: 'base64' }]);
+export async function lookupCertification(program, { rpcUrl = 'https://api.devnet.solana.com', programRpcUrl = 'https://api.mainnet-beta.solana.com', cluster, certificationProgram = CERTIFICATION_PROGRAM } = {}) {
+  // Certifications live on devnet. The program may be deployed on devnet, mainnet or both,
+  // with different bytecode on each: check each deployed build, devnet first, unless a cluster is named.
+  const clusters = cluster ? [cluster] : ['devnet', 'mainnet'];
   const slot = await rpc(rpcUrl, 'getSlot', []);
-  if (!cert?.value || cert.value.owner !== certificationProgram) {
-    return { program, bytecodeHash: hex(bh), certificationAddress: address, certified: false, reason: 'no certification for this exact build' };
+  let first = null;
+  for (const c of clusters) {
+    const source = c === 'devnet' ? rpcUrl : programRpcUrl;
+    if (!source) continue;
+    const acct = await rpc(source, 'getAccountInfo', [program, { encoding: 'base64' }]);
+    if (!acct?.value?.executable) continue;
+    const raw = Buffer.from(acct.value.data[0], 'base64');
+    let programData = raw;
+    if (acct.value.owner === 'BPFLoaderUpgradeab1e11111111111111111111111') {
+      const pdAddr = k.getAddressDecoder().decode(raw.subarray(4, 36));
+      const pd = await rpc(source, 'getAccountInfo', [pdAddr, { encoding: 'base64' }]);
+      programData = Buffer.from(pd.value.data[0], 'base64').subarray(45);
+    }
+    const bh = bytecodeHash(programData);
+    const address = await certificationAddress(program, bh, certificationProgram);
+    const cert = await rpc(rpcUrl, 'getAccountInfo', [address, { encoding: 'base64' }]);
+    if (!cert?.value || cert.value.owner !== certificationProgram) {
+      first = first || { program, programCluster: c, bytecodeHash: hex(bh), certificationAddress: address, certified: false, reason: 'no certification for this exact build' };
+      continue;
+    }
+    const d = decodeCertification(Buffer.from(cert.value.data[0], 'base64'));
+    const settled = BigInt(slot) >= BigInt(d.releasableAfterSlot);
+    return {
+      program, programCluster: c, bytecodeHash: hex(bh), certificationAddress: address,
+      certified: d.level > 0 && settled,
+      reason: d.level === 0 ? 'the jury did not certify this build' : settled ? `certified ${d.levelName}` : 'certified, but still inside the challenge window',
+      ...d,
+    };
   }
-  const c = decodeCertification(Buffer.from(cert.value.data[0], 'base64'));
-  const settled = BigInt(slot) >= BigInt(c.releasableAfterSlot);
-  return {
-    program, bytecodeHash: hex(bh), certificationAddress: address,
-    certified: c.level > 0 && settled,
-    reason: c.level === 0 ? 'the jury did not certify this build' : settled ? `certified ${c.levelName}` : 'certified, but still inside the challenge window',
-    ...c,
-  };
+  return first || { program, certified: false, reason: 'not a program on devnet or mainnet' };
 }

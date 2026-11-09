@@ -41,20 +41,28 @@ async function worker() {
       const s = rep.score;
       const sev = {};
       for (const f of rep.findings) sev[f.severity] = (sev[f.severity] || 0) + 1;
+      const leadClasses = {};
+      for (const l of rep.leads) leadClasses[l.class] = (leadClasses[l.class] || 0) + 1;
       row = {
         ...row,
         status: 'scanned',
-        score: s.score, depth: s.depth, ceiling: s.ceiling,
+        score: s.score, depth: s.depth, ceiling: s.ceiling, depthParts: s.depthParts,
         grade: rep.findings.length === 0 && s.depth < 50 ? 'Shallow run' : s.grade,
-        proven: rep.findings.length, provenBySeverity: sev, leads: rep.leads.length,
+        proven: rep.findings.length, provenBySeverity: sev, leads: rep.leads.length, leadClasses,
         transactions: rep.tested?.transactions ?? null,
+        durationMs: rep.tested?.durationMs ?? null,
         state: rep.tested?.state ?? null,
         replayedCalls: rep.tested?.history?.calls ?? 0,
+        replayedFromSlot: rep.tested?.history?.replayedFromSlot ?? null,
+        instructionsTried: (rep.tested?.instructions || []).map((i) => ({ name: i.name, succeeded: i.succeeded, failed: i.failed })),
+        classes: rep.tested?.classes || [],
         idl: Boolean(rep.program?.idl),
         idlInstructions: rep.program?.instructions ?? null,
         upgradeable: rep.program?.upgradeable ?? null,
+        upgradeAuthority: rep.program?.upgradeAuthority ?? null,
+        bytes: rep.program?.bytes ?? null,
         bytecodeSha256: rep.program?.sha256 ?? null,
-        tier: rep.tier?.name || 'Sniff', scannedAt: rep.createdAt,
+        engine: rep.engine, tier: rep.tier?.name || 'Sniff', scannedAt: rep.createdAt,
         certification: 'Not certified',
       };
     } else {
@@ -66,5 +74,13 @@ async function worker() {
   }
 }
 await Promise.all(Array.from({ length: concurrency }, worker));
+const certs = existsSync('data/certifications.json') ? JSON.parse(readFileSync('data/certifications.json', 'utf8')).certifications : [];
+for (const row of results) {
+  const c = certs.find((x) => x.program === row.address);
+  if (c) {
+    row.certification = `Devnet: ${c.levelName}`;
+    row.devnetCertification = { levelName: c.levelName, certification: c.certification, ruling: c.ruling, certifySignature: c.certifySignature, certifiedAt: c.certifiedAt, jurors: c.jurors, families: c.families, jurorsScripted: c.jurorsScripted, bytecodeHash: c.bytecodeHash, reportHash: c.reportHash };
+  }
+}
 writeFileSync('data/registry.json', JSON.stringify({ kind: 'fuzzy.registry/1', engine: 'fuzzy-score/1', source, generatedAt: new Date().toISOString(), programs: results }, null, 1) + '\n');
 console.error('wrote data/registry.json');

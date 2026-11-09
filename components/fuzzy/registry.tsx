@@ -1,12 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Info } from "@/components/fuzzy/info";
+import { COLUMN_HELP, STATE_LABEL, scoreColor } from "@/lib/assessments";
 
 export type RegistryRow = {
   rank: number;
   name: string;
   category: string;
   address: string;
+  description?: string;
   status: "scanned" | "not scanned";
   reason?: string;
   score?: number;
@@ -15,73 +19,134 @@ export type RegistryRow = {
   proven?: number;
   leads?: number;
   state?: string;
-  replayedCalls?: number;
   idl?: boolean;
-  upgradeable?: boolean | null;
-  bytecodeSha256?: string;
   scannedAt?: string;
   certification: string;
+  devnetCertification?: { levelName: string; certification: string };
 };
 
-const STATE: Record<string, string> = { mainnet: "Mainnet replay", synthetic: "From IDL", empty: "No IDL or history" };
-type Sort = "rank" | "score" | "name";
 
+type Sort = "rank" | "score" | "name";
+type View = "cards" | "table";
+
+export const shortDate = (iso?: string) => (iso ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }) : "");
 const short = (a: string) => `${a.slice(0, 4)}…${a.slice(-4)}`;
 
 export function Registry({ rows }: { rows: RegistryRow[] }) {
+  const router = useRouter();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("All");
   const [sort, setSort] = useState<Sort>("rank");
+  const [view, setView] = useState<View>("cards");
+  const [certOnly, setCertOnly] = useState(false);
+  useEffect(() => {
+    try { const v = localStorage.getItem("fuzzy-view"); if (v === "table" || v === "cards") setView(v); } catch {}
+  }, []);
+  const pick = (v: View) => { setView(v); try { localStorage.setItem("fuzzy-view", v); } catch {} };
   const cats = useMemo(() => ["All", ...Array.from(new Set(rows.map((r) => r.category))).sort()], [rows]);
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    const list = rows.filter((r) => (cat === "All" || r.category === cat) && (!needle || r.name.toLowerCase().includes(needle) || r.address.toLowerCase().includes(needle)));
-    return [...list].sort((a, b) => sort === "name" ? a.name.localeCompare(b.name) : sort === "score" ? (b.score ?? -1) - (a.score ?? -1) : a.rank - b.rank);
-  }, [rows, q, cat, sort]);
+    const list = rows.filter((r) => (cat === "All" || r.category === cat) && (!certOnly || r.devnetCertification) && (!needle || r.name.toLowerCase().includes(needle) || r.address.toLowerCase().includes(needle)));
+    return [...list].sort((a, b) => (sort === "name" ? a.name.localeCompare(b.name) : sort === "score" ? (b.score ?? -1) - (a.score ?? -1) : a.rank - b.rank));
+  }, [rows, q, cat, sort, certOnly]);
+  const href = (r: RegistryRow) => `/programs/${r.address}`;
 
   return (
     <div className="stack" style={{ gap: 12 }}>
       <div className="row" style={{ gap: 10 }}>
-        <input className="input" style={{ flex: "1 1 260px" }} placeholder="Search by name or address" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search programs" />
+        <input className="input" style={{ flex: "1 1 240px" }} placeholder="Search by name or address" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search programs" />
         <select className="input" value={cat} onChange={(e) => setCat(e.target.value)} aria-label="Category">{cats.map((c) => <option key={c}>{c}</option>)}</select>
         <select className="input" value={sort} onChange={(e) => setSort(e.target.value as Sort)} aria-label="Sort">
           <option value="rank">Most used first</option>
           <option value="score">Highest score first</option>
           <option value="name">Name</option>
         </select>
+        <div className="seg" role="group" aria-label="View">
+          <button type="button" aria-pressed={view === "cards"} onClick={() => pick("cards")}>Cards</button>
+          <button type="button" aria-pressed={view === "table"} onClick={() => pick("table")}>Table</button>
+        </div>
       </div>
-      <p className="muted" style={{ fontSize: 13 }}>{shown.length} of {rows.length} programs</p>
-      <div className="tablewrap">
-        <table className="data registry">
-          <thead>
-            <tr><th>#</th><th>Program</th><th>Category</th><th style={{ textAlign: "right" }}>Score</th><th>Run</th><th style={{ textAlign: "right" }}>Proven</th><th style={{ textAlign: "right" }}>Leads</th><th>Tested on</th><th>Certification</th></tr>
-          </thead>
-          <tbody>
-            {shown.map((r) => (
-              <tr key={r.address}>
-                <td className="mono muted">{r.rank}</td>
-                <td>
-                  <div>{r.name}</div>
-                  <a className="mono" style={{ fontSize: 12 }} href={`https://explorer.solana.com/address/${r.address}`} title={r.address}>{short(r.address)}</a>
-                </td>
-                <td className="muted">{r.category}</td>
-                {r.status === "scanned" ? (
-                  <>
-                    <td className="mono" style={{ textAlign: "right", fontSize: 16, color: "var(--text)" }}>{r.score}</td>
-                    <td className="muted">{r.grade}</td>
-                    <td className="mono" style={{ textAlign: "right" }}>{r.proven ? <span style={{ color: "var(--critical)" }}>{r.proven}</span> : 0}</td>
-                    <td className="mono muted" style={{ textAlign: "right" }}>{r.leads}</td>
-                    <td className="muted">{STATE[r.state || "empty"]}</td>
-                  </>
-                ) : (
-                  <td colSpan={5} className="muted">Not scanned: {r.reason}</td>
-                )}
-                <td className="muted">{r.certification}</td>
+      <div className="row" style={{ justifyContent: "space-between", gap: 10 }}>
+        <p className="muted" style={{ fontSize: 13 }}>{shown.length} of {rows.length} programs</p>
+        <label className="muted" style={{ fontSize: 13, display: "flex", gap: 8, alignItems: "center", cursor: "pointer" }}>
+          <input type="checkbox" checked={certOnly} onChange={(e) => setCertOnly(e.target.checked)} /> Devnet certified only
+        </label>
+      </div>
+
+      {view === "cards" ? (
+        <div className="cards">
+          {shown.map((r) => {
+            const shallow = r.grade === "Shallow run";
+            return (
+              <a key={r.address} className="pcard" href={href(r)}>
+                <div className="top">
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontWeight: 600 }}>{r.name}</div>
+                    <div className="mono muted" style={{ fontSize: 12 }}>{short(r.address)} · {r.category}</div>
+                  </div>
+                  <div style={{ textAlign: "center" }}>
+                    <div className="big" style={{ color: scoreColor(r.score, shallow) }}>{r.score ?? "-"}</div>
+                    <div className="muted" style={{ fontSize: 11 }}>{r.grade}</div>
+                  </div>
+                </div>
+                <div className="stats">
+                  <span><b style={{ color: r.proven ? "var(--critical)" : undefined }}>{r.proven ?? "-"}</b>proven</span>
+                  <span><b>{r.leads ?? "-"}</b>leads</span>
+                  <span><b>{r.depth ?? "-"}</b>depth</span>
+                </div>
+                <div className="row" style={{ justifyContent: "space-between", gap: 6 }}>
+                  {r.devnetCertification ? <span className="tag tag-cert">Devnet cert: {r.devnetCertification.levelName}</span> : <span className="tag">Not certified</span>}
+                  <span className="muted" style={{ fontSize: 12 }}>{STATE_LABEL[r.state || "empty"]} · {shortDate(r.scannedAt)}</span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="tablewrap">
+          <table className="data registry">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Program</th>
+                <th>Category</th>
+                <th>Score<Info text={COLUMN_HELP.score} /></th>
+                <th>Run<Info text={COLUMN_HELP.run} /></th>
+                <th>Proven<Info text={COLUMN_HELP.proven} /></th>
+                <th>Leads<Info text={COLUMN_HELP.leads} /></th>
+                <th>Tested on<Info text={COLUMN_HELP.tested} /></th>
+                <th>Scanned<Info text={COLUMN_HELP.scanned} /></th>
+                <th>Certification<Info text={COLUMN_HELP.certification} /></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {shown.map((r) => {
+                const shallow = r.grade === "Shallow run";
+                return (
+                  <tr key={r.address} onClick={() => router.push(href(r))}>
+                    <td className="mono muted c">{r.rank}</td>
+                    <td>
+                      <a href={href(r)} style={{ color: "var(--text)" }} onClick={(e) => e.stopPropagation()}>{r.name}</a>
+                      <div className="mono muted" style={{ fontSize: 12 }}>{short(r.address)}</div>
+                    </td>
+                    <td className="muted">{r.category}</td>
+                    <td className="c"><span className="score-num" style={{ color: scoreColor(r.score, shallow) }}>{r.score ?? "-"}</span></td>
+                    <td className="c muted">{r.grade}</td>
+                    <td className="c mono" style={{ color: r.proven ? "var(--critical)" : undefined }}>{r.proven ?? "-"}</td>
+                    <td className="c mono muted">{r.leads ?? "-"}</td>
+                    <td className="c muted">{STATE_LABEL[r.state || "empty"]}</td>
+                    <td className="c muted">{shortDate(r.scannedAt)}</td>
+                    <td className="c">{r.devnetCertification ? <span className="tag tag-cert">Devnet: {r.devnetCertification.levelName}</span> : <span className="muted">Not certified</span>}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+      <p className="muted" style={{ fontSize: 13 }}>
+        <b style={{ color: "var(--text-2)" }}>Shallow run</b> means nothing was proven but Fuzzy did not get far (Depth under 50), usually because the program publishes no IDL and had no recent calls to replay. It is not a judgment that the program is broken.
+      </p>
     </div>
   );
 }

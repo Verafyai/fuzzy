@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "fuzzy": {
+      "type": "http",
+      "url": "https://fuzzy.verafy.ai/api/mcp"
+    }
+  }
+}

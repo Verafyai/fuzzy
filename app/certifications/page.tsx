@@ -21,6 +21,7 @@ export default function CertificationsPage() {
   const proven = scanned.filter((r) => (r.proven ?? 0) > 0).length;
   const withIdl = scanned.filter((r) => r.idl).length;
   const replayed = scanned.filter((r) => r.state === "mainnet").length;
+  const certified = rows.filter((r) => r.devnetCertification).length;
   const date = new Date(registry.generatedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
   return (
     <main className="page stack" style={{ gap: 36, maxWidth: 920 }}>
@@ -35,7 +36,7 @@ export default function CertificationsPage() {
       <section className="stack" style={{ gap: 12 }}>
         <h2>The registry</h2>
         <p className="quiet">
-          {scanned.length} of the most-used Solana programs, scanned with a Fuzzy Sniff run on {date}. {proven === 0 ? "No run proved an exploit." : `${proven} ${proven === 1 ? "run" : "runs"} proved an exploit; details are withheld while the program teams are told.`} None of these programs is certified yet: a scan is a grade, and only a jury ruling makes a certification.
+          {scanned.length} of the most-used Solana programs, scanned with a Fuzzy Sniff run on {date}. {proven === 0 ? "No run proved an exploit." : `${proven} ${proven === 1 ? "run" : "runs"} proved an exploit; details are withheld while the program teams are told.`} {certified} have a devnet certification only: the programs whose runs reached Depth 40 or more were put to a jury on Solana devnet. Those jurors voted by script, and a Sniff run can earn Sniffed at most, so these are not full certifications. Click any program for its full report card.
         </p>
         <Registry rows={rows} />
         <p className="muted" style={{ fontSize: 13 }}>

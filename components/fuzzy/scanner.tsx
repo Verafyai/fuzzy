@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type DragEvent, type FormEvent } from "react";
+import { useEffect, useRef, useState, type DragEvent, type FormEvent } from "react";
 import { FuzzyMascot } from "@/components/fuzzy/mascot";
 import { FuzzyReport } from "@/components/fuzzy/report";
 import { openBuyCredits, refreshCreditsBalance } from "@/lib/credits/client";
@@ -16,6 +16,11 @@ export function Scanner() {
   const [program, setProgram] = useState<File | null>(null);
   const [idl, setIdl] = useState<File | null>(null);
   const [address, setAddress] = useState("");
+  useEffect(() => {
+    // ?program=<address> prefills the address, for links from agents and the MCP server.
+    const p = new URLSearchParams(window.location.search).get("program");
+    if (p && /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(p)) setAddress(p);
+  }, []);
   const [network, setNetwork] = useState<"mainnet" | "devnet">("mainnet");
   const [over, setOver] = useState(false);
   const [phase, setPhase] = useState<Phase>("idle");

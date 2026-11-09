@@ -1,14 +1,16 @@
 import { Scanner } from "@/components/fuzzy/scanner";
 import registry from "@/data/registry.json";
+import { ASSESSMENTS, BUILT_ON, NOT_RUN } from "@/lib/assessments";
+import { HowItWorks } from "@/components/fuzzy/how-it-works";
 
 const DEVNET = "https://devnet.verafy.ai";
 const CERT_PROGRAM = "1dcJPW3aGMCWDkNV6do6sEUwSxLdf8NtSuQb1teCdXt";
 const explorer = (a: string) => `https://explorer.solana.com/address/${a}?cluster=devnet`;
 
 const WAYS = [
-  ["Look it up", "Free, instant", "Check the registry or the certification account before calling a program. If Fuzzy has already scanned or certified this exact build, the agent has its answer without running anything."],
-  ["Run Fuzzy first", "100 credits, about a minute", "For a program nobody has scanned, or a build that changed, the agent runs Fuzzy on it before it sends money through it. The result goes into the registry for the next agent."],
-  ["Get it certified", "A jury ruling on Verafy Devnet", "A jury of AI models checks the run and rules on a level. The level is imprinted on chain for that exact build, so any agent can read it with one call."],
+  ["Look it up", "Free, instant", "/certifications", "Open the registry", "Check the registry or the certification account before calling a program. If Fuzzy has already scanned or certified this exact build, the agent has its answer without running anything."],
+  ["Run Fuzzy first", "100 credits, under a minute", "#scan", "Scan a program", "For a program nobody has scanned, or a build that changed, the agent runs Fuzzy on it before it sends money through it. The result goes into the registry for the next agent."],
+  ["Get it certified", "A jury ruling on Verafy Devnet", "/certifications#certify", "See certifications", "A jury of AI models checks the run and rules on a level. The level is imprinted on chain for that exact build, so any agent can read it with one call."],
 ];
 
 const STEPS = [
@@ -51,21 +53,38 @@ export default function Home() {
         </p>
       </section>
 
+      <section className="stack" style={{ gap: 14 }}>
+        <h2>How it works</h2>
+        <HowItWorks />
+      </section>
+
       <section className="stack" style={{ gap: 16 }}>
         <h2>Three ways an agent uses Fuzzy</h2>
         <div className="grid3">
-          {WAYS.map(([t, m, d], i) => (
+          {WAYS.map(([t, m, href, cta, d], i) => (
             <div key={t} className="panel stack" style={{ gap: 8 }}>
               <span className="mono" style={{ color: "var(--teal)", fontSize: 13 }}>{i + 1}</span>
               <h3>{t}</h3>
               <span className="mono muted" style={{ fontSize: 13 }}>{m}</span>
-              <p className="quiet" style={{ fontSize: 15 }}>{d}</p>
+              <p className="quiet" style={{ fontSize: 15, flex: 1 }}>{d}</p>
+              <a href={href} style={{ fontSize: 15 }}>{cta}</a>
             </div>
           ))}
         </div>
+        <div className="panel row" style={{ justifyContent: "space-between", gap: 16 }}>
+          <div className="stack" style={{ gap: 4, flex: "1 1 420px" }}>
+            <h3>Give your agent the Fuzzy MCP server</h3>
+            <p className="quiet" style={{ fontSize: 15 }}>One URL, no key: <code>https://fuzzy.verafy.ai/api/mcp</code>. Your agent gets <code>fuzzy_lookup</code>, <code>fuzzy_certification</code> and <code>fuzzy_registry_search</code>.</p>
+          </div>
+          <div className="row" style={{ gap: 10 }}>
+            <a className="btn btn-primary" href="/docs#mcp">Add the MCP</a>
+            <a className="btn btn-quiet" href="/fuzzy-mcp.json" download>Download config</a>
+            <a className="btn btn-quiet" href="https://github.com/Verafyai/fuzzy">GitHub</a>
+          </div>
+        </div>
       </section>
 
-      <section className="stack" style={{ gap: 14 }}>
+      <section id="scan" className="stack" style={{ gap: 14 }}>
         <h2>Scan a program</h2>
         <Scanner />
       </section>
@@ -82,6 +101,38 @@ export default function Home() {
           </table>
         </div>
         <p className="muted" style={{ fontSize: 14 }}>Fuzzy does not replace a human audit of the program&apos;s design and economics. It checks what can be proven by running transactions.</p>
+      </section>
+
+      <section className="stack" style={{ gap: 16 }}>
+        <h2>What Fuzzy runs on every program</h2>
+        <p className="quiet" style={{ fontSize: 17, maxWidth: 820 }}>
+          Each check below is a class of Solana exploit that security researchers have documented. Fuzzy turns each one into real attack transactions against the program, and counts it only if the attack works. Seven run today; five more are built next.
+        </p>
+        <div className="tablewrap">
+          <table className="data">
+            <thead><tr><th>Assessment</th><th>What it catches</th><th>How Fuzzy runs it</th><th>Documented by</th></tr></thead>
+            <tbody>
+              {ASSESSMENTS.map((a) => (
+                <tr key={a.id}>
+                  <td style={{ minWidth: 150 }}><div>{a.name}</div><span className="status" style={{ color: a.built ? "var(--teal)" : "var(--medium)" }}>{a.built ? "runs today" : "planned"}</span></td>
+                  <td className="quiet" style={{ fontSize: 13 }}>{a.catches}</td>
+                  <td className="quiet" style={{ fontSize: 13 }}>{a.how}</td>
+                  <td style={{ fontSize: 13, minWidth: 180 }}>{a.sources.map((src) => <div key={src.href}><a href={src.href}>{src.label}</a></div>)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="grid3" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))" }}>
+          <div className="panel stack" style={{ gap: 8 }}>
+            <h3>Built on</h3>
+            <ul className="list quiet" style={{ fontSize: 14 }}>{BUILT_ON.map((b) => <li key={b.href}><a href={b.href}>{b.label}</a></li>)}</ul>
+          </div>
+          <div className="panel stack" style={{ gap: 8 }}>
+            <h3>Not run by Fuzzy yet</h3>
+            <ul className="list quiet" style={{ fontSize: 14 }}>{NOT_RUN.map((n) => <li key={n.name}><a href={n.source.href}>{n.name}</a>: {n.why}</li>)}</ul>
+          </div>
+        </div>
       </section>
 
       <section className="stack" style={{ gap: 16 }}>
