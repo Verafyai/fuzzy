@@ -1,0 +1,5 @@
+{
+  "title": "Price Sniff at 80 credits",
+  "rationale": "A cheaper first run gets more programs a first report card.",
+  "changes": [{ "op": "replace", "id": "11", "text": "Run prices in shared Verafy Credits: Sniff 80." }]
+}

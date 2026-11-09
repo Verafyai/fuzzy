@@ -19,6 +19,7 @@
   "dependencies": {
     "@solana/kit": "^8.6.0",
     "litesvm": "^1.6.2",
+    "marked": "^15.0.12",
     "next": "^15.5.29",
     "react": "^19.1.10",
     "react-dom": "^19.1.10"

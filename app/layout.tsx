@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         {/* The canonical Verafy header: credits, checkout, sign-in and Google Analytics for every Verafy site. */}
         <Script src="https://www.verafy.ai/header/v1/verafy-header.js" strategy="afterInteractive" />
-        <verafy-header product="fuzzy" links="Example report:/example, Method:/method" style={{ display: "block", minHeight: 64, background: "#0B0E12" }} />
+        <verafy-header product="fuzzy" links="Certifications:/certifications, Blog:/blog, Method:/method" style={{ display: "block", minHeight: 64, background: "#0B0E12" }} />
         {children}
         <footer className="page" style={{ paddingTop: 0, paddingBottom: 40 }}>
           <p className="muted" style={{ fontSize: 14, borderTop: "1px solid var(--border)", paddingTop: 20 }}>

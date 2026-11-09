@@ -24,9 +24,16 @@ export default function Home() {
           </div>
           <div className="panel stack" style={{ gap: 8 }}>
             <h3>It keeps only proof</h3>
-            <p className="quiet" style={{ fontSize: 15 }}>A finding counts only if the attack transaction succeeds and moves funds to the attacker or hands them an authority. <a href="/method">How scoring works</a></p>
+            <p className="quiet" style={{ fontSize: 15 }}>A finding counts only if the attack transaction succeeds and moves funds to the attacker or hands them an authority. <a href="/example">See an example report</a></p>
           </div>
         </div>
+      </section>
+      <section className="panel row" style={{ justifyContent: "space-between", gap: 16 }}>
+        <div className="stack" style={{ gap: 6, flex: "1 1 420px" }}>
+          <h2>Verafy Certification</h2>
+          <p className="quiet" style={{ fontSize: 15 }}>A jury of registered Verafy harnesses turns a Fuzzy report into an on-chain report card for one exact build. Agents check it before they trust a program.</p>
+        </div>
+        <a className="btn btn-quiet" href="/certifications">Check a program</a>
       </section>
     </main>
   );

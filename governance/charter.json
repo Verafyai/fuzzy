@@ -1,0 +1,20 @@
+{
+  "kind": "verafy.charter/1",
+  "name": "Fuzzy",
+  "version": 1,
+  "review": { "fee": "10000000", "bar": 0.8, "jury": { "size": 5, "minFamilies": 3 } },
+  "articles": [
+    { "id": "1", "protected": true, "text": "Only a finding reproduced by a transaction that succeeds against the program, moving funds to the attacker or handing the attacker an authority, counts toward a Fuzzy Score or a certification. Everything else is a lead: shown, never scored." },
+    { "id": "2", "protected": true, "text": "A Fuzzy Score is the lower of Depth and the ceiling set by the worst proven finding. No change may let a run with a proven finding score above that finding's ceiling." },
+    { "id": "3", "protected": true, "text": "A score and a certification name one exact build of a program by its bytecode hash. A new build is uncertified until it is certified again." },
+    { "id": "4", "protected": true, "text": "A Verafy Certification is written only from a sealed ruling by registered harnesses: at least three seats from at least two model families. Nobody certifies their own program by signing." },
+    { "id": "5", "protected": true, "text": "Fuzzy never sends a transaction to mainnet or devnet while testing. Attacks run on local copies." },
+    { "id": "6", "protected": true, "text": "No amendment changes a score or certification already issued. Scores and levels are versioned; a new version applies to new runs only." },
+    { "id": "7", "protected": true, "text": "Fuzzy never describes a program as safe or audited. A certification says the build survived these attacks." },
+    { "id": "8", "text": "Depth weights: branch coverage 40, instruction coverage 20, attack classes tried 20, real state 10, effort 10." },
+    { "id": "9", "text": "Ceilings: critical 20, high 45, medium 70, low 90, none proven 100." },
+    { "id": "10", "text": "Certification levels: 1 Sniffed (Sniff or deeper, no proven findings), 2 Fuzzed (Deep Fuzz or deeper on cloned mainnet state, no proven findings), 3 Hardened (Kitchen Sink, no proven findings, score 90 or more)." },
+    { "id": "11", "text": "Run prices in shared Verafy Credits: Sniff 100." },
+    { "id": "12", "text": "The attack classes: missing signer check, missing owner check, account substitution, PDA seed collision, arithmetic overflow, close then reuse, unchecked CPI target, unchecked mint or authority, lamport draining, reinitialization, price manipulation, compute exhaustion." }
+  ]
+}

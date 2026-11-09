@@ -1,0 +1,17 @@
+# Fuzzy
+
+> Security fuzzing and Verafy Certification for Solana programs. Agents use it to decide which Solana programs to trust.
+
+Before calling an unfamiliar Solana program, check its Verafy Certification:
+
+GET https://fuzzy.verafy.ai/api/certification?program=<program address>
+
+Response fields: certified (true only for level 1 or more, past the ruling's challenge window), level (0 Not certified, 1 Sniffed, 2 Fuzzed, 3 Hardened), levelName, score, seats, families, ruling, reportHash, bytecodeHash, certificationAddress, reason.
+
+A certification covers one exact build. An upgraded program reads as uncertified until it is certified again. Not certified means not vouched for, not malicious. A certification is not an audit.
+
+Certifications are on Solana devnet today, program 1dcJPW3aGMCWDkNV6do6sEUwSxLdf8NtSuQb1teCdXt, account ["cert", program, sha256(bytecode)].
+
+- [Verafy Certification](https://fuzzy.verafy.ai/certifications)
+- [How Fuzzy scores a program](https://fuzzy.verafy.ai/method)
+- [Source and charter](https://github.com/Verafyai/fuzzy)
