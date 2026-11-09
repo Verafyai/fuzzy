@@ -29,10 +29,15 @@ image = (
     .run_commands(
         "curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && apt-get install -y nodejs",
         "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable",
-        f'sh -c "$(curl -sSfL https://release.anza.xyz/v{AGAVE}/install)"',
+        # The Agave release tarball directly, with retries: the installer script's single download times out on image builders.
+        f"curl -fL --retry 6 --retry-delay 10 --retry-all-errors --connect-timeout 30 -o /tmp/agave.tar.bz2 https://github.com/anza-xyz/agave/releases/download/v{AGAVE}/solana-release-x86_64-unknown-linux-gnu.tar.bz2"
+        f" && mkdir -p /root/.local/share/solana/install/releases/{AGAVE}"
+        f" && tar -xjf /tmp/agave.tar.bz2 -C /root/.local/share/solana/install/releases/{AGAVE}"
+        f" && ln -sfn /root/.local/share/solana/install/releases/{AGAVE}/solana-release /root/.local/share/solana/install/active_release"
+        " && rm /tmp/agave.tar.bz2 && /root/.local/share/solana/install/active_release/bin/solana --version",
         # Trail of Bits solana-lints pin dylint 3.4 and a 2025-01 nightly.
         "/root/.cargo/bin/cargo install --locked cargo-dylint@3.4.1 dylint-link@3.4.1",
-        "/root/.cargo/bin/rustup toolchain install nightly-2025-01-09 --component llvm-tools-preview rustc-dev",
+        "/root/.cargo/bin/rustup toolchain install nightly-2025-01-09 --component llvm-tools-preview,rustc-dev",
         # Trail of Bits lints, cloned once and built once on a scratch crate so jobs start warm.
         "git clone --depth 1 https://github.com/crytic/solana-lints /opt/solana-lints",
         "cd /tmp && /root/.cargo/bin/cargo new -q --lib warm && cd warm && PATH=/root/.cargo/bin:$PATH cargo dylint --path /opt/solana-lints --pattern 'lints/*' --all || true",
