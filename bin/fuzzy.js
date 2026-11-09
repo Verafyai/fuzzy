@@ -40,7 +40,8 @@ if (cmd === 'run') {
   } });
   report.seed = f.seed || report.program.sha256.slice(0, 16);
   const s = report.score;
-  console.error(`\n${report.program.name}: Fuzzy Score ${s.score} (${s.grade}). Depth ${s.depth}, ceiling ${s.ceiling}. ${report.findings.length} proven, ${report.leads.length} leads, ${report.tested.transactions} transactions.`);
+  const grade = report.findings.length === 0 && s.depth < 50 ? 'Shallow run' : s.grade
+  console.error(`\n${report.program.name}: Fuzzy Score ${s.score} (${grade}). Depth ${s.depth}, ceiling ${s.ceiling}. ${report.findings.length} proven, ${report.leads.length} leads, ${report.tested.transactions} transactions.`);
   const out = f.out || 'report.json';
   writeFileSync(out, JSON.stringify(report, null, 2));
   console.error(`Report written to ${out}`);
