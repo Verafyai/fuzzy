@@ -10,6 +10,7 @@ type VerafyHeaderProps = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElem
   mark?: string;
   home?: string;
   stage?: "alpha" | "beta" | "none";
+  "menu-home"?: "off";
 };
 
 declare module "react" {

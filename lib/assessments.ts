@@ -135,7 +135,7 @@ export const NOT_RUN: { name: string; why: string; source: Source }[] = [
 export const STATUS_TEXT: Record<string, string> = {
   "broke it": "Proven: an attack in this class worked.",
   held: "Tried, and every attack in this class failed.",
-  "not tried": "Applies to this program, but did not run in this pass: none of the calls that completed gave this class something to target.",
+  "not tried": "Could not run: this class applies, but no call to this program completed in Fuzzy's copy of Solana, so there was no working path to attack from. See Gaps for why.",
   "does not apply": "Nothing in this program's interface this class can target.",
 };
 
@@ -153,7 +153,7 @@ export const COLUMN_HELP: Record<string, string> = {
   proven: "Exploits proven by a transaction that moved SOL to the attacker or handed them an authority. Only these count.",
   leads: "Attacks that did something unexpected but did not prove theft. Shown, never scored.",
   tested: "What Fuzzy ran its attacks on: real mainnet accounts cloned from recent calls, accounts built from the program's IDL, or neither.",
-  certification: "Devnet certification only: a jury of registered Verafy harnesses ruled on the report on Solana devnet. Its jurors voted by script, and only the Sniffed level is possible today. Not a full certification.",
+  certification: "Devnet only. A jury of registered Verafy harnesses ruled on each build's report on Solana devnet, and the result is written on chain: Fuzzed, Sniffed, or Not certified when the run was too shallow to vouch for. The jurors voted by script, so these are not full certifications.",
   scanned: "When this build was last scanned.",
   source: "Verified means the deployed bytecode was rebuilt from public source at a known commit (OtterSec verification service). Source checks, such as dependency advisories, need a verified build.",
 };

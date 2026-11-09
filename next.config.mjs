@@ -6,6 +6,7 @@ const nextConfig = {
   // The Fuzzy blog lives on blog.verafy.ai.
   async redirects() {
     return [
+      { source: '/method', destination: '/docs/method', permanent: true },
       { source: '/blog', destination: 'https://blog.verafy.ai/', permanent: true },
       { source: '/blog/:slug*', destination: 'https://blog.verafy.ai/20261109-fuzzy-fuzzing-database-and-certification-for-agents', permanent: true },
     ];

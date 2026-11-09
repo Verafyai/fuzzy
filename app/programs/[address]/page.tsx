@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import registry from "@/data/registry.json";
 import { Info } from "@/components/fuzzy/info";
-import { ADDON_PLAN, ASSESSMENT_BY_ID, COLUMN_HELP, DEPTH_PARTS, STATE_LABEL, STATUS_TEXT, scoreColor } from "@/lib/assessments";
-import { SourceChecks } from "@/components/fuzzy/source-checks";
-import { BuildMachine } from "@/components/fuzzy/build-machine";
+import { ASSESSMENT_BY_ID, COLUMN_HELP, DEPTH_PARTS, STATE_LABEL, STATUS_TEXT, scoreColor } from "@/lib/assessments";
+import { JobResults } from "@/components/fuzzy/build-machine";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Row = any;
@@ -28,28 +27,12 @@ const devnetTx = (s: string) => `https://explorer.solana.com/tx/${s}?cluster=dev
 const date = (iso: string) => new Date(iso).toLocaleString("en-US", { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit", timeZone: "UTC", timeZoneName: "short" });
 const STATUS_COLOR: Record<string, string> = { "broke it": "var(--critical)", held: "var(--teal)", "not tried": "var(--medium)", "does not apply": "var(--text-3)" };
 
-function gaps(r: Row): string[] {
-  const g: string[] = [];
-  if (!r.idl) g.push("The program publishes no Anchor IDL on chain, so Fuzzy could not read its instruction names, accounts or arguments.");
-  if (r.state !== "mainnet") g.push(r.replayedCalls ? `Fuzzy found ${r.replayedCalls} recent mainnet ${r.replayedCalls === 1 ? "call" : "calls"}, but none replayed successfully on cloned accounts, so no attack ran on real state.` : "Fuzzy found no recent mainnet calls it could replay through a public RPC.");
-  const failed = (r.instructionsTried || []).filter((i: any) => !i.succeeded);
-  if (failed.length) g.push(`${failed.length} of ${(r.instructionsTried || []).length} instructions never completed an honest call, so there was no working path to attack from: ${failed.slice(0, 8).map((i: any) => i.name).join(", ")}${failed.length > 8 ? ", and more" : ""}.`);
-  const notTried = (r.classes || []).filter((c: any) => c.status === "not tried" && ASSESSMENT_BY_ID[c.id]?.built);
-  if (notTried.length) g.push(`Built attack classes that apply but did not run: ${notTried.map((c: any) => c.name).join(", ")}.`);
-  const planned = (r.classes || []).filter((c: any) => !ASSESSMENT_BY_ID[c.id]?.built && c.status !== "does not apply");
-  if (planned.length) g.push(`Attack classes that apply but are not built yet: ${planned.map((c: any) => c.name).join(", ")}.`);
-  g.push("Branch coverage is not measured in this engine version (0 of 40 Depth points).");
-  if (r.upgradeable) g.push("The program is upgradeable, so this report and any certification cover only the build hashed below.");
-  return g;
-}
-
 export default async function ProgramPage({ params }: { params: Promise<{ address: string }> }) {
   const r = find((await params).address);
   if (!r) notFound();
   const shallow = r.grade === "Shallow run";
   const cert = r.devnetCertification;
   const tried = (r.classes || []).filter((c: any) => c.status === "held" || c.status === "broke it").length;
-  const leadEntries = Object.entries(r.leadClasses || {}) as [string, number][];
 
   return (
     <main className="page stack" style={{ gap: 32, maxWidth: 980 }}>
@@ -62,7 +45,8 @@ export default async function ProgramPage({ params }: { params: Promise<{ addres
           <p className="quiet" style={{ fontSize: 17 }}>{r.description}</p>
           <p className="mono muted" style={{ fontSize: 13, overflowWrap: "anywhere" }}>{r.address}</p>
           <div className="row" style={{ gap: 10 }}>
-            <a className="btn btn-quiet" href={mainnet(r.address)}>Program on Solana Explorer</a>
+            <a className="btn btn-primary" href={`https://explorer.verafy.ai/program/${r.address}`}>Verafy Explorer</a>
+            <a className="btn btn-quiet" href={mainnet(r.address)}>Solana Explorer</a>
             <a className="btn btn-quiet" href={`https://solscan.io/account/${r.address}`}>Solscan</a>
             {r.site ? <a className="btn btn-quiet" href={r.site}>Project site</a> : null}
           </div>
@@ -80,9 +64,10 @@ export default async function ProgramPage({ params }: { params: Promise<{ addres
         <h2>Certification<Info text={COLUMN_HELP.certification} /></h2>
         {cert ? (
           <>
-            <p className="quiet"><span className="tag tag-cert">Devnet certification only: {cert.levelName}</span></p>
+            <p className="quiet"><span className={cert.level > 0 ? "tag tag-cert" : "tag"}>{cert.level > 0 ? `Devnet certification only: ${cert.levelName}` : "Recorded on devnet: Not certified"}</span></p>
             <p className="quiet" style={{ fontSize: 15 }}>
-              A jury of {cert.jurors} registered Verafy harnesses from {cert.families} model families ruled on this report on Solana devnet, and verafy_certification wrote the level for this exact build on {date(cert.certifiedAt)}. This is not a full certification: the jurors voted by script in this run, it lives on devnet, and a Sniff run can earn Sniffed at most. The jury ruled on the scan from {date(cert.certifiedAt)}; the report below may be a newer scan of the same build.
+              A jury of {cert.jurors} registered Verafy harnesses from {cert.families} model families ruled on this build&apos;s {cert.tier || "Sniff"} report on Solana devnet, and verafy_certification wrote the result on chain on {date(cert.certifiedAt)}.{" "}
+              {cert.level > 0 ? "This is not a full certification: the jurors voted by script, and it lives on devnet." : "Not certified means the run was too shallow to vouch for, or proved an exploit. It is a record, not an accusation."}
             </p>
             <dl className="kv">
               <dt>Certification account</dt><dd><a className="mono" href={devnet(cert.certification)}>{cert.certification}</a></dd>
@@ -91,16 +76,23 @@ export default async function ProgramPage({ params }: { params: Promise<{ addres
               <dt>Bytecode hash</dt><dd className="mono">{cert.bytecodeHash}</dd>
               <dt>Report hash</dt><dd className="mono">{cert.reportHash}</dd>
             </dl>
+            {cert.history?.length ? (
+              <div className="stack" style={{ gap: 6 }}>
+                <h3>Earlier rulings for this build</h3>
+                <p className="quiet" style={{ fontSize: 14 }}>A certification is replaced only by a newer jury ruling. The earlier rulings stay on chain.</p>
+                <ul className="list quiet" style={{ fontSize: 14 }}>{cert.history.map((h: any) => <li key={h.ruling}>{h.levelName}, score {h.score}, {date(h.certifiedAt)}: <a className="mono" href={devnet(h.ruling)}>{h.ruling.slice(0, 10)}…</a> (replaced {date(h.replacedAt)})</li>)}</ul>
+              </div>
+            ) : null}
           </>
         ) : (
-          <p className="quiet" style={{ fontSize: 15 }}>Not certified. A scan is a grade; a certification needs a jury ruling. Devnet certifications so far went to the programs whose runs reached Depth 40 or more.</p>
+          <p className="quiet" style={{ fontSize: 15 }}>No record on chain yet for this build.</p>
         )}
       </section>
 
       <section className="stack" style={{ gap: 12 }}>
         <h2>What ran</h2>
         <p className="quiet">
-          A Sniff run: {r.transactions} transactions in {Math.round((r.durationMs || 0) / 1000)} seconds, {tried} attack {tried === 1 ? "class" : "classes"} run, tested on {STATE_LABEL[r.state || "empty"].toLowerCase()}{r.state === "mainnet" && r.replayedFromSlot ? ` (accounts cloned at slot ${r.replayedFromSlot})` : ""}. Nothing was sent to mainnet or devnet. <a href="/method">How a run works</a>
+          {r.tier || "Sniff"} run: {r.transactions} transactions in {Math.round((r.durationMs || 0) / 1000)} seconds, {tried} attack {tried === 1 ? "class" : "classes"} run, tested on {STATE_LABEL[r.state || "empty"].toLowerCase()}{r.state === "mainnet" && r.replayedFromSlot ? ` (accounts cloned at slot ${r.replayedFromSlot})` : ""}. Nothing was sent to mainnet or devnet. <a href="/docs/method">How a run works</a>
         </p>
         <div className="tablewrap">
           <table className="data">
@@ -134,33 +126,12 @@ export default async function ProgramPage({ params }: { params: Promise<{ addres
         </div>
       </section>
 
-      {(r.instructionsTried || []).length ? (
+      {r.property ? (
         <section className="stack" style={{ gap: 12 }}>
-          <h2>Instructions</h2>
-          <p className="quiet">Fuzzy first calls each instruction the way an honest user would. Only instructions that complete an honest call can be attacked.</p>
-          <div className="row" style={{ gap: 8 }}>
-            {r.instructionsTried.map((i: any) => <span key={i.name} className="tag" style={{ color: i.succeeded ? "var(--teal)" : "var(--text-3)" }}>{i.name}: {i.succeeded ? "ran" : "did not complete"}</span>)}
-          </div>
+          <h2>Property fuzzing</h2>
+          <JobResults result={{ property: r.property }} />
         </section>
       ) : null}
-
-      <section className="stack" style={{ gap: 12 }}>
-        <h2>Findings and leads</h2>
-        <p className="quiet">
-          {r.proven ? `${r.proven} proven. Details go only to the program's team first.` : "No proven findings."} {r.leads ? `${r.leads} ${r.leads === 1 ? "lead" : "leads"}: attacks that did something unexpected but did not prove theft. Leads never count toward the score.` : "No leads."}
-        </p>
-        {leadEntries.length ? <div className="row" style={{ gap: 8 }}>{leadEntries.map(([c, n]) => <span key={c} className="tag">{ASSESSMENT_BY_ID[c]?.name || c}: {n}</span>)}</div> : null}
-      </section>
-
-      <SourceChecks addons={r.addons} />
-
-      <BuildMachine address={r.address} verified={Boolean(r.verifiedBuild)} />
-
-      <section className="stack" style={{ gap: 12 }}>
-        <h2>Gaps in this run</h2>
-        <ul className="list quiet">{gaps(r).map((g) => <li key={g}>{g}</li>)}</ul>
-        <p className="quiet" style={{ fontSize: 14 }}>Planned add-ons not run on this program yet: {ADDON_PLAN.filter((a) => a.status === "planned").map((a, i) => <span key={a.id}>{i ? ", " : ""}<a href="/method#addons">{a.name.toLowerCase()}</a></span>)}.</p>
-      </section>
 
       <section className="stack" style={{ gap: 12 }}>
         <h2>The build</h2>

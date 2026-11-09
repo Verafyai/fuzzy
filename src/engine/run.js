@@ -32,7 +32,7 @@ export async function fuzz({ program, idl: rawIdl = null, name, source = {}, tie
   const seenInvocations = new Set();
   if (measureCoverage) {
     setRecorder((input) => {
-      if (invocations.length >= 300) return;
+      if (invocations.length >= 120) return; // about 0.7 s each to trace
       const key = createHash('sha256').update(JSON.stringify([input.instruction_data, input.accounts.map((a) => [a.key, a.is_signer, a.data.length])])).digest('hex');
       if (seenInvocations.has(key)) return;
       seenInvocations.add(key);

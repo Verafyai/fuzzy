@@ -46,19 +46,22 @@ export async function fetchHistory(programId, { rpcUrl, limit = 10, onEvent = ()
       if (i < h.numRequiredSignatures) return i < h.numRequiredSignatures - h.numReadonlySignedAccounts;
       return i < nStatic - h.numReadonlyUnsignedAccounts;
     };
-    for (const ix of msg.instructions) {
-      if (keys[ix.programIdIndex] !== programId) continue;
-      const data = Buffer.from(k.getBase58Encoder().encode(ix.data));
-      const accounts = ix.accounts.map((i) => ({ address: keys[i], signer: isSigner(i), writable: isWritable(i) }));
-      const id = createHash('sha256').update(data).update(JSON.stringify(accounts)).digest('hex');
-      if (seen.has(id)) continue;
+    const decodeIx = (ix) => ({ programId: keys[ix.programIdIndex], data: [...Buffer.from(k.getBase58Encoder().encode(ix.data))], accounts: ix.accounts.map((i) => ({ address: keys[i], signer: isSigner(i), writable: isWritable(i) })) });
+    msg.instructions.forEach((ix, n) => {
+      if (keys[ix.programIdIndex] !== programId) return;
+      const { data, accounts } = decodeIx(ix);
+      const id = createHash('sha256').update(Buffer.from(data)).update(JSON.stringify(accounts)).digest('hex');
+      if (seen.has(id)) return;
       seen.add(id);
-      calls.push({ signature: s.signature, slot: tx.slot, data: [...data], accounts, feePayer: keys[0] });
-    }
+      // Instructions before this one in the same transaction often create the accounts it needs
+      // (token accounts, wrapped SOL), so they are replayed with it.
+      const prefix = msg.instructions.slice(0, n).map(decodeIx).filter((p) => p.programId !== programId);
+      calls.push({ signature: s.signature, slot: tx.slot, blockTime: tx.blockTime, data, accounts, prefix, feePayer: keys[0] });
+    });
   }
   onEvent({ type: 'note', text: `Found ${calls.length} recent calls to replay.` });
 
-  const addresses = [...new Set(calls.flatMap((c) => [c.feePayer, ...c.accounts.map((a) => a.address)]))].filter((a) => a !== programId);
+  const addresses = [...new Set(calls.flatMap((c) => [c.feePayer, ...c.accounts.map((a) => a.address), ...c.prefix.flatMap((p) => [p.programId, ...p.accounts.map((a) => a.address)])]))].filter((a) => a !== programId);
   const accounts = {};
   for (let i = 0; i < addresses.length; i += 100) {
     const batch = addresses.slice(i, i + 100);
@@ -75,7 +78,9 @@ export async function fetchHistory(programId, { rpcUrl, limit = 10, onEvent = ()
     if (pd?.value) programs[address] = Buffer.from(pd.value.data[0], 'base64').subarray(45).toString('base64');
   }
   onEvent({ type: 'note', text: `Cloned ${Object.keys(accounts).length} mainnet accounts and ${Object.keys(programs).length} other programs.` });
-  return { calls, accounts, programs, slot: calls[0]?.slot ?? null };
+  // Accounts are cloned as they are now, so the clock must be now too (programs reject stale timestamps).
+  const nowSlot = await rpc(rpcUrl, 'getSlot', []).catch(() => calls[0]?.slot ?? 0);
+  return { calls, accounts, programs, slot: calls[0]?.slot ?? null, now: { slot: nowSlot, unix: Math.floor(Date.now() / 1000) } };
 }
 
 const TOKEN_PROGRAMS = new Set(['TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA', 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb']);
@@ -105,6 +110,14 @@ async function makeHistoryWorld({ program, programId, history, seed }) {
     try { svm.addProgram(address, new Uint8Array(Buffer.from(bytes, 'base64'))); } catch { /* a program LiteSVM cannot load stays out */ }
   }
   svm.addProgram(programId, program);
+  if (history.now?.slot) {
+    try {
+      svm.warpToSlot(BigInt(history.now.slot));
+      const c = svm.getClock();
+      c.unixTimestamp = BigInt(history.now.unix);
+      svm.setClock(c);
+    } catch { /* keep the default clock */ }
+  }
   const attacker = await signerFor(seed, 'actor:attacker');
   svm.airdrop(attacker.address, k.lamports(ACTOR_FUNDS));
   const loot = (await signerFor(seed, 'new:loot')).address;
@@ -123,14 +136,23 @@ async function sendCall(world, call, payerAddress) {
     return meta;
   });
   const payer = signerOf(payerAddress);
-  const touched = new Set([payerAddress, ...call.accounts.map((a) => a.address), world.loot]);
+  const prefixIxs = (call.prefix || []).map((p) => ({
+    programAddress: p.programId,
+    accounts: p.accounts.map((a) => {
+      const meta = { address: a.address, role: a.signer ? (a.writable ? k.AccountRole.WRITABLE_SIGNER : k.AccountRole.READONLY_SIGNER) : a.writable ? k.AccountRole.WRITABLE : k.AccountRole.READONLY };
+      if (a.signer) meta.signer = signerOf(a.address);
+      return meta;
+    }),
+    data: Uint8Array.from(p.data),
+  }));
+  const touched = new Set([payerAddress, ...call.accounts.map((a) => a.address), ...(call.prefix || []).flatMap((p) => p.accounts.map((a) => a.address)), world.loot]);
   const before = snap(world, touched);
   recordInvocation(world.svm, world.programId, metas, Uint8Array.from(call.data));
   const msg = k.pipe(
     k.createTransactionMessage({ version: 0 }),
     (m) => k.setTransactionMessageFeePayerSigner(payer, m),
     (m) => k.setTransactionMessageLifetimeUsingBlockhash({ blockhash: world.svm.latestBlockhash(), lastValidBlockHeight: 0n }, m),
-    (m) => k.appendTransactionMessageInstruction({ programAddress: world.programId, accounts: metas, data: Uint8Array.from(call.data) }, m),
+    (m) => k.appendTransactionMessageInstructions([...prefixIxs, { programAddress: world.programId, accounts: metas, data: Uint8Array.from(call.data) }], m),
   );
   const tx = await k.signTransactionMessageWithSigners(msg);
   const res = world.svm.sendTransaction(tx);
@@ -216,7 +238,8 @@ export async function runHistory({ program, programId, history, idl, seed, budge
       // Signatures are not verified in replay, so every other signer must become the attacker:
       // an attack may never rely on a signature the attacker does not hold.
       const asAttacker = (x) => (x.signer ? { ...x, address: world0.attacker.address } : x);
-      const unsigned = { ...call, accounts: redirect(call.accounts.map((x, n) => (n === j ? { ...x, signer: false } : asAttacker(x)))) };
+      const attackerPrefix = (call.prefix || []).map((p) => ({ ...p, accounts: p.accounts.map(asAttacker) }));
+      const unsigned = { ...call, prefix: attackerPrefix, accounts: redirect(call.accounts.map((x, n) => (n === j ? { ...x, signer: false } : asAttacker(x)))) };
       const u = await attempt(unsigned, world0.attacker.address);
       mark(name, u.r.ok);
       const ug = u.r.ok ? gainOf(u.world, u.r) : 0n;
@@ -231,7 +254,7 @@ export async function runHistory({ program, programId, history, idl, seed, budge
       }
       // 2. The attacker signs in the signer's place.
       tried.add('account_substitution');
-      const swapped = { ...call, accounts: redirect(call.accounts.map((x, n) => (n === j ? { ...x, address: world0.attacker.address } : asAttacker(x)))) };
+      const swapped = { ...call, prefix: attackerPrefix, accounts: redirect(call.accounts.map((x, n) => (n === j ? { ...x, address: world0.attacker.address } : asAttacker(x)))) };
       const s = await attempt(swapped, world0.attacker.address);
       mark(name, s.r.ok);
       const sg = s.r.ok ? gainOf(s.world, s.r) : 0n;
@@ -252,7 +275,7 @@ export async function runHistory({ program, programId, history, idl, seed, budge
         if (outOfBudget()) break;
         tried.add('unchecked_mint');
         const placeholder = (await signerFor(seed, `loot-token:${call.accounts[n].address}`)).address;
-        const tokenCall = { ...call, lootTokens: { [placeholder]: call.accounts[n].address }, accounts: call.accounts.map((x, m) => (m === j ? { ...x, address: world0.attacker.address } : m === n ? { ...x, address: placeholder } : asAttacker(x))) };
+        const tokenCall = { ...call, prefix: attackerPrefix, lootTokens: { [placeholder]: call.accounts[n].address }, accounts: call.accounts.map((x, m) => (m === j ? { ...x, address: world0.attacker.address } : m === n ? { ...x, address: placeholder } : asAttacker(x))) };
         const t = await attempt(tokenCall, world0.attacker.address);
         mark(name, t.r.ok);
         const gains = t.r.ok ? tokenGainOf(t.world, t.r) : [];
@@ -276,7 +299,7 @@ export async function runHistory({ program, programId, history, idl, seed, budge
   };
 
   function finding(cls, severity, instruction, account, title, summary, fix, call, { world, r }) {
-    if (call.accounts.some((a) => a.signer && a.address !== world.attacker.address)) {
+    if ([...call.accounts, ...(call.prefix || []).flatMap((p) => p.accounts)].some((a) => a.signer && a.address !== world.attacker.address)) {
       throw new Error('history attack relied on a signature the attacker does not hold');
     }
     const f = {

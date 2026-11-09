@@ -16,7 +16,10 @@ function scan(p) {
   const out = join(reports, `${p.address}.json`);
   if (existsSync(out)) return Promise.resolve({ ok: true, out });
   return new Promise((resolve) => {
-    const child = spawn(process.execPath, ['bin/fuzzy.js', 'run', p.address, '--out', out, ...(args.rpc ? ['--rpc', args.rpc] : [])], { stdio: ['ignore', 'ignore', 'pipe'] });
+    // --tier deep: Deep Fuzz with branch coverage (needs FUZZY_LEDGER and agave-ledger-tool).
+    const child = args.tier === 'deep'
+      ? spawn(process.execPath, ['worker/jobs/deep.mjs', JSON.stringify({ address: p.address, network: 'mainnet', ...(args.rpc ? { rpcUrl: args.rpc } : {}) }), out], { stdio: ['ignore', 'ignore', 'pipe'] })
+      : spawn(process.execPath, ['bin/fuzzy.js', 'run', p.address, '--out', out, ...(args.rpc ? ['--rpc', args.rpc] : [])], { stdio: ['ignore', 'ignore', 'pipe'] });
     let err = '';
     child.stderr.on('data', (d) => { err += d; });
     const timer = setTimeout(() => { child.kill('SIGKILL'); resolve({ ok: false, error: 'Timed out' }); }, timeoutMs);
@@ -48,6 +51,7 @@ async function worker() {
         status: 'scanned',
         score: s.score, depth: s.depth, ceiling: s.ceiling, depthParts: s.depthParts,
         grade: rep.findings.length === 0 && s.depth < 50 ? 'Shallow run' : s.grade,
+        branch: typeof rep.tested?.branchCoverage === 'object' ? rep.tested.branchCoverage : null,
         proven: rep.findings.length, provenBySeverity: sev, leads: rep.leads.length, leadClasses,
         transactions: rep.tested?.transactions ?? null,
         durationMs: rep.tested?.durationMs ?? null,
@@ -82,12 +86,14 @@ for (const row of results) {
   row.verifiedBuild = Boolean(ad.verified?.verified);
   row.advisoryCounts = ad.advisories?.ran ? { vulnerabilities: ad.advisories.vulnerabilities, warnings: ad.advisories.warnings } : null;
 }
+const propertyData = existsSync('data/registry-property.json') ? JSON.parse(readFileSync('data/registry-property.json', 'utf8')).programs : {};
+for (const row of results) if (propertyData[row.address]) row.property = propertyData[row.address];
 const certs = existsSync('data/certifications.json') ? JSON.parse(readFileSync('data/certifications.json', 'utf8')).certifications : [];
 for (const row of results) {
   const c = certs.find((x) => x.program === row.address);
   if (c) {
-    row.certification = `Devnet: ${c.levelName}`;
-    row.devnetCertification = { levelName: c.levelName, certification: c.certification, ruling: c.ruling, certifySignature: c.certifySignature, certifiedAt: c.certifiedAt, jurors: c.jurors, families: c.families, jurorsScripted: c.jurorsScripted, bytecodeHash: c.bytecodeHash, reportHash: c.reportHash };
+    row.certification = c.level > 0 ? `Devnet: ${c.levelName}` : 'Recorded, not certified';
+    row.devnetCertification = { level: c.level ?? 1, levelName: c.levelName, tier: c.tier, history: c.history || [], certification: c.certification, ruling: c.ruling, certifySignature: c.certifySignature, certifiedAt: c.certifiedAt, jurors: c.jurors, families: c.families, jurorsScripted: c.jurorsScripted, bytecodeHash: c.bytecodeHash, reportHash: c.reportHash };
   }
 }
 writeFileSync('data/registry.json', JSON.stringify({ kind: 'fuzzy.registry/1', engine: 'fuzzy-score/1', source, generatedAt: new Date().toISOString(), programs: results }, null, 1) + '\n');

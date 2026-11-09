@@ -1,3 +1,4 @@
+import { DocsNav } from "@/components/fuzzy/docs-nav";
 import type { Metadata } from "next";
 import { ADDON_PLAN, ASSESSMENTS, BUILT_ON, NOT_RUN } from "@/lib/assessments";
 
@@ -25,6 +26,7 @@ const PARTS = [
 export default function MethodPage() {
   return (
     <main className="page stack" style={{ gap: 32, maxWidth: 860 }}>
+      <DocsNav current="/docs/method" />
       <section className="stack" style={{ gap: 12 }}>
         <h1>How Fuzzy works</h1>
         <p className="quiet" style={{ fontSize: 17 }}>

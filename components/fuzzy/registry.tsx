@@ -22,7 +22,7 @@ export type RegistryRow = {
   idl?: boolean;
   scannedAt?: string;
   certification: string;
-  devnetCertification?: { levelName: string; certification: string };
+  devnetCertification?: { level?: number; levelName: string; certification: string };
   verifiedBuild?: boolean;
 };
 
@@ -47,7 +47,7 @@ export function Registry({ rows }: { rows: RegistryRow[] }) {
   const cats = useMemo(() => ["All", ...Array.from(new Set(rows.map((r) => r.category))).sort()], [rows]);
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    const list = rows.filter((r) => (cat === "All" || r.category === cat) && (!certOnly || r.devnetCertification) && (!needle || r.name.toLowerCase().includes(needle) || r.address.toLowerCase().includes(needle)));
+    const list = rows.filter((r) => (cat === "All" || r.category === cat) && (!certOnly || (r.devnetCertification?.level ?? 1) > 0 && r.devnetCertification) && (!needle || r.name.toLowerCase().includes(needle) || r.address.toLowerCase().includes(needle)));
     return [...list].sort((a, b) => (sort === "name" ? a.name.localeCompare(b.name) : sort === "score" ? (b.score ?? -1) - (a.score ?? -1) : a.rank - b.rank));
   }, [rows, q, cat, sort, certOnly]);
   const href = (r: RegistryRow) => `/programs/${r.address}`;
@@ -97,7 +97,7 @@ export function Registry({ rows }: { rows: RegistryRow[] }) {
                 </div>
                 <div className="row" style={{ justifyContent: "space-between", gap: 6 }}>
                   <span className="row" style={{ gap: 6 }}>
-                    {r.devnetCertification ? <span className="tag tag-cert">Devnet cert: {r.devnetCertification.levelName}</span> : <span className="tag">Not certified</span>}
+                    {r.devnetCertification && (r.devnetCertification.level ?? 1) > 0 ? <span className="tag tag-cert">Devnet cert: {r.devnetCertification.levelName}</span> : <span className="tag">{r.devnetCertification ? "On chain: not certified" : "Not certified"}</span>}
                     {r.verifiedBuild ? <span className="tag" style={{ color: "var(--teal)" }}>Verified source</span> : null}
                   </span>
                   <span className="muted" style={{ fontSize: 12 }}>{STATE_LABEL[r.state || "empty"]} · {shortDate(r.scannedAt)}</span>
@@ -142,7 +142,7 @@ export function Registry({ rows }: { rows: RegistryRow[] }) {
                     <td className="c muted">{STATE_LABEL[r.state || "empty"]}</td>
                     <td className="c">{r.verifiedBuild ? <span className="status" style={{ color: "var(--teal)" }}>verified</span> : <span className="muted">not verified</span>}</td>
                     <td className="c muted">{shortDate(r.scannedAt)}</td>
-                    <td className="c">{r.devnetCertification ? <span className="tag tag-cert">Devnet: {r.devnetCertification.levelName}</span> : <span className="muted">Not certified</span>}</td>
+                    <td className="c">{r.devnetCertification && (r.devnetCertification.level ?? 1) > 0 ? <span className="tag tag-cert">Devnet: {r.devnetCertification.levelName}</span> : <span className="muted">{r.devnetCertification ? "On chain: not certified" : "Not certified"}</span>}</td>
                   </tr>
                 );
               })}

@@ -159,7 +159,7 @@ export function siteFromLocation(
     host === "127.0.0.1" ||
     host.endsWith(".vercel.app");
   if (
-    path === "/method" &&
+    path === "/docs/method" &&
     (preview || host.startsWith("forecast.") || host.startsWith("predict."))
   ) {
     return "forecast";

@@ -1,3 +1,4 @@
+import { DocsNav } from "@/components/fuzzy/docs-nav";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ const EVENTS = [
 export default function DocsPage() {
   return (
     <main className="page stack" style={{ gap: 36, maxWidth: 900 }}>
+      <DocsNav current="/docs#mcp" />
       <section className="stack" style={{ gap: 12 }}>
         <p className="mono" style={{ color: "var(--teal)", fontSize: 14 }}>Docs</p>
         <h1>Use Fuzzy from an agent</h1>
@@ -69,7 +71,7 @@ export default function DocsPage() {
         <p className="quiet">A good rule for an agent: before sending funds through an unfamiliar program, call <code>fuzzy_lookup</code>. Treat a program that is not in the registry, or has a proven finding, as unvetted, and keep amounts small until it is scanned.</p>
       </section>
 
-      <section className="stack" style={{ gap: 12 }}>
+      <section id="api" className="stack" style={{ gap: 12 }}>
         <h2>HTTP API</h2>
         <p className="quiet">Open to any origin. JSON.</p>
         <h3>Look a program up</h3>
@@ -84,7 +86,7 @@ GET https://fuzzy.verafy.ai/api/registry            # the whole registry`}</pre>
 content-type: application/json
 
 { "address": "<program address>", "network": "mainnet", "addons": ["advisories"] }`}</pre>
-        <p className="quiet">Or send <code>multipart/form-data</code> with <code>program</code> (a .so file, up to 4 MB) and optional <code>idl</code>. <code>addons</code> is optional, for mainnet programs: <code>verified</code> (+25 credits) checks for a verified build of public source; <code>advisories</code> (+100, includes <code>verified</code>) checks that build&apos;s dependencies against RustSec. Results arrive in the report&apos;s <code>addons</code> field and never change the score. <a href="/method#addons">All add-ons and prices</a>. A Sniff run costs 100 Verafy credits from the caller&apos;s balance (the <code>verafy_vid</code> cookie on .verafy.ai). The response streams newline-delimited JSON events:</p>
+        <p className="quiet">Or send <code>multipart/form-data</code> with <code>program</code> (a .so file, up to 4 MB) and optional <code>idl</code>. <code>addons</code> is optional, for mainnet programs: <code>verified</code> (+25 credits) checks for a verified build of public source; <code>advisories</code> (+100, includes <code>verified</code>) checks that build&apos;s dependencies against RustSec. Results arrive in the report&apos;s <code>addons</code> field and never change the score. <a href="/docs/method#addons">All add-ons and prices</a>. A Sniff run costs 100 Verafy credits from the caller&apos;s balance (the <code>verafy_vid</code> cookie on .verafy.ai). The response streams newline-delimited JSON events:</p>
         <div className="tablewrap">
           <table className="data">
             <thead><tr><th>Event type</th><th>Meaning</th></tr></thead>
@@ -135,7 +137,7 @@ npm run fuzzy -- replay report.json F1 --program program.so   # re-run a finding
           <li>Theft is measured in SOL everywhere, and in tokens during mainnet replay. Runs built from an IDL alone measure SOL only.</li>
           <li>A high score means a program survived these attacks. It is not an audit.</li>
         </ul>
-        <p className="quiet"><a href="/method">How Fuzzy works, in full</a> · <a href={GITHUB}>Source on GitHub</a></p>
+        <p className="quiet"><a href="/docs/method">How Fuzzy works, in full</a> · <a href={GITHUB}>Source on GitHub</a></p>
       </section>
     </main>
   );
