@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+import { setRecorder } from './record.js';
 // One Fuzzy run, from program bytes to a scored report.
 import { readIdl } from './idl.js';
 import { runSniff, ATTACK_CLASSES, applicableClasses } from './sniff.js';
@@ -10,12 +12,14 @@ export const REPORT_VERSION = 'fuzzy-report/1';
 export const ENGINE_VERSION = 'fuzzy-engine/0.2.0';
 
 export const TIERS = {
-  sniff: { name: 'Sniff', credits: 100, budget: { txs: 600, ms: 40_000 } },
+  sniff: { name: 'Sniff', credits: 100, budget: { txs: 600, ms: 40_000 }, historyLimit: 10 },
+  // Deep Fuzz runs on the build machine: four times the history, five times the budget, and branch coverage.
+  deep: { name: 'Deep Fuzz', credits: 1000, budget: { txs: 3000, ms: 180_000 }, historyLimit: 40 },
 };
 
 const SEVERITY_ORDER = { critical: 0, high: 1, medium: 2, low: 3 };
 
-export async function fuzz({ program, idl: rawIdl = null, name, source = {}, tier = 'sniff', seed, onEvent = () => {}, rpcUrl }) {
+export async function fuzz({ program, idl: rawIdl = null, name, source = {}, tier = 'sniff', seed, onEvent = () => {}, rpcUrl, measureCoverage }) {
   const t = TIERS[tier];
   if (!t) throw new Error(`tier ${tier} is not available yet`);
   const elf = elfInfo(program);
@@ -23,13 +27,25 @@ export async function fuzz({ program, idl: rawIdl = null, name, source = {}, tie
   const idl = rawIdl ? readIdl(rawIdl) : null;
   const runSeed = seed || hash.slice(0, 16);
   const t0 = Date.now();
+  // With a coverage measurer (Deep Fuzz), record every invocation's inputs to trace afterwards.
+  const invocations = [];
+  const seenInvocations = new Set();
+  if (measureCoverage) {
+    setRecorder((input) => {
+      if (invocations.length >= 300) return;
+      const key = createHash('sha256').update(JSON.stringify([input.instruction_data, input.accounts.map((a) => [a.key, a.is_signer, a.data.length])])).digest('hex');
+      if (seenInvocations.has(key)) return;
+      seenInvocations.add(key);
+      invocations.push(input);
+    });
+  }
 
   // A deployed program: replay its recent mainnet calls on cloned state first.
   let hist = null;
   if (source.address) {
     try {
       const url = rpcUrl || RPC[source.network || 'mainnet'];
-      const history = await fetchHistory(source.address, { rpcUrl: url, onEvent });
+      const history = await fetchHistory(source.address, { rpcUrl: url, onEvent, limit: t.historyLimit || 10 });
       if (history.calls.length) {
         hist = await runHistory({ program, programId: source.address, history, idl, seed: runSeed, budget: { txs: Math.floor(t.budget.txs / 2), ms: Math.floor(t.budget.ms / 2) }, onEvent });
         hist.slot = history.slot;
@@ -58,8 +74,18 @@ export async function fuzz({ program, idl: rawIdl = null, name, source = {}, tie
   const instructions = useHist ? histIx : sniffIx;
   const state = hist && histIx.some((i) => i.succeeded) ? 'mainnet' : idl ? 'synthetic' : 'empty';
   const outOfBudget = (hist?.outOfBudget || false) || (raw ? raw.depthInput.effort < 1 : false);
+  let branch = null;
+  if (measureCoverage) {
+    setRecorder(null);
+    try {
+      onEvent({ type: 'note', text: `Tracing ${invocations.length} invocations for branch coverage.` });
+      branch = await measureCoverage(program, invocations);
+    } catch (error) {
+      onEvent({ type: 'note', text: `Branch coverage could not be measured: ${error.message}` });
+    }
+  }
   const depthInput = {
-    branchCoverage: 0,
+    branchCoverage: branch ? branch.branchCoverage : 0,
     instructionCoverage: coverage(instructions),
     classesTried: tried.length,
     classesApplicable: applicable.length,
@@ -101,11 +127,11 @@ export async function fuzz({ program, idl: rawIdl = null, name, source = {}, tie
         status: tried.includes(c.id) ? (findings.some((f) => f.class === c.id) ? 'broke it' : 'held') : applicable.includes(c.id) ? 'not tried' : 'does not apply',
       })),
       state,
-      branchCoverage: 'not measured in this engine version',
+      branchCoverage: branch || 'not measured in this tier',
     },
     notes: [
       'Every finding was reproduced in LiteSVM with the transaction attached. Leads were tried and did not break anything; they never count toward the score.',
-      'Branch coverage is not measured yet, so it adds 0 of 40 to Depth. With synthetic accounts, that caps any score from this engine version at 55.',
+      branch ? `Branch coverage: ${branch.branchesTaken} of ${branch.branches} branch outcomes (${Math.round(branch.branchCoverage * 100)}%), measured by tracing ${branch.invocationsTraced} invocations in agave-ledger-tool. Execution past a cross-program call is not traced, so this is a floor.` : 'Branch coverage is not measured in a Sniff run, so it adds 0 of 40 to Depth. Deep Fuzz measures it.',
       state === 'mainnet' ? 'Attacks ran against cloned copies of the mainnet accounts that recent calls touched. Nothing was sent to mainnet.' : 'Accounts are synthetic, built from the IDL.',
       state === 'mainnet' ? 'Theft is measured in SOL and, for replayed calls, in SPL tokens: tokens that reach an empty account the attacker owns count as taken.' : 'Theft is measured in SOL. Token balances are part of the proof only in mainnet replay, so token-only exploits in IDL-built runs show up as leads at most.',
     ],

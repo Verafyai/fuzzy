@@ -6,6 +6,7 @@
 // transactions are signed only by the attacker, so their proof does not
 // depend on that.
 import { LiteSVM } from 'litesvm';
+import { recordInvocation } from './record.js';
 import * as k from '@solana/kit';
 import { createHash } from 'node:crypto';
 import { signerFor, ACTOR_FUNDS, FEE_PER_SIGNATURE } from './world.js';
@@ -124,6 +125,7 @@ async function sendCall(world, call, payerAddress) {
   const payer = signerOf(payerAddress);
   const touched = new Set([payerAddress, ...call.accounts.map((a) => a.address), world.loot]);
   const before = snap(world, touched);
+  recordInvocation(world.svm, world.programId, metas, Uint8Array.from(call.data));
   const msg = k.pipe(
     k.createTransactionMessage({ version: 0 }),
     (m) => k.setTransactionMessageFeePayerSigner(payer, m),

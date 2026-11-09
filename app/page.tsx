@@ -2,6 +2,7 @@ import { Scanner } from "@/components/fuzzy/scanner";
 import registry from "@/data/registry.json";
 import { ADDON_PLAN, ASSESSMENTS, BUILT_ON } from "@/lib/assessments";
 import { HowItWorks } from "@/components/fuzzy/how-it-works";
+import { BuildMachine } from "@/components/fuzzy/build-machine";
 
 const DEVNET = "https://devnet.verafy.ai";
 const CERT_PROGRAM = "1dcJPW3aGMCWDkNV6do6sEUwSxLdf8NtSuQb1teCdXt";
@@ -87,6 +88,7 @@ export default function Home() {
       <section id="scan" className="stack" style={{ gap: 14 }}>
         <h2>Scan a program</h2>
         <Scanner />
+        <BuildMachine />
       </section>
 
       <section className="stack" style={{ gap: 16 }}>
@@ -176,7 +178,7 @@ export default function Home() {
       <section className="stack" style={{ gap: 8, maxWidth: 820 }}>
         <h2>A prototype, for now</h2>
         <p className="quiet" style={{ fontSize: 16 }}>
-          Fuzzy is a prototype. Certifications live on Verafy Devnet, not mainnet, and no score from this engine version can go above 60, because it does not yet measure branch coverage. When <a href="https://chain.verafy.ai">Verafy Chain</a> is ready for prime time, we plan to move certifications there.
+          Fuzzy is a prototype. Certifications live on Verafy Devnet, not mainnet, and a Sniff run scores 60 at most, because only Deep Fuzz measures branch coverage. When <a href="https://chain.verafy.ai">Verafy Chain</a> is ready for prime time, we plan to move certifications there.
         </p>
       </section>
     </main>

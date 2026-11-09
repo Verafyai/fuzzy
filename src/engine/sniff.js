@@ -22,7 +22,7 @@ export const ATTACK_CLASSES = [
 /** Labels whose balance counts as the attacker's. */
 const ATTACKER_LABELS = new Set(['actor:attacker', 'new:loot']);
 
-function honestAccounts(ix) {
+export function honestAccounts(ix) {
   return ix.accounts.map((a) => {
     let label;
     if (a.role === 'fixed') label = `fixed:${a.address}`;
@@ -353,4 +353,10 @@ function evidence(result, world) {
 export function fmtSol(lamports) {
   const sol = Number(lamports) / 1e9;
   return `${sol.toLocaleString('en-US', { maximumFractionDigits: 4 })} SOL`;
+}
+
+/** Argument combinations for an instruction: typical values, or the extremes. For sequence fuzzing. */
+export function combosFor(idl, ix, kind = 'typical') {
+  types = idl?.types || new Map();
+  return argCombos(ix, (c) => (kind === 'extreme' && c.extreme.length ? c.extreme : c.typical));
 }

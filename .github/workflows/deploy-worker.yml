@@ -1,0 +1,19 @@
+name: Deploy the Fuzzy build machine (Modal)
+on:
+  push:
+    branches: [main]
+    paths: ["worker/**", "src/**", "package.json", "package-lock.json"]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ vars.MODAL_ENABLED == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install modal
+      - run: modal deploy worker/modal_app.py
+        env:
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}

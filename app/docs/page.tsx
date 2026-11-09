@@ -94,6 +94,18 @@ content-type: application/json
       </section>
 
       <section className="stack" style={{ gap: 12 }}>
+        <h2>Build machine add-ons</h2>
+        <p className="quiet">Rebuild from source (500 credits), static lints (300), Deep Fuzz (1,000), property fuzzing (1,500), the AI design review (1,000), or all of them as Kitchen Sink (4,000). They run for minutes on Fuzzy&apos;s build machine, so they are jobs: start one, then poll it.</p>
+        <pre className="code">{`POST https://fuzzy.verafy.ai/api/jobs
+{ "address": "<mainnet program>", "jobs": ["deep", "property"], "idl": { ...optional Anchor IDL } }
+-> { "id": "<job id>", "jobs": [...], "skipped": [...], "charged": 2500 }
+
+GET https://fuzzy.verafy.ai/api/jobs/<job id>
+-> { "status": "queued" | "running" | "done" | "failed", "result": { "rebuild", "lints", "deep", "property", "review" } }`}</pre>
+        <p className="quiet">Checks that need source (rebuild, lints, review) run only when the program has a verified build, and you are never charged for one that cannot run. A job that fails is refunded. <code>GET /api/jobs</code> says whether the build machine is connected.</p>
+      </section>
+
+      <section className="stack" style={{ gap: 12 }}>
         <h2>Command line</h2>
         <pre className="code">{`git clone ${GITHUB} && cd fuzzy && npm install
 npm run fuzzy -- run <program address>                 # a deployed program, mainnet by default
@@ -119,7 +131,7 @@ npm run fuzzy -- replay report.json F1 --program program.so   # re-run a finding
         <h2>Limits</h2>
         <ul className="list quiet">
           <li>Fuzzy is a prototype. Certifications live on Solana devnet, and devnet certifications so far had jurors voting by script.</li>
-          <li>No score from this engine version goes above 60: branch coverage is not measured yet.</li>
+          <li>A Sniff run scores 60 at most: only Deep Fuzz measures branch coverage.</li>
           <li>Theft is measured in SOL everywhere, and in tokens during mainnet replay. Runs built from an IDL alone measure SOL only.</li>
           <li>A high score means a program survived these attacks. It is not an audit.</li>
         </ul>

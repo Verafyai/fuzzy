@@ -2,6 +2,7 @@
 // a run, and every finding in it, replays to the same addresses and outcomes.
 // Nothing here ever talks to a network.
 import { LiteSVM } from 'litesvm';
+import { recordInvocation } from './record.js';
 import * as k from '@solana/kit';
 import { createHash } from 'node:crypto';
 import { concat, encodeValue } from './borsh.js';
@@ -99,6 +100,7 @@ export async function send(world, step) {
   const payer = world.actors[step.payer || 'owner'];
   touched.set(payer.address, `actor:${step.payer || 'owner'}`);
   const before = snapshot(world, touched);
+  recordInvocation(world.svm, world.programId, metas, data);
 
   const msg = k.pipe(
     k.createTransactionMessage({ version: 0 }),

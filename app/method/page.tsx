@@ -110,7 +110,7 @@ export default function MethodPage() {
             <tbody>{ADDON_PLAN.map((a) => <tr key={a.id}><td><a href={a.source.href}>{a.name}</a></td><td className="mono" style={{ textAlign: "center" }}>+{a.credits.toLocaleString("en-US")}</td><td className="quiet" style={{ fontSize: 13 }}>{a.what}</td><td className="muted" style={{ fontSize: 13 }}>{a.needs}</td><td style={{ textAlign: "center" }}><span className="status" style={{ color: a.status === "available" ? "var(--teal)" : "var(--medium)" }}>{a.status}</span></td></tr>)}</tbody>
           </table>
         </div>
-        <p className="quiet">Planned add-ons need a build machine with Docker and the Rust toolchain, which a web request cannot provide. Token balances are now part of the proof in every mainnet-replay run, at no extra cost.</p>
+        <p className="quiet">Rebuild, lints, Deep Fuzz, property fuzzing and the AI design review run on Fuzzy's build machine: an isolated container on Modal with Node 22, the Rust toolchain, the Agave tools and cargo-dylint, because a web request cannot build Rust or run for minutes. Until the build machine is online, the add-on panel says so and nothing is charged. Token balances are part of the proof in every mainnet-replay run, at no extra cost.</p>
       </section>
 
       <section className="stack" style={{ gap: 12 }}>
@@ -121,7 +121,7 @@ export default function MethodPage() {
       <section className="stack" style={{ gap: 12 }}>
         <h2>What this version does not do yet</h2>
         <ul className="list quiet">
-          <li>Branch coverage and model-planned attacks arrive with Deep Fuzz. Until then, the highest possible score is 60 with mainnet replay and 55 without.</li>
+          <li>A Sniff run does not measure branch coverage, so it scores 60 at most with mainnet replay and 55 without. Deep Fuzz measures it. Model-planned attacks are next.</li>
           <li>Programs with no IDL and no recent calls Fuzzy can replay get only a shallow run, because Fuzzy can&apos;t tell what their instructions are.</li>
           <li>Token-account, CPI and PDA attack classes are listed as not tried when they apply.</li>
         </ul>

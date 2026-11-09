@@ -4,6 +4,7 @@ import registry from "@/data/registry.json";
 import { Info } from "@/components/fuzzy/info";
 import { ADDON_PLAN, ASSESSMENT_BY_ID, COLUMN_HELP, DEPTH_PARTS, STATE_LABEL, STATUS_TEXT, scoreColor } from "@/lib/assessments";
 import { SourceChecks } from "@/components/fuzzy/source-checks";
+import { BuildMachine } from "@/components/fuzzy/build-machine";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Row = any;
@@ -152,6 +153,8 @@ export default async function ProgramPage({ params }: { params: Promise<{ addres
       </section>
 
       <SourceChecks addons={r.addons} />
+
+      <BuildMachine address={r.address} verified={Boolean(r.verifiedBuild)} />
 
       <section className="stack" style={{ gap: 12 }}>
         <h2>Gaps in this run</h2>

@@ -194,7 +194,7 @@ export function Scanner() {
           <legend>Add-ons for a deployed mainnet program</legend>
           <label><input type="checkbox" checked={addVerified || addAdvisories} disabled={addAdvisories} onChange={(e) => setAddVerified(e.target.checked)} /> <span><b>Verified-source check</b> <span className="cost">+25</span><br /><span className="muted">Is the deployed bytecode a verified build of public source? Which repository and commit? (OtterSec verification service)</span></span></label>
           <label><input type="checkbox" checked={addAdvisories} onChange={(e) => setAddAdvisories(e.target.checked)} /> <span><b>Dependency advisories</b> <span className="cost">+100</span><br /><span className="muted">Checks every crate in the verified commit&apos;s Cargo.lock against the RustSec advisory database, through OSV. Needs a verified build.</span></span></label>
-          <p className="muted" style={{ fontSize: 13 }}>Coming next: rebuild from source, static lints, Deep Fuzz with branch coverage, property fuzzing and an AI design review. <a href="/method#addons">What each one does</a></p>
+          <p className="muted" style={{ fontSize: 13 }}>Rebuild from source, static lints, Deep Fuzz, property fuzzing and the AI design review run on the build machine, below. <a href="/method#addons">What each one does</a></p>
         </fieldset>
       ) : null}
 
