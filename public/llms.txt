@@ -5,7 +5,9 @@
 Before calling an unfamiliar Solana program, an agent has three options:
 
 1. Look it up in the registry (free): GET https://fuzzy.verafy.ai/api/registry?program=<program address>. Returns the latest Fuzzy scan: score, depth, grade, proven, leads, bytecodeSha256, scannedAt. 404 means not scanned yet.
-2. Run Fuzzy on it first (100 Verafy credits): POST https://fuzzy.verafy.ai/api/scan with {"address": "<program address>", "network": "mainnet"}. Streams NDJSON; the last event is the report.
+2. Run Fuzzy on it first (100 Verafy credits): POST https://fuzzy.verafy.ai/api/scan with {"address": "<program address>", "network": "mainnet"}. Streams NDJSON; the last event is the report. Optional "addons": ["verified"] (+25 credits, is the deployed build verified against public source) or ["advisories"] (+100, RustSec advisories for that source's dependencies).
+
+MCP: add https://fuzzy.verafy.ai/api/mcp (Streamable HTTP, no key). Tools: fuzzy_lookup, fuzzy_certification, fuzzy_registry_search, fuzzy_scan_instructions.
 3. Check its Verafy Certification:
 
 GET https://fuzzy.verafy.ai/api/certification?program=<program address>

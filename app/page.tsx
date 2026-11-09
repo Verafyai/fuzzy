@@ -1,6 +1,6 @@
 import { Scanner } from "@/components/fuzzy/scanner";
 import registry from "@/data/registry.json";
-import { ASSESSMENTS, BUILT_ON, NOT_RUN } from "@/lib/assessments";
+import { ADDON_PLAN, ASSESSMENTS, BUILT_ON } from "@/lib/assessments";
 import { HowItWorks } from "@/components/fuzzy/how-it-works";
 
 const DEVNET = "https://devnet.verafy.ai";
@@ -106,7 +106,7 @@ export default function Home() {
       <section className="stack" style={{ gap: 16 }}>
         <h2>What Fuzzy runs on every program</h2>
         <p className="quiet" style={{ fontSize: 17, maxWidth: 820 }}>
-          Each check below is a class of Solana exploit that security researchers have documented. Fuzzy turns each one into real attack transactions against the program, and counts it only if the attack works. Seven run today; five more are built next.
+          Each check below is a class of Solana exploit that security researchers have documented. Fuzzy turns each one into real attack transactions against the program, and counts it only if the attack works. Eight run today; four more are planned.
         </p>
         <div className="tablewrap">
           <table className="data">
@@ -129,8 +129,9 @@ export default function Home() {
             <ul className="list quiet" style={{ fontSize: 14 }}>{BUILT_ON.map((b) => <li key={b.href}><a href={b.href}>{b.label}</a></li>)}</ul>
           </div>
           <div className="panel stack" style={{ gap: 8 }}>
-            <h3>Not run by Fuzzy yet</h3>
-            <ul className="list quiet" style={{ fontSize: 14 }}>{NOT_RUN.map((n) => <li key={n.name}><a href={n.source.href}>{n.name}</a>: {n.why}</li>)}</ul>
+            <h3>Add-ons, for more credits</h3>
+            <ul className="list quiet" style={{ fontSize: 14 }}>{ADDON_PLAN.map((n) => <li key={n.id}><a href={n.source.href}>{n.name}</a> <span className="cost">+{n.credits.toLocaleString("en-US")}</span> {n.status === "available" ? <span className="status" style={{ color: "var(--teal)" }}>available</span> : <span className="status" style={{ color: "var(--medium)" }}>planned</span>}</li>)}</ul>
+            <a href="/method#addons" style={{ fontSize: 14 }}>What each add-on runs</a>
           </div>
         </div>
       </section>

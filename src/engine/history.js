@@ -77,6 +77,17 @@ export async function fetchHistory(programId, { rpcUrl, limit = 10, onEvent = ()
   return { calls, accounts, programs, slot: calls[0]?.slot ?? null };
 }
 
+const TOKEN_PROGRAMS = new Set(['TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA', 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb']);
+const addrDecoder = k.getAddressDecoder();
+const addrEncoder = k.getAddressEncoder();
+
+/** An SPL token account's mint, owner and amount, or null. */
+export function tokenInfo(ownerProgram, data) {
+  if (!TOKEN_PROGRAMS.has(ownerProgram) || !data || data.length < 165) return null;
+  const b = Buffer.from(data);
+  return { mint: addrDecoder.decode(b.subarray(0, 32)), owner: addrDecoder.decode(b.subarray(32, 64)), amount: b.readBigUInt64LE(64) };
+}
+
 function fakeSigner(address) {
   return { address, signTransactions: async (txs) => txs.map(() => ({ [address]: new Uint8Array(64) })) };
 }
@@ -129,7 +140,7 @@ async function sendCall(world, call, payerAddress) {
     const b = before.get(address), a = after.get(address);
     let delta = a.lamports - b.lamports;
     if (address === payerAddress) delta += FEE_PER_SIGNATURE * BigInt(Object.keys(tx.signatures).length);
-    return { address, before: b.lamports.toString(), after: a.lamports.toString(), delta, dataChanged: !Buffer.from(b.data).equals(Buffer.from(a.data)), ownerAfter: a.owner, dataAfter: a.data };
+    return { address, before: b.lamports.toString(), after: a.lamports.toString(), delta, dataChanged: !Buffer.from(b.data).equals(Buffer.from(a.data)), ownerAfter: a.owner, dataAfter: a.data, token: a.token, tokenBefore: b.token };
   });
   return { ok: !failed, error: failed ? res.toString().slice(0, 160) : null, logs: meta.logs(), computeUnits: Number(meta.computeUnitsConsumed()), changes, transaction: k.getBase64EncodedWireTransaction(tx) };
 }
@@ -138,7 +149,7 @@ function snap(world, addresses) {
   const out = new Map();
   for (const address of addresses) {
     const a = world.svm.getAccount(address);
-    out.set(address, a.exists ? { lamports: BigInt(a.lamports), data: Uint8Array.from(a.data), owner: a.programAddress } : { lamports: 0n, data: new Uint8Array(), owner: SYSTEM });
+    out.set(address, a.exists ? { lamports: BigInt(a.lamports), data: Uint8Array.from(a.data), owner: a.programAddress, token: tokenInfo(a.programAddress, a.data) } : { lamports: 0n, data: new Uint8Array(), owner: SYSTEM, token: null });
   }
   return out;
 }
@@ -164,6 +175,15 @@ export async function runHistory({ program, programId, history, idl, seed, budge
 
   async function attempt(call, payer) {
     const world = await makeHistoryWorld({ program, programId, history, seed });
+    // Attacker-owned copies of token accounts: same mint, owner set to the attacker, empty.
+    for (const [placeholder, original] of Object.entries(call.lootTokens || {})) {
+      const a = history.accounts[original];
+      const data = Buffer.from(a.data, 'base64');
+      Buffer.from(addrEncoder.encode(world.attacker.address)).copy(data, 32);
+      data.writeBigUInt64LE(0n, 64);
+      world.svm.setAccount({ address: placeholder, data: new Uint8Array(data), executable: false, lamports: k.lamports(BigInt(a.lamports)), programAddress: a.owner, space: BigInt(data.length) });
+      world.lootTokens = { ...(world.lootTokens || {}), [placeholder]: original };
+    }
     const r = await sendCall(world, call, payer);
     txs++;
     if (txs % 10 === 0) onEvent({ type: 'progress', transactions: txs });
@@ -171,6 +191,8 @@ export async function runHistory({ program, programId, history, idl, seed, budge
   }
 
   const gainOf = (world, r) => r.changes.filter((c) => c.address === world.attacker.address || c.address === world.loot).reduce((s, c) => s + c.delta, 0n);
+  // Tokens that reached an account the attacker owns. Those accounts start empty, so any increase came from someone else.
+  const tokenGainOf = (world, r) => r.changes.filter((c) => c.token && c.tokenBefore && c.token.owner === world.attacker.address).map((c) => ({ address: c.address, mint: c.token.mint, gained: c.token.amount - c.tokenBefore.amount })).filter((g) => g.gained > 0n);
 
   for (const call of history.calls) {
     if (outOfBudget()) break;
@@ -216,6 +238,30 @@ export async function runHistory({ program, programId, history, idl, seed, budge
           `Replayed against cloned mainnet state, ${name} accepted the attacker's signature in place of ${argName(call, j)} and moved ${fmtSol(sg)} to the attacker.`,
           `Check that ${argName(call, j)} matches the authority stored in the account.`, swapped, s));
       }
+      // 3. Tokens: the attacker signs in the signer's place, and the signer's token accounts are
+      //    swapped, one at a time, for empty attacker-owned copies. Tokens that land there were taken.
+      const victimTokens = call.accounts.map((x, n) => ({ x, n })).filter(({ x }) => {
+        if (!x.writable || x.signer) return false;
+        const h = history.accounts[x.address];
+        const t = h && tokenInfo(h.owner, Buffer.from(h.data, 'base64'));
+        return t && t.owner === a.address;
+      }).slice(0, 2);
+      for (const { n } of victimTokens) {
+        if (outOfBudget()) break;
+        tried.add('unchecked_mint');
+        const placeholder = (await signerFor(seed, `loot-token:${call.accounts[n].address}`)).address;
+        const tokenCall = { ...call, lootTokens: { [placeholder]: call.accounts[n].address }, accounts: call.accounts.map((x, m) => (m === j ? { ...x, address: world0.attacker.address } : m === n ? { ...x, address: placeholder } : asAttacker(x))) };
+        const t = await attempt(tokenCall, world0.attacker.address);
+        mark(name, t.r.ok);
+        const gains = t.r.ok ? tokenGainOf(t.world, t.r) : [];
+        if (gains.length) {
+          const g = gains[0];
+          findings.push(finding('account_substitution', 'critical', name, argName(call, j), `${name} lets any signer act as ${argName(call, j)} and take their tokens`,
+            `Replayed against cloned mainnet state, ${name} accepted the attacker's signature in place of ${argName(call, j)} and moved ${g.gained} base units of mint ${g.mint} into an account the attacker owns.`,
+            `Check that ${argName(call, j)} matches the authority stored in the account, and that token accounts belong to the expected owner.`, tokenCall, t));
+          break;
+        }
+      }
     }
   }
   const replayed = [...kinds.values()].filter((k2) => k2.ok).length;
@@ -238,6 +284,7 @@ export async function runHistory({ program, programId, history, idl, seed, budge
       evidence: {
         transaction: r.transaction, computeUnits: r.computeUnits, logs: r.logs, programId,
         balances: r.changes.map((c) => ({ account: c.address === world.attacker.address ? 'actor:attacker' : c.address === world.loot ? 'new:loot' : c.address, address: c.address, before: c.before, after: c.after })),
+        tokens: r.changes.filter((c) => c.token || c.tokenBefore).map((c) => ({ address: c.address, mint: (c.token || c.tokenBefore).mint, owner: c.token?.owner ?? null, attackerOwned: c.token?.owner === world.attacker.address, before: String(c.tokenBefore?.amount ?? 0n), after: String(c.token?.amount ?? 0n) })),
         replaysAgainst: `cloned mainnet state at slot ${history.slot}`,
       },
     };

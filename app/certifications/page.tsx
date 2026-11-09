@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Metadata } from "next";
 import { CertLookup } from "@/components/fuzzy/cert-lookup";
 import record from "@/data/certify-devnet.json";
@@ -16,12 +17,19 @@ const LEVELS = [
 ];
 
 export default function CertificationsPage() {
-  const rows = (registry.programs as RegistryRow[]).filter(Boolean);
+  // Only what the list needs goes to the browser; full detail lives on each report card.
+  const rows = (registry.programs as any[]).filter(Boolean).map((r) => ({
+    rank: r.rank, name: r.name, category: r.category, address: r.address, status: r.status, reason: r.reason,
+    score: r.score, depth: r.depth, grade: r.grade, proven: r.proven, leads: r.leads, state: r.state, idl: r.idl,
+    scannedAt: r.scannedAt, certification: r.certification, verifiedBuild: r.verifiedBuild ?? false,
+    devnetCertification: r.devnetCertification ? { levelName: r.devnetCertification.levelName, certification: r.devnetCertification.certification } : undefined,
+  })) as RegistryRow[];
   const scanned = rows.filter((r) => r.status === "scanned");
   const proven = scanned.filter((r) => (r.proven ?? 0) > 0).length;
   const withIdl = scanned.filter((r) => r.idl).length;
   const replayed = scanned.filter((r) => r.state === "mainnet").length;
   const certified = rows.filter((r) => r.devnetCertification).length;
+  const verifiedBuilds = rows.filter((r) => r.verifiedBuild).length;
   const date = new Date(registry.generatedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
   return (
     <main className="page stack" style={{ gap: 36, maxWidth: 920 }}>
@@ -36,7 +44,7 @@ export default function CertificationsPage() {
       <section className="stack" style={{ gap: 12 }}>
         <h2>The registry</h2>
         <p className="quiet">
-          {scanned.length} of the most-used Solana programs, scanned with a Fuzzy Sniff run on {date}. {proven === 0 ? "No run proved an exploit." : `${proven} ${proven === 1 ? "run" : "runs"} proved an exploit; details are withheld while the program teams are told.`} {certified} have a devnet certification only: the programs whose runs reached Depth 40 or more were put to a jury on Solana devnet. Those jurors voted by script, and a Sniff run can earn Sniffed at most, so these are not full certifications. Click any program for its full report card.
+          {scanned.length} of the most-used Solana programs, scanned with a Fuzzy Sniff run on {date}. {proven === 0 ? "No run proved an exploit." : `${proven} ${proven === 1 ? "run" : "runs"} proved an exploit; details are withheld while the program teams are told.`} {certified} have a devnet certification only: the programs whose runs reached Depth 40 or more were put to a jury on Solana devnet. Those jurors voted by script, and a Sniff run can earn Sniffed at most, so these are not full certifications. Only {verifiedBuilds} have a verified build on record, meaning their deployed bytecode was rebuilt from public source. Click any program for its full report card.
         </p>
         <Registry rows={rows} />
         <p className="muted" style={{ fontSize: 13 }}>

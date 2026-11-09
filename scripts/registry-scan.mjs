@@ -74,6 +74,14 @@ async function worker() {
   }
 }
 await Promise.all(Array.from({ length: concurrency }, worker));
+const addonData = existsSync('data/registry-addons.json') ? JSON.parse(readFileSync('data/registry-addons.json', 'utf8')).programs : {};
+for (const row of results) {
+  const ad = addonData[row.address];
+  if (!ad) continue;
+  row.addons = ad;
+  row.verifiedBuild = Boolean(ad.verified?.verified);
+  row.advisoryCounts = ad.advisories?.ran ? { vulnerabilities: ad.advisories.vulnerabilities, warnings: ad.advisories.warnings } : null;
+}
 const certs = existsSync('data/certifications.json') ? JSON.parse(readFileSync('data/certifications.json', 'utf8')).certifications : [];
 for (const row of results) {
   const c = certs.find((x) => x.program === row.address);

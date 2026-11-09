@@ -1,3 +1,4 @@
+import { SourceChecks } from "@/components/fuzzy/source-checks";
 import { FuzzyMascot, moodForGrade } from "@/components/fuzzy/mascot";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -170,6 +171,8 @@ export function FuzzyReport({ report, example = false }: { report: Report; examp
           ))}
         </div>
       </section>
+
+      {report.addons ? <SourceChecks addons={report.addons} /> : null}
 
       <section className="panel stack" style={{ gap: 8 }}>
         <h2>About this run</h2>

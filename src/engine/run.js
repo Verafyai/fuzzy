@@ -7,7 +7,7 @@ import { elfInfo, sha256Hex } from './ingest.js';
 import { fuzzyScore, SCORE_VERSION } from '../score.js';
 
 export const REPORT_VERSION = 'fuzzy-report/1';
-export const ENGINE_VERSION = 'fuzzy-engine/0.1.0';
+export const ENGINE_VERSION = 'fuzzy-engine/0.2.0';
 
 export const TIERS = {
   sniff: { name: 'Sniff', credits: 100, budget: { txs: 600, ms: 40_000 } },
@@ -107,7 +107,7 @@ export async function fuzz({ program, idl: rawIdl = null, name, source = {}, tie
       'Every finding was reproduced in LiteSVM with the transaction attached. Leads were tried and did not break anything; they never count toward the score.',
       'Branch coverage is not measured yet, so it adds 0 of 40 to Depth. With synthetic accounts, that caps any score from this engine version at 55.',
       state === 'mainnet' ? 'Attacks ran against cloned copies of the mainnet accounts that recent calls touched. Nothing was sent to mainnet.' : 'Accounts are synthetic, built from the IDL.',
-      'Theft is measured in SOL. Token balances are not yet part of the proof, so token-only exploits show up as leads at most.',
+      state === 'mainnet' ? 'Theft is measured in SOL and, for replayed calls, in SPL tokens: tokens that reach an empty account the attacker owns count as taken.' : 'Theft is measured in SOL. Token balances are part of the proof only in mainnet replay, so token-only exploits in IDL-built runs show up as leads at most.',
     ],
   };
 }

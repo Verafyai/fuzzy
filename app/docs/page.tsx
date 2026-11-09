@@ -83,8 +83,8 @@ GET https://fuzzy.verafy.ai/api/registry            # the whole registry`}</pre>
         <pre className="code">{`POST https://fuzzy.verafy.ai/api/scan
 content-type: application/json
 
-{ "address": "<program address>", "network": "mainnet" }`}</pre>
-        <p className="quiet">Or send <code>multipart/form-data</code> with <code>program</code> (a .so file, up to 4 MB) and optional <code>idl</code>. Costs 100 Verafy credits from the caller&apos;s balance (the <code>verafy_vid</code> cookie on .verafy.ai). The response streams newline-delimited JSON events:</p>
+{ "address": "<program address>", "network": "mainnet", "addons": ["advisories"] }`}</pre>
+        <p className="quiet">Or send <code>multipart/form-data</code> with <code>program</code> (a .so file, up to 4 MB) and optional <code>idl</code>. <code>addons</code> is optional, for mainnet programs: <code>verified</code> (+25 credits) checks for a verified build of public source; <code>advisories</code> (+100, includes <code>verified</code>) checks that build&apos;s dependencies against RustSec. Results arrive in the report&apos;s <code>addons</code> field and never change the score. <a href="/method#addons">All add-ons and prices</a>. A Sniff run costs 100 Verafy credits from the caller&apos;s balance (the <code>verafy_vid</code> cookie on .verafy.ai). The response streams newline-delimited JSON events:</p>
         <div className="tablewrap">
           <table className="data">
             <thead><tr><th>Event type</th><th>Meaning</th></tr></thead>
@@ -120,7 +120,7 @@ npm run fuzzy -- replay report.json F1 --program program.so   # re-run a finding
         <ul className="list quiet">
           <li>Fuzzy is a prototype. Certifications live on Solana devnet, and devnet certifications so far had jurors voting by script.</li>
           <li>No score from this engine version goes above 60: branch coverage is not measured yet.</li>
-          <li>Theft is measured in SOL. Token-only exploits show up as leads at most.</li>
+          <li>Theft is measured in SOL everywhere, and in tokens during mainnet replay. Runs built from an IDL alone measure SOL only.</li>
           <li>A high score means a program survived these attacks. It is not an audit.</li>
         </ul>
         <p className="quiet"><a href="/method">How Fuzzy works, in full</a> · <a href={GITHUB}>Source on GitHub</a></p>

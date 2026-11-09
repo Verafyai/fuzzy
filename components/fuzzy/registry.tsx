@@ -23,6 +23,7 @@ export type RegistryRow = {
   scannedAt?: string;
   certification: string;
   devnetCertification?: { levelName: string; certification: string };
+  verifiedBuild?: boolean;
 };
 
 
@@ -95,7 +96,10 @@ export function Registry({ rows }: { rows: RegistryRow[] }) {
                   <span><b>{r.depth ?? "-"}</b>depth</span>
                 </div>
                 <div className="row" style={{ justifyContent: "space-between", gap: 6 }}>
-                  {r.devnetCertification ? <span className="tag tag-cert">Devnet cert: {r.devnetCertification.levelName}</span> : <span className="tag">Not certified</span>}
+                  <span className="row" style={{ gap: 6 }}>
+                    {r.devnetCertification ? <span className="tag tag-cert">Devnet cert: {r.devnetCertification.levelName}</span> : <span className="tag">Not certified</span>}
+                    {r.verifiedBuild ? <span className="tag" style={{ color: "var(--teal)" }}>Verified source</span> : null}
+                  </span>
                   <span className="muted" style={{ fontSize: 12 }}>{STATE_LABEL[r.state || "empty"]} · {shortDate(r.scannedAt)}</span>
                 </div>
               </a>
@@ -115,6 +119,7 @@ export function Registry({ rows }: { rows: RegistryRow[] }) {
                 <th>Proven<Info text={COLUMN_HELP.proven} /></th>
                 <th>Leads<Info text={COLUMN_HELP.leads} /></th>
                 <th>Tested on<Info text={COLUMN_HELP.tested} /></th>
+                <th>Source<Info text={COLUMN_HELP.source} /></th>
                 <th>Scanned<Info text={COLUMN_HELP.scanned} /></th>
                 <th>Certification<Info text={COLUMN_HELP.certification} /></th>
               </tr>
@@ -135,6 +140,7 @@ export function Registry({ rows }: { rows: RegistryRow[] }) {
                     <td className="c mono" style={{ color: r.proven ? "var(--critical)" : undefined }}>{r.proven ?? "-"}</td>
                     <td className="c mono muted">{r.leads ?? "-"}</td>
                     <td className="c muted">{STATE_LABEL[r.state || "empty"]}</td>
+                    <td className="c">{r.verifiedBuild ? <span className="status" style={{ color: "var(--teal)" }}>verified</span> : <span className="muted">not verified</span>}</td>
                     <td className="c muted">{shortDate(r.scannedAt)}</td>
                     <td className="c">{r.devnetCertification ? <span className="tag tag-cert">Devnet: {r.devnetCertification.levelName}</span> : <span className="muted">Not certified</span>}</td>
                   </tr>

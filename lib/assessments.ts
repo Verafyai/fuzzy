@@ -89,11 +89,11 @@ export const ASSESSMENTS: Assessment[] = [
     sources: [SEALEVEL, HELIUS],
   },
   {
-    id: "unchecked_mint", name: "Unchecked mint or authority", built: false,
-    catches: "Token accounts accepted without checking their mint or owner.",
-    how: "Planned: substitute token accounts with the wrong mint or owner. Needs token balances in the proof first.",
-    proof: "",
-    sources: [HELIUS],
+    id: "unchecked_mint", name: "Unchecked token owner", built: true,
+    catches: "Token accounts accepted without checking who owns them, so tokens meant for one user can be sent to another.",
+    how: "In mainnet replay, the attacker signs in the user's place and each of the user's token accounts is swapped, one at a time, for an empty copy the attacker owns.",
+    proof: "Tokens land in the attacker-owned copy. It starts empty, so every unit came from someone else.",
+    sources: [HELIUS, SEALEVEL],
   },
   {
     id: "price_manipulation", name: "Price manipulation", built: false,
@@ -114,15 +114,22 @@ export const BUILT_ON: Source[] = [
   { label: "@solana/kit: transaction building", href: "https://github.com/anza-xyz/kit" },
 ];
 
-/** Checks people usually run that Fuzzy does not run yet. */
+/** Add-ons: checks beyond the Sniff run, each for extra credits. Some run today; the rest need a build machine. */
+export type Addon = { id: string; name: string; credits: number; status: "available" | "planned"; needs: string; what: string; source: Source };
+export const ADDON_PLAN: Addon[] = [
+  { id: "verified", name: "Verified-source check", credits: 25, status: "available", needs: "A deployed mainnet program", what: "Whether the deployed bytecode was rebuilt from public source, and from which repository and commit.", source: { label: "OtterSec verification service (solana-verify)", href: "https://github.com/Ellipsis-Labs/solana-verifiable-build" } },
+  { id: "advisories", name: "Dependency advisories", credits: 100, status: "available", needs: "A verified build", what: "Every crate in the verified commit's Cargo.lock checked against the RustSec advisory database.", source: { label: "RustSec advisory database, through OSV", href: "https://rustsec.org" } },
+  { id: "rebuild", name: "Rebuild from source", credits: 500, status: "planned", needs: "Public source", what: "Fuzzy rebuilds the program itself in Docker and compares the hash with the deployed bytecode.", source: { label: "solana-verify (Ellipsis Labs)", href: "https://github.com/Ellipsis-Labs/solana-verifiable-build" } },
+  { id: "lints", name: "Static lints", credits: 300, status: "planned", needs: "A verified build", what: "Trail of Bits' Solana lints and Clippy over the verified source.", source: { label: "Trail of Bits solana-lints", href: "https://github.com/crytic/solana-lints" } },
+  { id: "deep", name: "Deep Fuzz", credits: 1000, status: "planned", needs: "Nothing", what: "Branch coverage, model-planned attacks and the five planned attack classes, on cloned mainnet state. Required for the Fuzzed level.", source: { label: "LiteSVM", href: "https://github.com/LiteSVM/litesvm" } },
+  { id: "property", name: "Property fuzzing", credits: 1500, status: "planned", needs: "A verified build", what: "Trident fuzzing against invariants an AI agent writes from the source and IDL, labeled as agent-written.", source: { label: "Trident (Ackee Blockchain)", href: "https://github.com/Ackee-Blockchain/trident" } },
+  { id: "review", name: "AI design review", credits: 1000, status: "planned", needs: "A verified build", what: "A jury of models from different labs reads the source and docs for design and economic risks. Not a human audit.", source: { label: "Verafy Harness juries", href: "https://harness.verafy.ai" } },
+  { id: "sink", name: "Kitchen Sink", credits: 4000, status: "planned", needs: "A verified build", what: "Everything above in one run. Required for the Hardened level.", source: { label: "Verafy Certification levels", href: "https://fuzzy.verafy.ai/certifications" } },
+];
+
+/** Still not automated. */
 export const NOT_RUN: { name: string; why: string; source: Source }[] = [
-  { name: "Verifiable build", why: "Confirming the deployed bytecode matches published source. Fuzzy hashes the bytecode it tests but does not compare it with source yet.", source: { label: "solana-verify (Ellipsis Labs)", href: "https://github.com/Ellipsis-Labs/solana-verifiable-build" } },
-  { name: "Static analysis and lints", why: "Needs the program's source code; Fuzzy works from bytecode.", source: CRYTIC },
-  { name: "Dependency advisories", why: "Needs the program's Cargo.lock.", source: { label: "RustSec advisory database", href: "https://rustsec.org" } },
-  { name: "Property-based fuzzing", why: "Invariants written by the program's own team.", source: { label: "Trident (Ackee Blockchain)", href: "https://github.com/Ackee-Blockchain/trident" } },
-  { name: "Branch coverage", why: "Not measured in this engine version, so it adds 0 of 40 to Depth.", source: { label: "LiteSVM", href: "https://github.com/LiteSVM/litesvm" } },
-  { name: "Token balances in the proof", why: "Theft is measured in SOL today; token-only exploits show up as leads at most.", source: { label: "SPL Token", href: "https://spl.solana.com/token" } },
-  { name: "A human audit", why: "Design and economic risks need people who understand what the program is for.", source: HELIUS },
+  { name: "A human audit", why: "Design and economic risks need people who understand what the program is for. The AI design review is a first pass, not a substitute.", source: HELIUS },
 ];
 
 export const STATUS_TEXT: Record<string, string> = {
@@ -148,6 +155,7 @@ export const COLUMN_HELP: Record<string, string> = {
   tested: "What Fuzzy ran its attacks on: real mainnet accounts cloned from recent calls, accounts built from the program's IDL, or neither.",
   certification: "Devnet certification only: a jury of registered Verafy harnesses ruled on the report on Solana devnet. Its jurors voted by script, and only the Sniffed level is possible today. Not a full certification.",
   scanned: "When this build was last scanned.",
+  source: "Verified means the deployed bytecode was rebuilt from public source at a known commit (OtterSec verification service). Source checks, such as dependency advisories, need a verified build.",
 };
 
 export function scoreColor(score: number | undefined, shallow: boolean) {

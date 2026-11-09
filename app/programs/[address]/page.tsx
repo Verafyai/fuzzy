@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import registry from "@/data/registry.json";
 import { Info } from "@/components/fuzzy/info";
-import { ASSESSMENT_BY_ID, COLUMN_HELP, DEPTH_PARTS, NOT_RUN, STATE_LABEL, STATUS_TEXT, scoreColor } from "@/lib/assessments";
+import { ADDON_PLAN, ASSESSMENT_BY_ID, COLUMN_HELP, DEPTH_PARTS, STATE_LABEL, STATUS_TEXT, scoreColor } from "@/lib/assessments";
+import { SourceChecks } from "@/components/fuzzy/source-checks";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Row = any;
@@ -80,7 +81,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ addres
           <>
             <p className="quiet"><span className="tag tag-cert">Devnet certification only: {cert.levelName}</span></p>
             <p className="quiet" style={{ fontSize: 15 }}>
-              A jury of {cert.jurors} registered Verafy harnesses from {cert.families} model families ruled on this report on Solana devnet, and verafy_certification wrote the level for this exact build on {date(cert.certifiedAt)}. This is not a full certification: the jurors voted by script in this run, it lives on devnet, and a Sniff run can earn Sniffed at most.
+              A jury of {cert.jurors} registered Verafy harnesses from {cert.families} model families ruled on this report on Solana devnet, and verafy_certification wrote the level for this exact build on {date(cert.certifiedAt)}. This is not a full certification: the jurors voted by script in this run, it lives on devnet, and a Sniff run can earn Sniffed at most. The jury ruled on the scan from {date(cert.certifiedAt)}; the report below may be a newer scan of the same build.
             </p>
             <dl className="kv">
               <dt>Certification account</dt><dd><a className="mono" href={devnet(cert.certification)}>{cert.certification}</a></dd>
@@ -150,10 +151,12 @@ export default async function ProgramPage({ params }: { params: Promise<{ addres
         {leadEntries.length ? <div className="row" style={{ gap: 8 }}>{leadEntries.map(([c, n]) => <span key={c} className="tag">{ASSESSMENT_BY_ID[c]?.name || c}: {n}</span>)}</div> : null}
       </section>
 
+      <SourceChecks addons={r.addons} />
+
       <section className="stack" style={{ gap: 12 }}>
         <h2>Gaps in this run</h2>
         <ul className="list quiet">{gaps(r).map((g) => <li key={g}>{g}</li>)}</ul>
-        <p className="quiet" style={{ fontSize: 14 }}>Not run by Fuzzy at all: {NOT_RUN.map((n, i) => <span key={n.name}>{i ? ", " : ""}<a href={n.source.href}>{n.name.toLowerCase()}</a></span>)}.</p>
+        <p className="quiet" style={{ fontSize: 14 }}>Planned add-ons not run on this program yet: {ADDON_PLAN.filter((a) => a.status === "planned").map((a, i) => <span key={a.id}>{i ? ", " : ""}<a href="/method#addons">{a.name.toLowerCase()}</a></span>)}.</p>
       </section>
 
       <section className="stack" style={{ gap: 12 }}>

@@ -131,3 +131,7 @@ table.registry tbody tr:hover td { background: var(--surface); }
 @keyframes hiwLine { to { opacity: 1; } }
 @media (max-width: 640px) { .hiw-node .lbl { font-size: 10px; } .hiw-node .dot { width: 28px; height: 28px; font-size: 11px; } .hiw-line { top: 13px; } }
 @media (prefers-reduced-motion: reduce) { .hiw-body, .hiw-log span { animation: none; opacity: 1; } .hiw-line span { transition: none; } }
+.addons { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.addons legend { padding: 0 6px; font-size: 13px; color: var(--text-3); }
+.addons label { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--text-2); cursor: pointer; }
+.addons input { margin-top: 4px; }

@@ -53,6 +53,8 @@ function summary(r: any) {
     score: r.score, grade: r.grade, depth: r.depth, proven: r.proven, leads: r.leads,
     testedOn: r.state === "mainnet" ? "cloned mainnet state" : r.state === "synthetic" ? "accounts built from the IDL" : "neither IDL nor replay",
     scannedAt: r.scannedAt, bytecodeSha256: r.bytecodeSha256, upgradeable: r.upgradeable,
+    verifiedBuild: r.addons?.verified ? { verified: Boolean(r.addons.verified.verified), repo: r.addons.verified.repo, commit: r.addons.verified.commit } : null,
+    dependencyAdvisories: r.advisoryCounts || null,
     certification: r.devnetCertification ? { scope: "devnet only, jurors scripted, not a full certification", level: r.devnetCertification.levelName, account: r.devnetCertification.certification, ruling: r.devnetCertification.ruling } : null,
     reportCard: `${SITE}/programs/${r.address}`,
   };
@@ -85,7 +87,8 @@ async function call(name: string, args: any) {
       return text({
         program,
         web: `${SITE}/?program=${program}`,
-        cost: "100 Verafy credits per Sniff run. New visitors get 1,000 free credits.",
+        cost: "100 Verafy credits per Sniff run. Add-ons for mainnet programs: verified-source check +25, dependency advisories +100. New visitors get 1,000 free credits.",
+        api: { method: "POST", url: `${SITE}/api/scan`, body: { address: program || "<address>", network: "mainnet", addons: ["advisories"] } },
         cli: `git clone https://github.com/Verafyai/fuzzy && cd fuzzy && npm install && npm run fuzzy -- run ${program || "<address>"}`,
         note: "Every attack runs in a local copy of Solana. Nothing is sent to mainnet or devnet.",
       });

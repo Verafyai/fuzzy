@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ASSESSMENTS, BUILT_ON, NOT_RUN } from "@/lib/assessments";
+import { ADDON_PLAN, ASSESSMENTS, BUILT_ON, NOT_RUN } from "@/lib/assessments";
 
 export const metadata: Metadata = {
   title: "Method | Fuzzy",
@@ -101,8 +101,20 @@ export default function MethodPage() {
         <p className="quiet">Grades: 90 and up is Hardened, 75 Solid, 50 Shaky, 25 Exposed, and below 25 Broken. Scores are versioned as fuzzy-score/1 and tied to one exact build of the program.</p>
       </section>
 
+      <section id="addons" className="stack" style={{ gap: 12 }}>
+        <h2>Add-ons</h2>
+        <p className="quiet">A Sniff run costs 100 credits. Add-ons run more checks for more credits. Most need source code, which Fuzzy finds through a verified build: when the deployed bytecode has been rebuilt from a public repository, Fuzzy reads that exact commit. Add-ons are reported beside the Fuzzy Score and never change it.</p>
+        <div className="tablewrap">
+          <table className="data">
+            <thead><tr><th>Add-on</th><th style={{ textAlign: "center" }}>Credits</th><th>What it runs</th><th>Needs</th><th style={{ textAlign: "center" }}>Status</th></tr></thead>
+            <tbody>{ADDON_PLAN.map((a) => <tr key={a.id}><td><a href={a.source.href}>{a.name}</a></td><td className="mono" style={{ textAlign: "center" }}>+{a.credits.toLocaleString("en-US")}</td><td className="quiet" style={{ fontSize: 13 }}>{a.what}</td><td className="muted" style={{ fontSize: 13 }}>{a.needs}</td><td style={{ textAlign: "center" }}><span className="status" style={{ color: a.status === "available" ? "var(--teal)" : "var(--medium)" }}>{a.status}</span></td></tr>)}</tbody>
+          </table>
+        </div>
+        <p className="quiet">Planned add-ons need a build machine with Docker and the Rust toolchain, which a web request cannot provide. Token balances are now part of the proof in every mainnet-replay run, at no extra cost.</p>
+      </section>
+
       <section className="stack" style={{ gap: 12 }}>
-        <h2>Checks Fuzzy does not run</h2>
+        <h2>Still not automated</h2>
         <ul className="list quiet">{NOT_RUN.map((n) => <li key={n.name}><strong>{n.name}:</strong> {n.why} <a href={n.source.href}>{n.source.label}</a></li>)}</ul>
       </section>
 

@@ -22,6 +22,8 @@ export function Scanner() {
     if (p && /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(p)) setAddress(p);
   }, []);
   const [network, setNetwork] = useState<"mainnet" | "devnet">("mainnet");
+  const [addVerified, setAddVerified] = useState(false);
+  const [addAdvisories, setAddAdvisories] = useState(false);
   const [over, setOver] = useState(false);
   const [phase, setPhase] = useState<Phase>("idle");
   const [feed, setFeed] = useState<string[]>([]);
@@ -32,6 +34,10 @@ export function Scanner() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const addressValid = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address.trim());
+  // Source add-ons need a deployed mainnet program; advisories include the verified-source check.
+  const addonsOn = !program && network === "mainnet";
+  const addons = addonsOn ? [...(addVerified || addAdvisories ? ["verified"] : []), ...(addAdvisories ? ["advisories"] : [])] : [];
+  const total = COST + (addons.includes("verified") ? 25 : 0) + (addons.includes("advisories") ? 100 : 0);
   const ready = phase !== "running" && (program !== null || addressValid);
 
   function takeFiles(files: FileList | null) {
@@ -65,7 +71,7 @@ export function Scanner() {
         if (idl) form.set("idl", idl);
         response = await fetch("/api/scan", { method: "POST", body: form });
       } else {
-        response = await fetch("/api/scan", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ address: address.trim(), network }) });
+        response = await fetch("/api/scan", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ address: address.trim(), network, addons }) });
       }
     } catch {
       setPhase("error");
@@ -98,7 +104,7 @@ export function Scanner() {
   }
 
   function handle(event: Report) {
-    if (event.type === "charged") setFeed((f) => [...f, event.mock ? `Run started. Mock data: credits are not connected on this deploy, so nothing was spent.` : `Run started. ${COST} credits spent.`]);
+    if (event.type === "charged") setFeed((f) => [...f, event.mock ? `Run started. Mock data: credits are not connected on this deploy, so nothing was spent.` : `Run started. ${total} credits spent.`]);
     if (event.type === "note") setFeed((f) => [...f, event.text]);
     if (event.type === "progress") setTransactions(event.transactions);
     if (event.type === "finding") {
@@ -183,12 +189,21 @@ export function Scanner() {
         </>
       ) : null}
 
+      {addonsOn ? (
+        <fieldset className="addons">
+          <legend>Add-ons for a deployed mainnet program</legend>
+          <label><input type="checkbox" checked={addVerified || addAdvisories} disabled={addAdvisories} onChange={(e) => setAddVerified(e.target.checked)} /> <span><b>Verified-source check</b> <span className="cost">+25</span><br /><span className="muted">Is the deployed bytecode a verified build of public source? Which repository and commit? (OtterSec verification service)</span></span></label>
+          <label><input type="checkbox" checked={addAdvisories} onChange={(e) => setAddAdvisories(e.target.checked)} /> <span><b>Dependency advisories</b> <span className="cost">+100</span><br /><span className="muted">Checks every crate in the verified commit&apos;s Cargo.lock against the RustSec advisory database, through OSV. Needs a verified build.</span></span></label>
+          <p className="muted" style={{ fontSize: 13 }}>Coming next: rebuild from source, static lints, Deep Fuzz with branch coverage, property fuzzing and an AI design review. <a href="/method#addons">What each one does</a></p>
+        </fieldset>
+      ) : null}
+
       <div className="row" style={{ justifyContent: "space-between" }}>
         <p className="muted" style={{ fontSize: 14, maxWidth: 560 }}>
           Sniff runs for up to a minute. Nothing is ever sent to mainnet: every attack runs on a local copy of Solana.
         </p>
         <div className="row" style={{ gap: 12 }}>
-          <span className="cost">{COST} credits</span>
+          <span className="cost">{total} credits</span>
           <button type="submit" className="btn btn-primary" disabled={!ready}>
             {phase === "running" ? "Sniffing…" : "Run Sniff"}
           </button>
