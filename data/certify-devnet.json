@@ -1,0 +1,180 @@
+{
+  "date": "2026-11-09T18:26:09.267Z",
+  "program": "9LdWL4mYLEyM8YnZejQYp5UzEynN75pxqUosZuXcB5ve",
+  "ruling": "AbgeVBT8PPmXL8XNd3N9iNRqB9ci9nesNwEtAjGCZkPk",
+  "rulingSignatures": {
+    "open": "3XwcMiv7qKiGTfmuK2Bj7vpMpy24MjBRvkWX3bTzT1L4RSSDVKAaCGFogqdGXJUtE8Yda6HA84koczyjWBFvFWWU",
+    "commit 0": "4AvGzbPqHxQLMi3fgXRbRwkwnrh2xHvFqsDKEoWbq9YnggTP5F9nBHeUmY4fcAzwWcSB6ZCWuWvtY7MwJLzHAgFY",
+    "commit 1": "Gi4sUfHH5nGnyB59ugiDAhQxbYqLJzLEuEcfVDrsJfiPbt2vx4paa9AEXL5uoQnH6nvu2eEvFLBtCRbPcVoNqpy",
+    "commit 2": "MEKHG2MsQqHEerM8UEd4vPTU2NxzqYfVQQpUG7KfYu9mvn8EVTebtCPCXo1bSHSjYHQdix9BJNAghG5AA7M4KZD",
+    "commit 3": "3KRh2Tz3dV7dmZED5hsVknFj5n2oGsTddZ5En4VGRrLjKKUZbceecqpT9ALPS721btLqb1iaRxG9jnJicQh7RShN",
+    "reveal 0": "4HEsLfeTKCGMJ71ZpYgLfmg5C1HQEJ2Z8vDqKo55hmBbuBkV1VvT13hM9S4Ke2jSArbqtFVUbzP8uuep2W81PQF9",
+    "reveal 1": "4w8sTjNEYPp12nJb4AZet8ib4LVeiVLZvhFbs5iQ9gghsuGK4TumyBY3ev7h3YrEDzJWvXS6ZutBGRG9iEnvv8ek",
+    "reveal 2": "J1xZ6gfRvGvhPx58FHNgdD6pEBKjP4xgtRy9ejoaBHWiPxHnnZQfZK25gPiznq4XqeENBhc4tsTMNEPkJj6smHK",
+    "reveal 3": "63wiQy2PnH8JqSZmYENoviaNR2pgVu9Ms5Jvahx75wXcU8ciHayJWsPim7e21uMGWtqaWpjPaz6451ojuVCw36Wt",
+    "seal": "22mNC1aJcMyzzwkmbLot32q98tNYnthhonmcSZgfBoTJfEJfKqiJRjiB5vLukW2wTNW6bNXFM1LqRbmgJuWoyhPf"
+  },
+  "certification": "8vSDoA5knpKDbu46VoSVhqM3PNwbHRrNm4gsUgjUS516",
+  "certifySignature": "5JhbNtYboii3PChTZHn5QpERbBfCyXkf4dvtLHiR12uJ51Brkqq44wUUi3fsmAacN3cs55KXuTyCiHAmtuBEDVxm",
+  "lookup": {
+    "program": "9LdWL4mYLEyM8YnZejQYp5UzEynN75pxqUosZuXcB5ve",
+    "bytecodeHash": "4fe939267083cd8aeb10f9422d7b84334dd12302226cb8f3c3ac6166ce5ec696",
+    "certificationAddress": "8vSDoA5knpKDbu46VoSVhqM3PNwbHRrNm4gsUgjUS516",
+    "certified": true,
+    "reason": "certified Sniffed",
+    "level": 1,
+    "levelName": "Sniffed",
+    "score": 55,
+    "seats": 4,
+    "families": 4,
+    "reportHash": "a18052bec9658da292c91ff0a97d717880ea2048cd6fe3d0f9c7771a44dfdda8",
+    "ruling": "AbgeVBT8PPmXL8XNd3N9iNRqB9ci9nesNwEtAjGCZkPk",
+    "certifier": "F9iFmVCf4sApukyctbh7KhGgjnWVsWsr1nrjyGY1qh3H",
+    "releasableAfterSlot": "520471656",
+    "certifiedSlot": "520471661"
+  },
+  "report": {
+    "version": "fuzzy-report/1",
+    "engine": "fuzzy-engine/0.1.0",
+    "scoreVersion": "fuzzy-score/1",
+    "createdAt": "2026-11-09T18:25:33.005Z",
+    "tier": {
+      "id": "sniff",
+      "name": "Sniff",
+      "credits": 100
+    },
+    "program": {
+      "name": "example_vault",
+      "sha256": "4fe939267083cd8aeb10f9422d7b84334dd12302226cb8f3c3ac6166ce5ec696",
+      "bytes": 12840,
+      "machine": "bpf",
+      "textBytes": 9864,
+      "sbfInstructions": 1233,
+      "idl": true,
+      "instructions": 3,
+      "address": "9LdWL4mYLEyM8YnZejQYp5UzEynN75pxqUosZuXcB5ve",
+      "network": "devnet"
+    },
+    "score": {
+      "version": "fuzzy-score/1",
+      "score": 55,
+      "grade": "Shaky",
+      "mood": "waiting",
+      "depth": 55,
+      "depthParts": {
+        "branchCoverage": 0,
+        "instructionCoverage": 20,
+        "attackClasses": 20,
+        "realState": 5,
+        "effort": 10
+      },
+      "ceiling": 100,
+      "cappedBy": null,
+      "proven": 0,
+      "leads": 1
+    },
+    "findings": [],
+    "leads": [
+      {
+        "class": "missing_owner",
+        "instruction": "ping",
+        "title": "ping accepts a fake vault",
+        "detail": "It accepted an account the program does not own, but changed nothing, so it is not counted."
+      }
+    ],
+    "tested": {
+      "durationMs": 1504,
+      "transactions": 182,
+      "paths": 13,
+      "instructions": [
+        {
+          "name": "initialize",
+          "succeeded": true,
+          "failed": true
+        },
+        {
+          "name": "withdraw",
+          "succeeded": true,
+          "failed": true
+        },
+        {
+          "name": "ping",
+          "succeeded": true,
+          "failed": true
+        }
+      ],
+      "history": null,
+      "classes": [
+        {
+          "id": "missing_signer",
+          "name": "Missing signer check",
+          "status": "held"
+        },
+        {
+          "id": "missing_owner",
+          "name": "Missing owner check",
+          "status": "held"
+        },
+        {
+          "id": "account_substitution",
+          "name": "Account substitution",
+          "status": "held"
+        },
+        {
+          "id": "pda_seed",
+          "name": "PDA seed collision",
+          "status": "does not apply"
+        },
+        {
+          "id": "arithmetic",
+          "name": "Arithmetic overflow",
+          "status": "held"
+        },
+        {
+          "id": "close_reuse",
+          "name": "Close, then reuse",
+          "status": "does not apply"
+        },
+        {
+          "id": "unchecked_cpi",
+          "name": "Unchecked CPI target",
+          "status": "does not apply"
+        },
+        {
+          "id": "unchecked_mint",
+          "name": "Unchecked mint or authority",
+          "status": "does not apply"
+        },
+        {
+          "id": "lamport_draining",
+          "name": "Lamport draining",
+          "status": "held"
+        },
+        {
+          "id": "reinitialization",
+          "name": "Reinitialization",
+          "status": "held"
+        },
+        {
+          "id": "price_manipulation",
+          "name": "Price manipulation",
+          "status": "does not apply"
+        },
+        {
+          "id": "compute_exhaustion",
+          "name": "Compute exhaustion",
+          "status": "held"
+        }
+      ],
+      "state": "synthetic",
+      "branchCoverage": "not measured in this engine version"
+    },
+    "notes": [
+      "Every finding was reproduced in LiteSVM with the transaction attached. Leads were tried and did not break anything; they never count toward the score.",
+      "Branch coverage is not measured yet, so it adds 0 of 40 to Depth. With synthetic accounts, that caps any score from this engine version at 55.",
+      "Accounts are synthetic, built from the IDL.",
+      "Theft is measured in SOL. Token balances are not yet part of the proof, so token-only exploits show up as leads at most."
+    ],
+    "seed": "certify-devnet"
+  }
+}

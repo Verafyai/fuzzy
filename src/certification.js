@@ -1,0 +1,123 @@
+// Verafy Certification (VIP-0034): a program's report card on Solana.
+// The on-chain program lives in Verafy Harness, packages/solana/certification.
+// This module computes what a jury rules on, finds a program's certification
+// and reads it. Lookups are read-only RPC calls.
+import { createHash } from 'node:crypto';
+import * as k from '@solana/kit';
+
+/** verafy_certification on devnet. */
+export const CERTIFICATION_PROGRAM = process.env.VERAFY_CERTIFICATION_PROGRAM || '1dcJPW3aGMCWDkNV6do6sEUwSxLdf8NtSuQb1teCdXt';
+export const RULING_PROGRAM = 'A6iZhDZASfQGCmzxXWW8JdnEhtz7EZE3gS4N1hkiJNNN';
+export const REGISTRY_PROGRAM = 'Bn6jV1CGK4WFibJcCVsEzHeVVhtph2xPsNkemWfgqn9R';
+export const DOMAIN = 'verafy-certification/1';
+export const CERT_SIZE = 192;
+
+/** What a level means. The jury's answer is the level. */
+export const LEVELS = [
+  { level: 0, name: 'Not certified', meaning: 'The jury found a proven exploit, or the report does not support any level.' },
+  { level: 1, name: 'Sniffed', meaning: 'Survived a Sniff run with no proven findings.' },
+  { level: 2, name: 'Fuzzed', meaning: 'Survived a Deep Fuzz run on cloned mainnet state with no proven findings.' },
+  { level: 3, name: 'Hardened', meaning: 'Survived a Kitchen Sink run with no proven findings and a Fuzzy Score of 90 or more.' },
+];
+
+const sha = (...parts) => createHash('sha256').update(Buffer.concat(parts.map((p) => Buffer.from(p)))).digest();
+const key = (a) => Buffer.from(k.getAddressEncoder().encode(a));
+const hex = (b) => Buffer.from(b).toString('hex');
+
+/**
+ * The bytes Solana runs, without the loader's trailing padding: the ELF ends
+ * at its section header table. Everyone hashes this the same way.
+ */
+export function bytecodeOf(programData) {
+  const b = Buffer.from(programData);
+  if (b.length >= 64 && b.readUInt32BE(0) === 0x7f454c46) {
+    const shoff = Number(b.readBigUInt64LE(40));
+    const end = shoff + b.readUInt16LE(58) * b.readUInt16LE(60);
+    if (end > 64 && end <= b.length) return b.subarray(0, end);
+  }
+  let n = b.length;
+  while (n > 0 && b[n - 1] === 0) n--;
+  return b.subarray(0, n);
+}
+
+export const bytecodeHash = (programData) => sha(bytecodeOf(programData));
+
+/** The ruling's contract hash: what the jury ruled on. */
+export function certificationContractHash({ program, bytecodeHash: bh, reportHash, score }) {
+  return sha(Buffer.from(DOMAIN), key(program), Buffer.from(bh), Buffer.from(reportHash), Buffer.from([score]));
+}
+
+/** sha256 of the report as canonical JSON (sorted keys). */
+export function reportHash(report) {
+  const canon = (v) => (Array.isArray(v) ? `[${v.map(canon).join(',')}]` : v && typeof v === 'object' ? `{${Object.keys(v).sort().filter((x) => v[x] !== undefined).map((x) => `${JSON.stringify(x)}:${canon(v[x])}`).join(',')}}` : JSON.stringify(v));
+  return sha(Buffer.from(canon(report)));
+}
+
+export async function certificationAddress(program, bh, programId = CERTIFICATION_PROGRAM) {
+  const [pda] = await k.getProgramDerivedAddress({ programAddress: programId, seeds: [Buffer.from('cert'), key(program), Buffer.from(bh)] });
+  return pda;
+}
+
+export function certifyData({ program, bytecodeHash: bh, reportHash: rh, score }) {
+  return Buffer.concat([Buffer.from([0]), key(program), Buffer.from(bh), Buffer.from(rh), Buffer.from([score])]);
+}
+
+export function decodeCertification(data) {
+  const b = Buffer.from(data);
+  if (b.length < CERT_SIZE || b.subarray(0, 8).toString() !== 'VRFYCRT1') return null;
+  const addr = (o) => k.getAddressDecoder().decode(b.subarray(o, o + 32));
+  const level = b[8];
+  return {
+    level,
+    levelName: LEVELS[level]?.name ?? `Level ${level}`,
+    score: b[9],
+    seats: b[10],
+    families: b[11],
+    program: addr(16),
+    bytecodeHash: hex(b.subarray(48, 80)),
+    reportHash: hex(b.subarray(80, 112)),
+    ruling: addr(112),
+    certifier: addr(144),
+    releasableAfterSlot: b.readBigUInt64LE(176).toString(),
+    certifiedSlot: b.readBigUInt64LE(184).toString(),
+  };
+}
+
+async function rpc(url, method, params) {
+  const res = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }) });
+  const body = await res.json();
+  if (body.error) throw new Error(`RPC ${method}: ${body.error.message}`);
+  return body.result;
+}
+
+/**
+ * Should an agent trust this program? Hash its current bytecode, read the
+ * certification for exactly that build, and check the ruling is past its
+ * challenge window.
+ */
+export async function lookupCertification(program, { rpcUrl = 'https://api.devnet.solana.com', certificationProgram = CERTIFICATION_PROGRAM } = {}) {
+  const acct = await rpc(rpcUrl, 'getAccountInfo', [program, { encoding: 'base64' }]);
+  if (!acct?.value?.executable) return { program, certified: false, reason: 'not a program on this cluster' };
+  const raw = Buffer.from(acct.value.data[0], 'base64');
+  let programData = raw;
+  if (acct.value.owner === 'BPFLoaderUpgradeab1e11111111111111111111111') {
+    const pdAddr = k.getAddressDecoder().decode(raw.subarray(4, 36));
+    const pd = await rpc(rpcUrl, 'getAccountInfo', [pdAddr, { encoding: 'base64' }]);
+    programData = Buffer.from(pd.value.data[0], 'base64').subarray(45);
+  }
+  const bh = bytecodeHash(programData);
+  const address = await certificationAddress(program, bh, certificationProgram);
+  const cert = await rpc(rpcUrl, 'getAccountInfo', [address, { encoding: 'base64' }]);
+  const slot = await rpc(rpcUrl, 'getSlot', []);
+  if (!cert?.value || cert.value.owner !== certificationProgram) {
+    return { program, bytecodeHash: hex(bh), certificationAddress: address, certified: false, reason: 'no certification for this exact build' };
+  }
+  const c = decodeCertification(Buffer.from(cert.value.data[0], 'base64'));
+  const settled = BigInt(slot) >= BigInt(c.releasableAfterSlot);
+  return {
+    program, bytecodeHash: hex(bh), certificationAddress: address,
+    certified: c.level > 0 && settled,
+    reason: c.level === 0 ? 'the jury did not certify this build' : settled ? `certified ${c.levelName}` : 'certified, but still inside the challenge window',
+    ...c,
+  };
+}
