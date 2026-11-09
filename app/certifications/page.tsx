@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { CertLookup } from "@/components/fuzzy/cert-lookup";
 import record from "@/data/certify-devnet.json";
+import registry from "@/data/registry.json";
+import { Registry, type RegistryRow } from "@/components/fuzzy/registry";
 
 export const metadata: Metadata = {
-  title: "Verafy Certification | Fuzzy",
-  description: "On-chain report cards for Solana programs. Agents check one account to decide whether to trust a program.",
+  title: "Registry and certifications | Fuzzy",
+  description: "The Fuzzy registry of scanned Solana programs and their on-chain Verafy Certifications. Agents look a program up here before they use it.",
 };
 
 const LEVELS = [
@@ -14,13 +16,34 @@ const LEVELS = [
 ];
 
 export default function CertificationsPage() {
+  const rows = (registry.programs as RegistryRow[]).filter(Boolean);
+  const scanned = rows.filter((r) => r.status === "scanned");
+  const proven = scanned.filter((r) => (r.proven ?? 0) > 0).length;
+  const withIdl = scanned.filter((r) => r.idl).length;
+  const replayed = scanned.filter((r) => r.state === "mainnet").length;
+  const date = new Date(registry.generatedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
   return (
     <main className="page stack" style={{ gap: 36, maxWidth: 920 }}>
       <section className="stack" style={{ gap: 12 }}>
-        <p className="mono" style={{ color: "var(--teal)", fontSize: 14 }}>Verafy Certification</p>
-        <h1>A report card on chain, for every build</h1>
+        <p className="mono" style={{ color: "var(--teal)", fontSize: 14 }}>Registry and certifications</p>
+        <h1>Look a program up before you use it</h1>
         <p className="quiet" style={{ fontSize: 17 }}>
-          Agents now call Solana programs they have never seen, and the only signal they get is reputation: a name, a website, an audit PDF that may describe a different build. A Verafy Certification is a machine-checkable answer. A jury of registered Verafy harnesses reads a Fuzzy report and rules which level the program earned. The level is written on Solana for that exact build, and only a sealed jury ruling can write it.
+          Agents now call Solana programs they have never seen, and the only signals they get were made for people: a name, a website, an audit PDF that may describe a different build. Fuzzy keeps two records an agent can read instead. The registry lists every program Fuzzy has scanned and how it scored. A Verafy Certification goes further: a jury of registered Verafy harnesses reads a Fuzzy report, rules which level the program earned, and the level is imprinted on Solana for that exact build.
+        </p>
+      </section>
+
+      <section className="stack" style={{ gap: 12 }}>
+        <h2>The registry</h2>
+        <p className="quiet">
+          {scanned.length} of the most-used Solana programs, scanned with a Fuzzy Sniff run on {date}. {proven === 0 ? "No run proved an exploit." : `${proven} ${proven === 1 ? "run" : "runs"} proved an exploit; details are withheld while the program teams are told.`} None of these programs is certified yet: a scan is a grade, and only a jury ruling makes a certification.
+        </p>
+        <Registry rows={rows} />
+        <p className="muted" style={{ fontSize: 13 }}>
+          Programs are listed in the order <a href="https://orbmarkets.io/programs">Orb&apos;s program directory</a> showed them on {date}, with SPL Token and Token-2022 in place of two native built-ins Fuzzy cannot load.
+        </p>
+        <h3 style={{ marginTop: 8 }}>Why most scores are low</h3>
+        <p className="quiet">
+          A low score here means a shallow run, not a broken program. Fuzzy learns a program from its Anchor IDL or by replaying its recent mainnet calls. Only {withIdl} of these programs publish an IDL on chain, and only {replayed} had recent calls Fuzzy could replay on cloned mainnet state through a public RPC. Without either, Fuzzy can&apos;t tell what the instructions are, so it tries little and Depth stays low. That is the honest result, and it is what the next engine version is for.
         </p>
       </section>
 
@@ -42,7 +65,8 @@ export default function CertificationsPage() {
       <section className="stack" style={{ gap: 12 }}>
         <h2>How an agent checks</h2>
         <ul className="list quiet">
-          <li><strong>HTTP:</strong> <code>GET https://fuzzy.verafy.ai/api/certification?program=&lt;address&gt;</code> returns <code>certified</code>, the level, the score and the ruling.</li>
+          <li><strong>Registry:</strong> <code>GET https://fuzzy.verafy.ai/api/registry?program=&lt;address&gt;</code> returns the latest scan: score, depth, proven count, leads and the bytecode hash it covers.</li>
+          <li><strong>Certification over HTTP:</strong> <code>GET https://fuzzy.verafy.ai/api/certification?program=&lt;address&gt;</code> returns <code>certified</code>, the level, the score and the ruling.</li>
           <li><strong>MCP:</strong> the Verafy Harness MCP server has the tool <code>verafy_certification</code>.</li>
           <li><strong>Directly on Solana:</strong> hash the program&apos;s current bytecode (the ELF the loader runs, without padding), then read the account at <code>[&quot;cert&quot;, program, bytecode hash]</code> under <code>1dcJPW3aGMCWDkNV6do6sEUwSxLdf8NtSuQb1teCdXt</code>. No account means no certification for this build.</li>
         </ul>

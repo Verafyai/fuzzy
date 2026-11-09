@@ -70,3 +70,15 @@ ul.list { margin: 0; padding-left: 20px; display: flex; flex-direction: column; 
 .post-body h2 { margin: 32px 0 12px; color: var(--text); font-size: 24px; }
 .post-body strong { color: var(--text); }
 .post-body code { font-size: 15px; color: var(--text); }
+
+.pill { display: inline-block; font: 600 11px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--medium); border: 1px solid currentColor; border-radius: 999px; padding: 3px 9px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.tablewrap { overflow-x: auto; }
+.pipeline { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; counter-reset: none; }
+.pipeline li { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--text-2); }
+.pipeline li b { color: var(--text); font-size: 16px; }
+.pipeline li[data-chain="true"] { border-color: var(--teal-fill); }
+@media (max-width: 760px) { .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+table.registry td { white-space: nowrap; }
+table.registry td:nth-child(2) { white-space: normal; min-width: 200px; }
+ul.list code, p code { overflow-wrap: anywhere; word-break: break-all; }

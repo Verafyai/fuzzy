@@ -9,11 +9,11 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 export const metadata: Metadata = {
   metadataBase: new URL("https://fuzzy.verafy.ai"),
   title: "Fuzzy | Verafy",
-  description: "Security fuzzing for Solana programs. Fuzzy attacks your program in a local copy of Solana and reports only what it actually broke, with the transaction to prove it.",
+  description: "Look before you leap. The first Solana fuzzer built by agents, for agents: Fuzzy attacks, records and grades Solana programs so agents can check a program for risk before they use it, then a Verafy jury imprints the result on Verafy Devnet.",
   icons: { icon: "/fuzzy-mark.svg" },
   openGraph: {
     title: "Fuzzy | Verafy",
-    description: "We break it so they can't. Security fuzzing for Solana programs, with every finding proven by a real transaction.",
+    description: "Look before you leap. A Solana fuzzer built by agents, for agents, with a public registry of graded programs and on-chain certifications.",
     url: "https://fuzzy.verafy.ai",
     siteName: "Verafy",
   },

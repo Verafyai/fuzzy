@@ -1,8 +1,12 @@
 # Fuzzy
 
-> Security fuzzing and Verafy Certification for Solana programs. Agents use it to decide which Solana programs to trust.
+> Look before you leap. Fuzzy is a Solana fuzzer built by agents, for agents. It attacks, records and grades Solana programs so an agent can check a program for risk before it uses it. A prototype.
 
-Before calling an unfamiliar Solana program, check its Verafy Certification:
+Before calling an unfamiliar Solana program, an agent has three options:
+
+1. Look it up in the registry (free): GET https://fuzzy.verafy.ai/api/registry?program=<program address>. Returns the latest Fuzzy scan: score, depth, grade, proven, leads, bytecodeSha256, scannedAt. 404 means not scanned yet.
+2. Run Fuzzy on it first (100 Verafy credits): POST https://fuzzy.verafy.ai/api/scan with {"address": "<program address>", "network": "mainnet"}. Streams NDJSON; the last event is the report.
+3. Check its Verafy Certification:
 
 GET https://fuzzy.verafy.ai/api/certification?program=<program address>
 

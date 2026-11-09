@@ -27,7 +27,7 @@ export default function MethodPage() {
       <section className="stack" style={{ gap: 12 }}>
         <h1>How Fuzzy works</h1>
         <p className="quiet" style={{ fontSize: 17 }}>
-          Solana programs are usually checked three ways: manual audits, which are slow and expensive; open-source fuzzers, which need someone to write the attacks; and scanners, which flag possible bugs that are mostly false alarms. Fuzzy fills the gap between them. It runs real attack transactions against your program in LiteSVM, a local copy of Solana, and keeps only the attacks that work.
+          Checking a Solana program has meant separate tools run by a person: confirm the deployed build, run a static scanner, write a fuzz harness, test against real state, then commission an audit. Fuzzy runs the parts a machine can prove as one automated pass. It attacks the program in LiteSVM, a local copy of Solana, keeps only the attacks that work, grades the run, and can send the result to a Verafy jury that imprints a certification on <a href="https://devnet.verafy.ai">Verafy Devnet</a>.
         </p>
       </section>
 
@@ -36,6 +36,7 @@ export default function MethodPage() {
         <ul className="list quiet">
           <li>Reads the program&apos;s Anchor IDL and builds the accounts it expects, funded as if users had deposited.</li>
           <li>Calls every instruction as an honest owner would, to learn which paths work and in what order.</li>
+          <li>For a deployed program, replays its recent mainnet calls on cloned copies of the accounts they touched, then attacks those calls too. This works without an IDL.</li>
           <li>Attacks each working path: drops each required signature, re-runs setup as a stranger, swaps in a look-alike account owned by another program, and sends extreme arguments.</li>
           <li>Keeps a finding only if the attack transaction succeeds and moves funds to the attacker or writes the attacker in as an authority. Everything else is a lead: shown, never scored.</li>
           <li>Never sends anything to mainnet or devnet. Fetching a deployed program is a read.</li>
@@ -59,8 +60,8 @@ export default function MethodPage() {
       <section className="stack" style={{ gap: 12 }}>
         <h2>What this version does not do yet</h2>
         <ul className="list quiet">
-          <li>Branch coverage, cloned mainnet state and model-planned attacks arrive with Deep Fuzz. Until then, the highest possible score is 55.</li>
-          <li>Programs without an IDL get only a shallow run, because Fuzzy can&apos;t tell what their instructions are.</li>
+          <li>Branch coverage and model-planned attacks arrive with Deep Fuzz. Until then, the highest possible score is 60 with mainnet replay and 55 without.</li>
+          <li>Programs with no IDL and no recent calls Fuzzy can replay get only a shallow run, because Fuzzy can&apos;t tell what their instructions are.</li>
           <li>Token-account, CPI and PDA attack classes are listed as not tried when they apply.</li>
         </ul>
       </section>

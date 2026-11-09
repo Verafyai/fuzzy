@@ -189,7 +189,10 @@ export async function runHistory({ program, programId, history, idl, seed, budge
       if (!a.signer) continue;
       // 1. The signer drops out: the attacker pays, payouts go to the attacker.
       tried.add('missing_signer'); tried.add('lamport_draining');
-      const unsigned = { ...call, accounts: redirect(call.accounts.map((x, n) => (n === j ? { ...x, signer: false } : x))) };
+      // Signatures are not verified in replay, so every other signer must become the attacker:
+      // an attack may never rely on a signature the attacker does not hold.
+      const asAttacker = (x) => (x.signer ? { ...x, address: world0.attacker.address } : x);
+      const unsigned = { ...call, accounts: redirect(call.accounts.map((x, n) => (n === j ? { ...x, signer: false } : asAttacker(x)))) };
       const u = await attempt(unsigned, world0.attacker.address);
       mark(name, u.r.ok);
       const ug = u.r.ok ? gainOf(u.world, u.r) : 0n;
@@ -204,7 +207,7 @@ export async function runHistory({ program, programId, history, idl, seed, budge
       }
       // 2. The attacker signs in the signer's place.
       tried.add('account_substitution');
-      const swapped = { ...call, accounts: redirect(call.accounts.map((x, n) => (n === j ? { ...x, address: world0.attacker.address } : x))) };
+      const swapped = { ...call, accounts: redirect(call.accounts.map((x, n) => (n === j ? { ...x, address: world0.attacker.address } : asAttacker(x)))) };
       const s = await attempt(swapped, world0.attacker.address);
       mark(name, s.r.ok);
       const sg = s.r.ok ? gainOf(s.world, s.r) : 0n;
@@ -225,6 +228,9 @@ export async function runHistory({ program, programId, history, idl, seed, budge
   };
 
   function finding(cls, severity, instruction, account, title, summary, fix, call, { world, r }) {
+    if (call.accounts.some((a) => a.signer && a.address !== world.attacker.address)) {
+      throw new Error('history attack relied on a signature the attacker does not hold');
+    }
     const f = {
       class: cls, severity, instruction, account, title, summary, fix,
       steps: [{ ix: instruction, args: [], payer: 'attacker', accounts: call.accounts.map((a) => ({ label: a.address, signer: a.signer, writable: a.writable })) }],
