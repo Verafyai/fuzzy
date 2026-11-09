@@ -2,7 +2,7 @@
   "version": "fuzzy-report/1",
   "engine": "fuzzy-engine/0.1.0",
   "scoreVersion": "fuzzy-score/1",
-  "createdAt": "2026-11-09T17:27:02.834Z",
+  "createdAt": "2026-11-09T17:35:28.892Z",
   "tier": {
     "id": "sniff",
     "name": "Sniff",
@@ -266,7 +266,7 @@
     }
   ],
   "tested": {
-    "durationMs": 828,
+    "durationMs": 850,
     "transactions": 185,
     "paths": 11,
     "instructions": [
@@ -286,6 +286,7 @@
         "failed": true
       }
     ],
+    "history": null,
     "classes": [
       {
         "id": "missing_signer",
@@ -354,7 +355,8 @@
   "notes": [
     "Every finding was reproduced in LiteSVM with the transaction attached. Leads were tried and did not break anything; they never count toward the score.",
     "Branch coverage is not measured yet, so it adds 0 of 40 to Depth. With synthetic accounts, that caps any score from this engine version at 55.",
-    "Accounts are synthetic, built from the IDL. Cloned mainnet state arrives with Deep Fuzz."
+    "Accounts are synthetic, built from the IDL.",
+    "Theft is measured in SOL. Token balances are not yet part of the proof, so token-only exploits show up as leads at most."
   ],
   "seed": "example"
 }

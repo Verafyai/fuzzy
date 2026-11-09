@@ -34,7 +34,7 @@ if (cmd === 'run') {
     idl = idl || got.idl;
     source = { address: target, network, upgradeable: got.upgradeable, upgradeAuthority: got.upgradeAuthority };
   }
-  const report = await fuzz({ program, idl, source, name: f.name, seed: f.seed, onEvent: (e) => {
+  const report = await fuzz({ program, idl, source, name: f.name, seed: f.seed, rpcUrl: f.rpc, onEvent: (e) => {
     if (e.type === 'finding') console.error(`  proven: [${e.finding.severity}] ${e.finding.title}`);
     if (e.type === 'note') console.error(`  ${e.text}`);
   } });

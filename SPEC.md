@@ -87,16 +87,15 @@ Rules: a score is tied to one bytecode hash and goes stale on upgrade; the badge
 
 ## 5. Credits
 
-Verafy Credits: a prepaid balance on a Verafy account, 1 credit = 1 cent at list price. Not a token, not on chain, not transferable. New accounts get 1,000 free (expire after 90 days, one grant per verified account). Purchased credits never expire. Prices are proposals until M2 measures real cost per run.
+Fuzzy uses the shared Verafy credits system, the same one as Swarm Explorer and the other product sites: the shared ledger at www.verafy.ai/api/credits, the visitor cookie on `.verafy.ai`, the shared header badge, checkout and packs. New visitors get 1,000 free credits once, across all Verafy products. Fuzzy spends from the `shared` product with source `fuzzy`.
 
-| Pack | Credits | Price |
+| Tier | Credits | Status |
 |---|---|---|
-| Starter | 2,500 | $25 |
-| Builder | 10,000 | $90 |
-| Team | 50,000 | $400 |
-| Protocol | 250,000 | $1,750, plus a monthly Kitchen Sink per watched program |
+| Sniff | 100 | Live |
+| Deep Fuzz | 500 (proposed) | Not built |
+| Kitchen Sink | 2,500 (proposed) | Not built |
 
-Billing: hold at start, settle at end; full release if a run fails on our side; Kitchen Sink stops early at a coverage plateau (30 minutes with nothing new) and refunds unused time; every charge is on a ledger linked to its run, rebuildable from the log.
+The program is fetched and checked before credits are spent; a run that fails in the engine is refunded.
 
 ## 6. Architecture
 
