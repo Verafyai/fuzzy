@@ -1,0 +1,326 @@
+/* Copy with verafy-credits.js. One merged badge. Dark products use these colors. */
+.verafy-credits {
+  display: inline-flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+  height: 36px;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid #232c36;
+  border-radius: 999px;
+  background: color-mix(in srgb, #ffffff 4%, transparent);
+  box-shadow: none;
+  color: #b8c2cc;
+  font-family: inherit;
+  /* design-check-disable-next-line small-text -- unified header spec §4.2 credits badge text is 14px */
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.verafy-credits__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px 0 14px;
+  white-space: nowrap;
+}
+
+.verafy-credits__dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #5fe0c8;
+}
+
+.verafy-credits__count {
+  color: #ffffff;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.verafy-credits__words--short,
+.verafy-credits__buy-short {
+  display: none;
+}
+
+.verafy-credits__buy {
+  margin: 0;
+  border: 0;
+  border-left: 1px solid #232c36;
+  border-radius: 0;
+  background: #3f8f80;
+  color: #05080d;
+  font: inherit;
+  font-weight: 600;
+  padding: 0 14px;
+  cursor: pointer;
+  box-shadow: none;
+  text-decoration: none;
+}
+
+.verafy-credits__buy:hover {
+  background: #4aa392;
+  color: #05080d;
+}
+
+.verafy-credits__buy:focus-visible,
+.verafy-header .verafy-credits__buy:focus-visible {
+  outline: 2px solid #5fe0c8;
+  outline-offset: 2px;
+}
+
+@media (max-width: 639px) {
+  .verafy-credits__words,
+  .verafy-credits__buy-full {
+    display: none;
+  }
+
+  .verafy-credits__buy-short {
+    display: inline;
+  }
+
+  .verafy-credits__status {
+    gap: 6px;
+    padding: 0 6px 0 8px;
+  }
+
+  .verafy-credits__buy {
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 359px) {
+  .verafy-credits__dot {
+    display: none;
+  }
+
+  .verafy-credits__status {
+    gap: 0;
+    padding: 0 4px 0 6px;
+  }
+
+  .verafy-credits__buy {
+    padding: 0 6px;
+  }
+}
+
+.verafy-credits__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.verafy-credits__close,
+.verafy-credits__pack button {
+  min-height: 44px;
+  border: 1px solid #2dd4bf;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.verafy-credits__close:focus-visible,
+.verafy-credits__pack button:focus-visible {
+  outline: 2px solid #2dd4bf;
+  outline-offset: 2px;
+}
+
+.verafy-credits__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.verafy-credits__sheet {
+  position: fixed;
+  z-index: 81;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 100dvh;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 16px 16px 24px;
+  border: 1px solid #2dd4bf;
+  border-radius: 16px 16px 0 0;
+  background: #0a0f15;
+  color: #ffffff;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+@media (min-width: 768px) {
+  .verafy-credits__sheet {
+    top: 50%;
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    width: min(920px, calc(100vw - 2rem));
+    transform: translate(-50%, -50%);
+    border-radius: 16px;
+    padding: 32px;
+  }
+}
+
+.verafy-credits__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.verafy-credits__head h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.verafy-credits__head p,
+.verafy-credits__secure,
+.verafy-credits__error {
+  margin: 8px 0 0;
+  font-size: 1rem;
+}
+
+.verafy-credits__close {
+  padding: 0 12px;
+  color: inherit;
+}
+
+.verafy-credits__packs {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .verafy-credits__packs {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.verafy-credits__pack {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #2dd4bf;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.verafy-credits__pack h3 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.verafy-credits__price {
+  margin: 8px 0 0;
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+
+.verafy-credits__badge {
+  border: 1px solid #2dd4bf;
+  border-radius: 999px;
+  color: #2dd4bf;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+}
+
+.verafy-credits__pack .credits-buy-link {
+  margin-top: 16px;
+}
+
+.verafy-credits__pack button,
+.credits-buy-link {
+  width: auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #5fe0c8;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  padding: 0;
+  min-height: 44px;
+}
+
+.credits-buy-link {
+  display: inline-flex;
+  align-items: center;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.verafy-credits__pack button:hover,
+.credits-buy-link:hover {
+  background: transparent;
+  color: #ffffff;
+}
+
+.verafy-credits__pack button:disabled,
+.credits-buy-link:disabled {
+  cursor: progress;
+  background: transparent;
+  color: #5fe0c8;
+  opacity: 0.7;
+}
+
+button.verafy-credits__backdrop {
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.credits-out {
+  margin-top: 8px;
+  padding: 16px;
+  border: 1px solid #232c36;
+  border-radius: 10px;
+  background: #0e141b;
+  color: #ffffff;
+}
+
+.credits-out p {
+  margin: 0 0 4px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.credits-closed-page {
+  min-height: 100vh;
+  background: #0b0e12;
+  color: #ffffff;
+}
+
+.credits-closed-main {
+  box-sizing: border-box;
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 96px 16px 48px;
+}
+
+.credits-closed-main h1 {
+  margin: 0 0 12px;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.credits-closed-main p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #dfe5eb;
+}
+
+

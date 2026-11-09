@@ -1,0 +1,383 @@
+/*
+ * Shared product header for Bias Detector and Swarm Explorer.
+ * Hex values are the unified-header tokens (spec §3);
+ * they are listed in .design-check.json palette.
+ *
+ * Header exceptions (spec wins, or a later Rex rule):
+ *   Stage pill 10px, nav 15px, Verafy.ai link 14px, credits text 14px,
+ *   badge height 36px, menu moves left of the lockup below 1100px.
+ *   At <=359px page padding is 8px so the 17px product name stays whole.
+ */
+
+:root {
+  --hdr-height: 64px;
+  --hdr-height-mobile: 56px;
+  --hdr-bg: #0b0e12;
+  --hdr-text: #ffffff;
+  --text-nav: #c9d2dc;
+  --text-muted: #8a96a3;
+  --teal: #5fe0c8;
+  --teal-fill: #3f8f80;
+  --stage-alpha: #e0b862;
+  --teal-fill-hover: #4aa392;
+  --on-accent-fill: #05080d;
+  --hdr-line: #232c36;
+  --hdr-border: color-mix(in srgb, #5fe0c8 18%, transparent);
+  --hdr-divider: color-mix(in srgb, #ffffff 12%, transparent);
+  --hdr-badge-bg: color-mix(in srgb, #ffffff 4%, transparent);
+  --hdr-font: var(--font-inter), Inter, system-ui, sans-serif;
+  --hdr-pad: 32px;
+}
+
+.product-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: var(--hdr-height);
+  background: var(--hdr-bg);
+  border-bottom: 1px solid var(--hdr-border);
+  color: var(--hdr-text);
+  font-family: var(--hdr-font);
+}
+
+.product-header__bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 var(--hdr-pad);
+}
+
+.product-header__menu {
+  display: none;
+  flex: 0 0 44px;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-nav);
+  cursor: pointer;
+}
+
+.product-header__lockup {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+  min-width: max-content;
+  min-height: 44px;
+  color: var(--hdr-text);
+  text-decoration: none;
+}
+
+.product-header__mark {
+  display: block;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  color: var(--teal);
+}
+
+.product-header__icon {
+  display: block;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  color: var(--teal);
+}
+
+.product-header__name {
+  flex: 0 0 auto;
+  color: var(--hdr-text);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.product-header__beta {
+  flex: 0 0 auto;
+  border: 1px solid color-mix(in srgb, var(--teal) 50%, transparent);
+  border-radius: 999px;
+  color: var(--teal);
+  /* design-check-disable-next-line small-text -- unified header spec §4.1 Beta pill is 10px */
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  padding: 3px 8px;
+  text-transform: uppercase;
+}
+
+/* Release stage pill (lib/product-status.ts). Beta = teal, Alpha = amber. */
+.product-header__stage[data-stage="alpha"] {
+  border-color: color-mix(in srgb, var(--stage-alpha) 55%, transparent);
+  color: var(--stage-alpha);
+}
+
+.product-header[data-product="mediation"] .product-header__beta {
+  letter-spacing: 0.18em;
+  padding: 3px 9px;
+}
+
+.product-header__cluster {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 24px;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.product-header__links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.product-header__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text-nav);
+  /* design-check-disable-next-line small-text -- unified header spec §4.2 nav links are 15px */
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.product-header__links a:hover,
+.product-header__sheet a:hover,
+.product-header__verafy:hover {
+  color: var(--hdr-text);
+}
+
+.product-header__links a[aria-current="page"] {
+  color: var(--hdr-text);
+  text-decoration: underline;
+  text-decoration-color: var(--teal);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.product-header__divider {
+  flex: 0 0 auto;
+  width: 1px;
+  height: 20px;
+  background: var(--hdr-divider);
+}
+
+.product-header__verafy {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  color: var(--text-muted);
+  /* design-check-disable-next-line small-text -- unified header spec §4.2 Verafy.ai link is 14px */
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.product-header__external {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.product-header__slot {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.product-header__sheet {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  box-sizing: border-box;
+  padding: 4px 16px 12px;
+  background: var(--hdr-bg);
+  border-bottom: 1px solid var(--hdr-border);
+}
+
+.product-header__sheet[hidden] {
+  display: none;
+}
+
+.product-header__sheet a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text-nav);
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.product-header a:focus-visible,
+.product-header button:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.bias-sim-banner {
+  top: var(--hdr-height);
+}
+
+.bias-shell-main {
+  padding-top: calc(var(--hdr-height) + 52px);
+}
+
+@media (max-width: 1279px) and (min-width: 1100px) {
+  .product-header__links,
+  .product-header__cluster {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 1099px) {
+  .product-header__menu {
+    display: inline-flex;
+  }
+
+  .product-header__links,
+  .product-header__divider,
+  .product-header__verafy {
+    display: none;
+  }
+
+  /* Mediation has no nav to collapse, so the company link stays on the bar. */
+  .product-header[data-product="mediation"] .product-header__verafy {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 1100px) {
+  .product-header__sheet {
+    display: none;
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --hdr-pad: 16px;
+  }
+
+  .product-header[data-product="mediation"] .product-header__bar {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .product-header[data-product="mediation"] .product-header__cluster {
+    gap: 8px;
+  }
+
+  .product-header {
+    height: var(--hdr-height-mobile);
+  }
+
+  .product-header__bar {
+    gap: 8px;
+  }
+
+  /* Keep the stage pill on phones, just tighter. */
+  .product-header__beta {
+    letter-spacing: 0.08em;
+    padding: 2px 6px;
+  }
+
+  .bias-sim-banner {
+    top: var(--hdr-height-mobile);
+  }
+
+  .bias-shell-main {
+    padding-top: calc(var(--hdr-height-mobile) + 52px);
+  }
+}
+
+/* 320px: 16px padding cannot fit a 44px menu, the 17px name, and the pill. */
+@media (max-width: 359px) {
+  :root {
+    --hdr-pad: 8px;
+  }
+
+  .product-header__bar {
+    gap: 4px;
+  }
+
+  .product-header__lockup {
+    gap: 6px;
+  }
+}
+
+/* Phones up to 430px: the stage pill needs ~40px, so use the 320px spacing
+ * and the compact credits badge. The product name and pill both stay whole. */
+@media (max-width: 430px) {
+  :root {
+    --hdr-pad: 8px;
+  }
+
+  .product-header__bar {
+    gap: 4px;
+  }
+
+  .product-header__lockup {
+    gap: 6px;
+  }
+
+  .product-header__beta {
+    letter-spacing: 0.06em;
+    padding: 2px 5px;
+  }
+
+  .product-header .verafy-credits__dot {
+    display: none;
+  }
+
+  .product-header .verafy-credits__status {
+    gap: 0;
+    padding: 0 6px 0 8px;
+  }
+
+  .product-header .verafy-credits__buy {
+    padding: 0 8px;
+  }
+
+  /* Judiciary has no menu; its company link moves off the bar on phones. */
+  .product-header[data-product="mediation"] .product-header__verafy {
+    display: none;
+  }
+}
+
+/* Below 375px the name, menu and credits fill the bar; the pill steps aside
+ * rather than clip the Buy button. */
+@media (max-width: 374px) {
+  .product-header__beta {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-header,
+  .product-header * {
+    transition: none;
+  }
+}

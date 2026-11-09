@@ -56,10 +56,10 @@ async function accountInfo(url, address) {
 export async function fetchProgram(address, { network = 'mainnet', rpcUrl } = {}) {
   const url = rpcUrl || RPC[network];
   if (!url) throw new Error(`unknown network ${network}`);
-  try { k.assertIsAddress(address); } catch { throw new Error('that is not a valid Solana address'); }
+  try { k.assertIsAddress(address); } catch { throw new Error('That is not a valid Solana address.'); }
   const acct = await accountInfo(url, address);
-  if (!acct) throw new Error(`no account at ${address} on ${network}`);
-  if (!acct.executable) throw new Error(`${address} is not a program`);
+  if (!acct) throw new Error(`There is no account at ${address} on ${network}.`);
+  if (!acct.executable) throw new Error(`${address} is not a program.`);
   let program, upgradeable = false, upgradeAuthority = null;
   if (acct.owner === UPGRADEABLE) {
     const programData = k.getAddressDecoder().decode(acct.data.subarray(4, 36));

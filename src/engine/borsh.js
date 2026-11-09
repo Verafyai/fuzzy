@@ -16,7 +16,10 @@ function intBytes(value, bytes, signed) {
   return out;
 }
 
-export function encodeValue(type, value, resolveKey) {
+const norm = (x) => String(x).replace(/[_\s-]/g, '').toLowerCase();
+const definedName = (t) => t && t.defined && (typeof t.defined === 'string' ? t.defined : t.defined.name);
+
+export function encodeValue(type, value, resolveKey, types = new Map()) {
   if (typeof type === 'string') {
     if (type in INT) return intBytes(value, INT[type][0], INT[type][1]);
     if (type === 'bool') return new Uint8Array([value ? 1 : 0]);
@@ -27,9 +30,26 @@ export function encodeValue(type, value, resolveKey) {
     }
     throw new Error(`unsupported arg type ${type}`);
   }
-  if (type.option) return value == null ? new Uint8Array([0]) : concat([new Uint8Array([1]), encodeValue(type.option, value, resolveKey)]);
-  if (type.vec) return concat([intBytes((value || []).length, 4, false), ...(value || []).map((v) => encodeValue(type.vec, v, resolveKey))]);
-  if (type.array) return concat(Array.from({ length: type.array[1] }, (_, i) => encodeValue(type.array[0], (value || [])[i] ?? 0, resolveKey)));
+  if (type.option) return value == null ? new Uint8Array([0]) : concat([new Uint8Array([1]), encodeValue(type.option, value, resolveKey, types)]);
+  if (type.vec) return concat([intBytes((value || []).length, 4, false), ...(value || []).map((v) => encodeValue(type.vec, v, resolveKey, types))]);
+  if (type.array) return concat(Array.from({ length: type.array[1] }, (_, i) => encodeValue(type.array[0], (value || [])[i] ?? 0, resolveKey, types)));
+  const name = definedName(type);
+  if (name) {
+    const def = types.get(norm(name));
+    const t = def && (def.type || def);
+    if (t && t.kind === 'struct') {
+      const fields = t.fields || [];
+      if (fields.length && typeof fields[0] !== 'object') return concat(fields.map((f, i) => encodeValue(f, (value || [])[i], resolveKey, types)));
+      return concat(fields.map((f) => encodeValue(f.type, (value || {})[f.name], resolveKey, types)));
+    }
+    if (t && t.kind === 'enum') {
+      const idx = value?.variant ?? 0;
+      const variant = (t.variants || [])[idx] || {};
+      const fields = variant.fields || [];
+      const parts = fields.map((f, i) => (typeof f === 'object' && f.type !== undefined ? encodeValue(f.type, (value?.fields || {})[f.name], resolveKey, types) : encodeValue(f, (value?.fields || [])[i], resolveKey, types)));
+      return concat([new Uint8Array([idx]), ...parts]);
+    }
+  }
   throw new Error(`unsupported arg type ${JSON.stringify(type)}`);
 }
 
@@ -42,7 +62,7 @@ export function concat(parts) {
 }
 
 /** Ordinary values first, then the extremes the arithmetic attack uses. */
-export function candidates(type) {
+export function candidates(type, types = new Map(), depth = 0) {
   if (typeof type === 'string') {
     if (type in INT) {
       const [bytes, signed] = INT[type];
@@ -56,7 +76,26 @@ export function candidates(type) {
     if (type === 'string') return { typical: ['fuzzy'], extreme: ['', 'x'.repeat(200)] };
     if (type === 'bytes') return { typical: [[1, 2, 3]], extreme: [[]] };
   }
-  if (type.option) return { typical: [null, ...candidates(type.option).typical.slice(0, 1)], extreme: [] };
+  if (type.option) return { typical: [null, ...candidates(type.option, types, depth + 1).typical.slice(0, 1)], extreme: [] };
+  const name = definedName(type);
+  if (name && depth < 6) {
+    const def = types.get(norm(name));
+    const t = def && (def.type || def);
+    const first = (ft, key) => { const c = candidates(ft, types, depth + 1); return key === 'extreme' && c.extreme.length ? c.extreme[0] : c.typical[0]; };
+    if (t && t.kind === 'struct') {
+      const fields = t.fields || [];
+      const build = (key) => (fields.length && typeof fields[0] !== 'object' ? fields.map((f) => first(f, key)) : Object.fromEntries(fields.map((f) => [f.name, first(f.type, key)])));
+      return { typical: [build('typical')], extreme: [build('extreme')] };
+    }
+    if (t && t.kind === 'enum') {
+      const variants = (t.variants || []).map((v, i) => {
+        const fields = v.fields || [];
+        const vals = fields.length && typeof fields[0] === 'object' && fields[0].type !== undefined ? Object.fromEntries(fields.map((f) => [f.name, first(f.type, 'typical')])) : fields.map((f) => first(f, 'typical'));
+        return { variant: i, fields: vals };
+      });
+      return { typical: variants.slice(0, 3), extreme: [] };
+    }
+  }
   if (type.vec) return { typical: [[]], extreme: [] };
   if (type.array) return { typical: [[]], extreme: [] };
   return { typical: [0], extreme: [] };

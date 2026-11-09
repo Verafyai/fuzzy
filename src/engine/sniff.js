@@ -43,9 +43,10 @@ function asAttacker(accounts, { sign = true } = {}) {
   });
 }
 
+let types = new Map();
 function argCombos(ix, pick) {
   if (ix.args.length === 0) return [[]];
-  const lists = ix.args.map((a) => pick(candidates(a.type)));
+  const lists = ix.args.map((a) => pick(candidates(a.type, types)));
   const combos = [];
   const width = Math.max(...lists.map((l) => l.length));
   for (let i = 0; i < width; i++) combos.push(lists.map((l) => l[Math.min(i, l.length - 1)]));
@@ -96,6 +97,7 @@ async function loadEncoder() {
  */
 export async function runSniff({ program, idl, seed = 'fuzzy', budget = { txs: 600, ms: 40_000 }, onEvent = () => {} }) {
   await loadEncoder();
+  types = idl?.types || new Map();
   const t0 = Date.now();
   let txs = 0;
   const paths = new Set();
@@ -103,13 +105,22 @@ export async function runSniff({ program, idl, seed = 'fuzzy', budget = { txs: 6
   const findings = [];
   const leads = [];
   const tried = new Set();
+  const unsupported = new Set();
   const outOfBudget = () => txs >= budget.txs || Date.now() - t0 > budget.ms;
 
   async function run(prefix, step) {
     const world = await makeWorld({ program, seed, idl });
     for (const p of prefix) { await send(world, p); txs++; }
-    const result = await send(world, step);
+    let result;
+    try {
+      result = await send(world, step);
+    } catch (error) {
+      unsupported.add(step.ix);
+      result = { ok: false, error: 'unsupported_args', computeUnits: 0, logs: [String(error.message || error)], changes: [], transaction: '' };
+      return { world, result };
+    }
     txs++;
+    if (txs % 25 === 0) onEvent({ type: 'progress', transactions: txs });
     const s = seen.get(step.ix) || { ok: false, err: false };
     if (result.ok) s.ok = true; else s.err = true;
     seen.set(step.ix, s);
@@ -158,6 +169,7 @@ export async function runSniff({ program, idl, seed = 'fuzzy', budget = { txs: 6
     if (!progress) break;
   }
   onEvent({ type: 'note', text: `Learned ${steps.length} of ${idl.instructions.length} instructions.` });
+  if (unsupported.size) onEvent({ type: 'note', text: `Could not encode arguments for ${[...unsupported].join(', ')}.` });
 
   // 2. Attack every working step.
   for (let i = 0; i < steps.length && !outOfBudget(); i++) {

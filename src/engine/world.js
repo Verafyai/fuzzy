@@ -83,7 +83,7 @@ export async function send(world, step) {
   let data;
   if (ix) {
     const resolveKey = (v) => k.getAddressEncoder().encode(String(v).startsWith('actor:') ? world.actors[String(v).slice(6)].address : v);
-    data = concat([Uint8Array.from(ix.discriminator), ...ix.args.map((a, i) => encodeValue(a.type, step.args[i], resolveKey))]);
+    data = concat([Uint8Array.from(ix.discriminator), ...ix.args.map((a, i) => encodeValue(a.type, step.args[i], resolveKey, world.idl.types))]);
   } else {
     data = Uint8Array.from(step.raw || []);
   }
