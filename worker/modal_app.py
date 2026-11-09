@@ -42,7 +42,8 @@ image = (
         "git clone --depth 1 https://github.com/crytic/solana-lints /opt/solana-lints",
         "cd /tmp && /root/.cargo/bin/cargo new -q --lib warm && cd warm && PATH=/root/.cargo/bin:$PATH cargo dylint --path /opt/solana-lints --pattern 'lints/*' --all || true",
         # A genesis ledger for agave-ledger-tool program run (branch coverage).
-        f"export PATH={PATH} && (solana-test-validator --ledger /opt/ledger --quiet --reset & sleep 30; pkill -f solana-test-validator; sleep 2) || true",
+        # Stop it by pid: pkill -f would match this shell's own command line and kill the build step.
+        f"export PATH={PATH}; solana-test-validator --ledger /opt/ledger --quiet --reset & pid=$!; sleep 30; kill $pid; wait $pid; test -d /opt/ledger/rocksdb && echo ledger ready",
     )
     .pip_install("fastapi[standard]")
     .env({"PATH": PATH, "FUZZY_LEDGER": "/opt/ledger", "AGAVE_LEDGER_TOOL": "agave-ledger-tool", "FUZZY_BUILD_SBF": "cargo-build-sbf", "FUZZY_SOLANA_LINTS": "/opt/solana-lints"})
