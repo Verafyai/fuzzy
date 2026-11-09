@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CREDIT_COSTS, CREDIT_PRODUCT_SHARED } from "@/lib/credits/config";
 import { chargeAction } from "@/lib/credits/charge-request";
+import { creditsMockForced, creditsUseMock } from "@/lib/credits/config";
 import { refundCredits } from "@/lib/credits/service";
 import { applyVisitorCookie } from "@/lib/credits/visitor-cookie";
 // The engine is plain ESM JavaScript, shared with the CLI.
@@ -65,6 +66,12 @@ async function readInput(request: NextRequest): Promise<Input | NextResponse> {
 }
 
 export async function POST(request: NextRequest) {
+  // A production deploy without the credits secret must not fall back to the mock ledger,
+  // which would make scans free and disagree with the balance in the header.
+  const mock = creditsUseMock();
+  if (mock && process.env.VERCEL_ENV === "production" && !creditsMockForced()) {
+    return NextResponse.json({ error: "Credits are not configured on this deploy yet, so scans are paused." }, { status: 503 });
+  }
   const input = await readInput(request);
   if (input instanceof NextResponse) return input;
   try {
@@ -82,7 +89,7 @@ export async function POST(request: NextRequest) {
   const stream = new ReadableStream({
     async start(controller) {
       const emit = (event: unknown) => controller.enqueue(encoder.encode(JSON.stringify(event) + "\n"));
-      emit({ type: "charged", credits: amount, balance: charge.balance });
+      emit({ type: "charged", credits: amount, balance: charge.balance, ...(mock ? { mock: true } : {}) });
       try {
         const report = await fuzz({
           program: input.program,
@@ -93,7 +100,7 @@ export async function POST(request: NextRequest) {
           onEvent: (event: { type: string }) => emit(event),
         });
         report.seed = report.program.sha256.slice(0, 16);
-        emit({ type: "report", report });
+        emit({ type: "report", report: mock ? { ...report, mock: true } : report });
       } catch (error) {
         await refundCredits({ visitorId: charge.visitorId, amount, reason: "fuzzy-sniff-failed", source: "fuzzy", idempotencyKey: charge.idempotencyKey, product: CREDIT_PRODUCT_SHARED });
         emit({ type: "error", message: `The run failed and your ${amount} credits were returned. ${error instanceof Error ? error.message : ""}`.trim() });

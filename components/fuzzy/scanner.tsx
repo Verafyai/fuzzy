@@ -93,7 +93,7 @@ export function Scanner() {
   }
 
   function handle(event: Report) {
-    if (event.type === "charged") setFeed((f) => [...f, `Run started. ${COST} credits spent.`]);
+    if (event.type === "charged") setFeed((f) => [...f, event.mock ? `Run started. Mock data: credits are not connected on this deploy, so nothing was spent.` : `Run started. ${COST} credits spent.`]);
     if (event.type === "note") setFeed((f) => [...f, event.text]);
     if (event.type === "progress") setTransactions(event.transactions);
     if (event.type === "finding") {
