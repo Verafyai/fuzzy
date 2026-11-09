@@ -14,7 +14,7 @@ export default function CertificationsPage() {
     rank: r.rank, name: r.name, category: r.category, address: r.address, status: r.status, reason: r.reason,
     score: r.score, depth: r.depth, grade: r.grade, proven: r.proven, leads: r.leads, state: r.state, idl: r.idl,
     scannedAt: r.scannedAt, certification: r.certification, verifiedBuild: r.verifiedBuild ?? false,
-    devnetCertification: r.devnetCertification ? { level: r.devnetCertification.level, levelName: r.devnetCertification.levelName, certification: r.devnetCertification.certification } : undefined,
+    devnetCertification: r.devnetCertification ? { level: r.devnetCertification.level, score: r.devnetCertification.score, levelName: r.devnetCertification.levelName, certification: r.devnetCertification.certification } : undefined,
   })) as RegistryRow[];
   const date = new Date(registry.generatedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
   return (
@@ -25,7 +25,7 @@ export default function CertificationsPage() {
       </section>
       <Registry rows={rows} />
       <p className="muted" style={{ fontSize: 13 }}>
-        Order follows <a href="https://orbmarkets.io/programs">Orb&apos;s program directory</a> on {date}. Devnet certifications only; the jurors voted by script.
+        Order follows <a href="https://orbmarkets.io/programs">Orb&apos;s program directory</a> on {date}. Certification grades: A Hardened, B Fuzzed, C Sniffed, I too shallow to grade, F exploit proven. Devnet only; the jurors voted by script.
       </p>
     </main>
   );

@@ -2,9 +2,11 @@ import "./globals.css";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Script from "next/script";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+// A true monospace for the ASCII certification stamps; system mono stacks fall back to proportional fonts on some machines.
+const stampMono = JetBrains_Mono({ subsets: ["latin"], weight: ["700"], variable: "--font-stamp" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://fuzzy.verafy.ai"),
@@ -21,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${stampMono.variable}`}>
       <body>
         {/* The canonical Verafy header: credits, checkout, sign-in and Google Analytics for every Verafy site. */}
         <Script src="https://www.verafy.ai/header/v1/verafy-header.js" strategy="afterInteractive" />

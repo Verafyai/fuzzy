@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import registry from "@/data/registry.json";
 import { Info } from "@/components/fuzzy/info";
-import { ASSESSMENT_BY_ID, COLUMN_HELP, DEPTH_PARTS, STATE_LABEL, STATUS_TEXT, scoreColor } from "@/lib/assessments";
+import { Stamp } from "@/components/fuzzy/stamp";
+import { certLevel as levelOf, gradeFor } from "@/lib/grade";
+import { ASSESSMENT_BY_ID, COLUMN_HELP, DEPTH_PARTS, STATUS_TEXT, scoreColor } from "@/lib/assessments";
 import { JobResults } from "@/components/fuzzy/build-machine";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -32,6 +34,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ addres
   if (!r) notFound();
   const shallow = r.grade === "Shallow run";
   const cert = r.devnetCertification;
+  const certLevel = levelOf(cert);
   const tried = (r.classes || []).filter((c: any) => c.status === "held" || c.status === "broke it").length;
 
   return (
@@ -60,15 +63,17 @@ export default async function ProgramPage({ params }: { params: Promise<{ addres
         </div>
       </section>
 
-      <section className="panel stack" style={{ gap: 10, borderColor: cert ? "var(--teal-fill)" : undefined }}>
+      <section className="panel stack" style={{ gap: 14 }}>
         <h2>Certification<Info text={COLUMN_HELP.certification} /></h2>
         {cert ? (
           <>
-            <p className="quiet"><span className={cert.level > 0 ? "tag tag-cert" : "tag"}>{cert.level > 0 ? `Devnet certification only: ${cert.levelName}` : "Recorded on devnet: Not certified"}</span></p>
-            <p className="quiet" style={{ fontSize: 15 }}>
-              A jury of {cert.jurors} registered Verafy harnesses from {cert.families} model families ruled on this build&apos;s {cert.tier || "Sniff"} report on Solana devnet, and verafy_certification wrote the result on chain on {date(cert.certifiedAt)}.{" "}
-              {cert.level > 0 ? "This is not a full certification: the jurors voted by script, and it lives on devnet." : "Not certified means the run was too shallow to vouch for, or proved an exploit. It is a record, not an accusation."}
-            </p>
+            <div className="row" style={{ gap: 24, alignItems: "flex-start" }}>
+              <Stamp cert={cert} name={r.name} proven={r.proven} />
+              <p className="quiet" style={{ fontSize: 15, flex: "1 1 320px" }}>
+                Grade <b style={{ color: "var(--text)" }}>{gradeFor(cert, r.proven).grade}</b>. A jury of {cert.jurors} registered Verafy harnesses from {cert.families} model families ruled on this build&apos;s {cert.tier || "Sniff"} report, and verafy_certification wrote it on Solana devnet on {date(cert.certifiedAt)}. Devnet only, and the jurors voted by script.{" "}
+                {certLevel === 0 ? (r.proven ? "F means an exploit was proven." : "I means the run was too shallow to grade. It is not a judgment that the program is broken.") : null}
+              </p>
+            </div>
             <dl className="kv">
               <dt>Certification account</dt><dd><a className="mono" href={devnet(cert.certification)}>{cert.certification}</a></dd>
               <dt>Jury ruling</dt><dd><a className="mono" href={devnet(cert.ruling)}>{cert.ruling}</a></dd>
@@ -78,21 +83,20 @@ export default async function ProgramPage({ params }: { params: Promise<{ addres
             </dl>
             {cert.history?.length ? (
               <div className="stack" style={{ gap: 6 }}>
-                <h3>Earlier rulings for this build</h3>
-                <p className="quiet" style={{ fontSize: 14 }}>A certification is replaced only by a newer jury ruling. The earlier rulings stay on chain.</p>
-                <ul className="list quiet" style={{ fontSize: 14 }}>{cert.history.map((h: any) => <li key={h.ruling}>{h.levelName}, score {h.score}, {date(h.certifiedAt)}: <a className="mono" href={devnet(h.ruling)}>{h.ruling.slice(0, 10)}…</a> (replaced {date(h.replacedAt)})</li>)}</ul>
+                <h3>Earlier certifications for this build</h3>
+                <ul className="list quiet" style={{ fontSize: 14 }}>{cert.history.map((h: any) => <li key={h.ruling}>Grade {gradeFor(h).grade}, {date(h.certifiedAt)}: <a className="mono" href={devnet(h.ruling)}>{h.ruling.slice(0, 10)}…</a> (replaced {date(h.replacedAt)})</li>)}</ul>
               </div>
             ) : null}
           </>
         ) : (
-          <p className="quiet" style={{ fontSize: 15 }}>No record on chain yet for this build.</p>
+          <p className="quiet" style={{ fontSize: 15 }}>Not certified yet. This build has no certification on chain.</p>
         )}
       </section>
 
       <section className="stack" style={{ gap: 12 }}>
         <h2>What ran</h2>
         <p className="quiet">
-          {r.tier || "Sniff"} run: {r.transactions} transactions in {Math.round((r.durationMs || 0) / 1000)} seconds, {tried} attack {tried === 1 ? "class" : "classes"} run, tested on {STATE_LABEL[r.state || "empty"].toLowerCase()}{r.state === "mainnet" && r.replayedFromSlot ? ` (accounts cloned at slot ${r.replayedFromSlot})` : ""}. Nothing was sent to mainnet or devnet. <a href="/docs/method">How a run works</a>
+          {r.tier || "Sniff"} run: {r.transactions} transactions in {Math.round((r.durationMs || 0) / 1000)} seconds, {tried} attack {tried === 1 ? "class" : "classes"} run {r.state === "mainnet" ? "on cloned mainnet accounts" : r.state === "synthetic" ? "on accounts built from the IDL" : "with no accounts to test on"}{r.state === "mainnet" && r.replayedFromSlot ? ` (accounts cloned at slot ${r.replayedFromSlot})` : ""}. Nothing was sent to mainnet or devnet. <a href="/docs/method">How a run works</a>
         </p>
         <div className="tablewrap">
           <table className="data">

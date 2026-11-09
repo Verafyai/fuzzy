@@ -1,3 +1,4 @@
+import { Stamp } from "@/components/fuzzy/stamp";
 import { SourceChecks } from "@/components/fuzzy/source-checks";
 import { FuzzyMascot, moodForGrade } from "@/components/fuzzy/mascot";
 
@@ -20,6 +21,13 @@ function sol(lamports: string | number) {
 
 function plural(n: number, one: string, many = `${one}s`) {
   return `${n.toLocaleString("en-US")} ${n === 1 ? one : many}`;
+}
+
+/** The level a jury would be asked to confirm, by the same rule certify-all uses. */
+function projectedLevel(report: Report) {
+  if (report.findings.length) return 0;
+  if (report.tier?.id === "deep" && report.tested?.state === "mainnet" && report.score.depth >= 40) return 2;
+  return report.score.depth >= 40 ? 1 : 0;
 }
 
 export function FuzzyReport({ report, example = false }: { report: Report; example?: boolean }) {
@@ -59,6 +67,15 @@ export function FuzzyReport({ report, example = false }: { report: Report; examp
         </div>
         <FuzzyMascot mood={shallow ? "sniffing" : moodForGrade(s.grade)} size={132} />
       </section>
+
+      {example ? null : (
+        <section className="panel row" style={{ gap: 24, alignItems: "center" }}>
+          <Stamp pending cert={{ level: projectedLevel(report), levelName: ["Not certified", "Sniffed", "Fuzzed", "Hardened"][projectedLevel(report)], score: s.score, bytecodeHash: report.program.sha256 }} name={report.program.name} proven={report.findings.length} />
+          <p className="quiet" style={{ fontSize: 15, flex: "1 1 300px" }}>
+            The grade this report would put to a Verafy jury. It becomes a certification only when the jury rules and the result is written on Solana for this exact build.
+          </p>
+        </section>
+      )}
 
       <section className="row" style={{ alignItems: "stretch", gap: 20 }}>
         <div className="panel stack" style={{ flex: "1 1 460px" }}>

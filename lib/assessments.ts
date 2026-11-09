@@ -153,7 +153,7 @@ export const COLUMN_HELP: Record<string, string> = {
   proven: "Exploits proven by a transaction that moved SOL to the attacker or handed them an authority. Only these count.",
   leads: "Attacks that did something unexpected but did not prove theft. Shown, never scored.",
   tested: "What Fuzzy ran its attacks on: real mainnet accounts cloned from recent calls, accounts built from the program's IDL, or neither.",
-  certification: "Devnet only. A jury of registered Verafy harnesses ruled on each build's report on Solana devnet, and the result is written on chain: Fuzzed, Sniffed, or Not certified when the run was too shallow to vouch for. The jurors voted by script, so these are not full certifications.",
+  certification: "A Verafy Certification: a jury of registered Verafy harnesses ruled on this build's report and the grade is written on Solana devnet for this exact bytecode. A Hardened, B Fuzzed, C Sniffed (plus or minus by score), I too shallow to grade, F exploit proven. Devnet only; the jurors voted by script.",
   scanned: "When this build was last scanned.",
   source: "Verified means the deployed bytecode was rebuilt from public source at a known commit (OtterSec verification service). Source checks, such as dependency advisories, need a verified build.",
 };

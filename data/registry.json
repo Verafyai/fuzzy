@@ -3956,7 +3956,9 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "d7709524ab16022f59521b3b44df1476572b5109afce0515ac86c1e44430763f",
-    "reportHash": "f95f5f1e4633df88f7e792b062eb4e82829c79fd6199c97962e3bb7715fdb418"
+    "reportHash": "f95f5f1e4633df88f7e792b062eb4e82829c79fd6199c97962e3bb7715fdb418",
+    "level": 1,
+    "score": 47
    }
   },
   {
@@ -4797,7 +4799,9 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "3192a190b0aa4ade360844924118cebd47a5479b26658764ae285362f2ede6d0",
-    "reportHash": "30e933c56c3cde29153b212a027258406342ad9d94c237f524575c73436376f7"
+    "reportHash": "30e933c56c3cde29153b212a027258406342ad9d94c237f524575c73436376f7",
+    "level": 1,
+    "score": 47
    }
   },
   {
@@ -11256,7 +11260,9 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "9af9e3b1cbc9d89340af4d9d46e4c88d3dc2fc67e0090f9370047d97532ff09d",
-    "reportHash": "df088c920bae6a08c73ea66eeb8d21d96e3bebfb500d39fe873002d91acc1d83"
+    "reportHash": "df088c920bae6a08c73ea66eeb8d21d96e3bebfb500d39fe873002d91acc1d83",
+    "level": 1,
+    "score": 47
    }
   },
   {
@@ -11857,7 +11863,9 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "719b9e80d632562f075ba27a8ce474d09a52e603c8c63dec7504ff420c246c29",
-    "reportHash": "4fd94edb19f47c9f64bd06f977f684448d0471a2fb2a9aca8910bc5906e694c1"
+    "reportHash": "4fd94edb19f47c9f64bd06f977f684448d0471a2fb2a9aca8910bc5906e694c1",
+    "level": 1,
+    "score": 50
    }
   },
   {
@@ -12985,7 +12993,9 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "3a702bdefbce9eac65f42abc5e94947898dfcda1fefdd59c69ad948d0ce06a99",
-    "reportHash": "c8554b43e42ea4ff1cf445230fc5769dfedee3afae6d3aa31467c16a9f056a0d"
+    "reportHash": "c8554b43e42ea4ff1cf445230fc5769dfedee3afae6d3aa31467c16a9f056a0d",
+    "level": 1,
+    "score": 47
    }
   },
   {
@@ -13135,7 +13145,9 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "bfda2d6e6b5a6683fae9e5cf91160b80d277381e846e123ba8ce657059ecd327",
-    "reportHash": "381c16786fc2495b7838522e3c9795797fe53066b7e45deeb56230a3c971849b"
+    "reportHash": "381c16786fc2495b7838522e3c9795797fe53066b7e45deeb56230a3c971849b",
+    "level": 1,
+    "score": 47
    }
   },
   {
@@ -13418,7 +13430,9 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "0e1b8c9bce12fcae8874ca68de39fce51eb894593dac41441c288d0592bbd86e",
-    "reportHash": "c411569f2a2abc970a42b55745022bbf38fd277918ecd19c3351534bb9cdae9d"
+    "reportHash": "c411569f2a2abc970a42b55745022bbf38fd277918ecd19c3351534bb9cdae9d",
+    "level": 1,
+    "score": 42
    }
   },
   {
@@ -13735,7 +13749,9 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "9d61a5ab098e39fc1b0f2e31b71aead9f7a1079c62f5747aca04c0210ce9d95f",
-    "reportHash": "a660ee2422685c91448c51618f380a5fa0145a59d007def26d7450aadf39978e"
+    "reportHash": "a660ee2422685c91448c51618f380a5fa0145a59d007def26d7450aadf39978e",
+    "level": 1,
+    "score": 47
    }
   },
   {
@@ -17686,7 +17702,9 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "99ee61a5159e15a359b01298b52c9f9f912eb19e47bdfe83987c16de52a4b1ff",
-    "reportHash": "120a37b8ab3fcedac977fe2e84272dc82aca9159a9af4a86f028029987c7e219"
+    "reportHash": "120a37b8ab3fcedac977fe2e84272dc82aca9159a9af4a86f028029987c7e219",
+    "level": 1,
+    "score": 47
    }
   },
   {
@@ -18183,7 +18201,9 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "4159610d690c5bf5ba5d6ba0d8ddd6649c02c722bcff4251dd62fc954cb4cb94",
-    "reportHash": "c847dc726572790da8123188fc8fbc4929b2191fb5bfc130082fe37052c0545d"
+    "reportHash": "c847dc726572790da8123188fc8fbc4929b2191fb5bfc130082fe37052c0545d",
+    "level": 1,
+    "score": 47
    }
   },
   {
@@ -19926,7 +19946,9 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "46fc6f624531b035050552e3e885ffcbdb0d92b6ea4d1452a0419d7d90d5cf0c",
-    "reportHash": "3b2b139cdd8bd8788baf0e9f30a42ed9a99e2150dee7192cc4ef7b73be06a9d9"
+    "reportHash": "3b2b139cdd8bd8788baf0e9f30a42ed9a99e2150dee7192cc4ef7b73be06a9d9",
+    "level": 1,
+    "score": 49
    }
   },
   {
@@ -22735,7 +22757,9 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "766533347d1e477537185192a8018962150898d457a0e4e98c0c5a2ba9133afd",
-    "reportHash": "930dfee622d3e6c5d4c83dd270a6d9b9e24a70919fa9d5f101a5810a7b4f91d7"
+    "reportHash": "930dfee622d3e6c5d4c83dd270a6d9b9e24a70919fa9d5f101a5810a7b4f91d7",
+    "level": 1,
+    "score": 40
    }
   }
  ]

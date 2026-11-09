@@ -168,3 +168,8 @@ table.registry tbody tr:hover td { background: var(--surface); }
 .tile-what { font-size: 13px; color: var(--text-2); line-height: 1.4; }
 .tile-check { position: absolute; top: 14px; right: 14px; width: 22px; height: 22px; border-radius: 999px; border: 1.5px solid var(--border); display: grid; place-items: center; font-size: 13px; color: #0B0E12; }
 .tile[aria-pressed="true"] .tile-check { background: var(--teal); border-color: var(--teal); }
+
+/* ASCII certification stamps */
+.stamp { margin: 0; font: 700 13px/1.35 var(--font-stamp), monospace; letter-spacing: 0; white-space: pre; transform: rotate(-1deg); opacity: 0.95; width: max-content; max-width: 100%; overflow: hidden; }
+.stamp-mini { font-size: 11px; line-height: 1.2; transform: rotate(-1.5deg); }
+.stamp-tag { font-size: 12px; line-height: 1; transform: none; padding: 0; }
