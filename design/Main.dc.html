@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fuzzy: drop a program</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D10}
+a{color:#4FD1B5;text-decoration:none}a:hover{color:#9BEBD8}
+</style>
+</helmet>
+<div style="background: #0B0D10; color: #E8EAED; font-family: Inter, system-ui, sans-serif; min-height: 100vh">
+<header style="max-width: 1240px; margin: 0 auto; padding: 20px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; color: #E8EAED">
+<dc-import name="Fuzzy" mood="waiting" size="{{ 40 }}" hint-size="40px,40px"></dc-import>
+<span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700">Fuzzy</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #9AA3AD">by Verafy</span>
+</a>
+<nav style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px; font-size: 15px">
+<a href="#how" style="color: #C5CBD2">How it works</a>
+<a href="Credits.dc.html" style="color: #C5CBD2">Pricing</a>
+<a href="#benchmarks" style="color: #C5CBD2">Benchmarks</a>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #F5B84B; border: 1px solid #3A3220; border-radius: 999px; padding: 6px 12px">1,000 free credits</span>
+<a href="Run.dc.html" style="background: #4FD1B5; color: #0B0D10; font-weight: 600; border-radius: 10px; padding: 10px 18px">Sign in</a>
+</nav>
+</header>
+
+<section style="max-width: 1240px; margin: 0 auto; padding: 48px 32px 72px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #4FD1B5">Security fuzzing for Solana programs</p>
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 64px; line-height: 1.02; font-weight: 700; letter-spacing: -0.02em">We break it so they can't.</h1>
+<p style="margin: 0; font-size: 19px; line-height: 1.55; color: #B8C0C8; max-width: 620px">Drop in a Solana program or paste its address. Fuzzy runs every good fuzzer and scanner at once, turns every lead into a real attack, and reports only what it actually broke, with the transaction to prove it.</p>
+
+<div style="border: 2px dashed #2E3A40; border-radius: 20px; background: #10151A; padding: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px">
+<dc-import name="Fuzzy" mood="waiting" size="{{ 120 }}" hint-size="120px,120px"></dc-import>
+<div style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">Drop your program here</p>
+<p style="margin: 0; font-size: 15px; color: #9AA3AD">A compiled .so file. Add the IDL JSON too for sharper attacks.</p>
+<label style="align-self: flex-start; margin-top: 6px; border: 1px solid #3A4650; border-radius: 10px; padding: 10px 16px; font-size: 15px; color: #E8EAED; cursor: pointer">Browse files<input type="file" accept=".so,.json" style="display: none"></label>
+</div>
+</div>
+
+<div style="display: flex; align-items: center; gap: 12px; color: #6B7580; font-size: 13px; font-family: 'JetBrains Mono', monospace"><span style="flex: 1; height: 1px; background: #232A33"></span>or point it at a deployed program<span style="flex: 1; height: 1px; background: #232A33"></span></div>
+
+<form style="display: flex; flex-wrap: wrap; gap: 12px; margin: 0">
+<label style="flex: 1 1 360px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #9AA3AD">Program address
+<input type="text" placeholder="e.g. 9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin" style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #E8EAED; background: #10151A; border: 1px solid #2E3A40; border-radius: 10px; padding: 14px 16px"></label>
+<label style="flex: 0 1 160px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: #9AA3AD">Network
+<select style="font-size: 15px; color: #E8EAED; background: #10151A; border: 1px solid #2E3A40; border-radius: 10px; padding: 13px 14px"><option>Mainnet</option><option>Devnet</option></select></label>
+<a href="Run.dc.html" style="align-self: flex-end; background: #4FD1B5; color: #0B0D10; font-weight: 600; font-size: 16px; border-radius: 10px; padding: 14px 22px">Size it up</a>
+</form>
+<p style="margin: 0; font-size: 14px; color: #9AA3AD">New accounts start with 1,000 free credits, enough for 10 quick runs. Nothing is ever sent to mainnet: every attack runs on a local copy.</p>
+</div>
+
+<div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 20px">
+<dc-import name="Fuzzy" mood="sniffing" size="{{ 260 }}" hint-size="260px,260px"></dc-import>
+<div style="width: 100%; max-width: 400px; background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-size: 13px; color: #9AA3AD">Example report</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #9AA3AD">Deep Fuzz</span></div>
+<div style="display: flex; align-items: baseline; gap: 12px"><span style="font-family: 'JetBrains Mono', monospace; font-size: 48px; font-weight: 600; color: #FF8A3D">45</span><span style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">Exposed</span></div>
+<div style="display: flex; gap: 10px; align-items: center; font-size: 14px"><span style="background: #3A2418; color: #FF8A3D; border-radius: 6px; padding: 3px 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px">HIGH</span>Withdraw accepts a vault it doesn't own</div>
+<div style="font-size: 13px; color: #9AA3AD">Proven with a replayable transaction. 38 other leads were checked and thrown out.</div>
+</div>
+</div>
+</section>
+
+<section id="how" style="background: #0F1317; border-top: 1px solid #1C2127; border-bottom: 1px solid #1C2127">
+<div style="max-width: 1240px; margin: 0 auto; padding: 64px 32px; display: flex; flex-direction: column; gap: 32px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 600">Proof, not a list of maybes</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px">
+<div style="background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'JetBrains Mono', monospace; color: #4FD1B5; font-size: 14px">Step 1</span>
+<h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">Hand it over</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #B8C0C8">Drop the .so, or paste an address and Fuzzy fetches the deployed bytecode, the IDL and the mainnet accounts it touches.</p>
+</div>
+<div style="background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'JetBrains Mono', monospace; color: #4FD1B5; font-size: 14px">Step 2</span>
+<h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">Everything at once</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #B8C0C8">Six engines run in parallel: hygiene checks, static analysis, coverage fuzzing, model-planned attacks, invariant hunting and an attacker swarm.</p>
+</div>
+<div style="background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-family: 'JetBrains Mono', monospace; color: #4FD1B5; font-size: 14px">Step 3</span>
+<h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">Only what it broke</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #B8C0C8">Every lead becomes a real attack replayed in LiteSVM. If it doesn't break anything, it isn't a finding.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section style="max-width: 1240px; margin: 0 auto; padding: 64px 32px; display: flex; flex-direction: column; gap: 28px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 600">Pick how hard to hit it</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px">
+<div style="background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600">Sniff</h3>
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 28px; color: #F5B84B">100 <span style="font-size: 14px; color: #9AA3AD">credits</span></p>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #B8C0C8">About 15 minutes. Hygiene, static analysis and a short fuzz. Good for every commit.</p>
+</div>
+<div style="background: #12161B; border: 2px solid #4FD1B5; border-radius: 16px; padding: 27px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: center"><h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600">Deep Fuzz</h3><span style="font-size: 12px; color: #0B0D10; background: #4FD1B5; border-radius: 999px; padding: 4px 10px; font-weight: 600">Most picked</span></div>
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 28px; color: #F5B84B">500 <span style="font-size: 14px; color: #9AA3AD">credits</span></p>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #B8C0C8">About an hour. Every engine except the swarm, against cloned mainnet accounts.</p>
+</div>
+<div style="background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600">Kitchen Sink</h3>
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 28px; color: #F5B84B">2,500 <span style="font-size: 14px; color: #9AA3AD">credits</span></p>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #B8C0C8">Up to 4 hours. All six engines, including the attacker swarm. Run it before an audit or a launch.</p>
+</div>
+</div>
+</section>
+
+<footer style="border-top: 1px solid #1C2127">
+<div style="max-width: 1240px; margin: 0 auto; padding: 28px 32px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: #9AA3AD">
+<span>Fuzzy is a Verafy product. A high score means the program survived these attacks. It is not an audit and not a promise of safety.</span>
+<span style="font-family: 'JetBrains Mono', monospace">fuzzy.verafy.ai</span>
+</div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1560}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

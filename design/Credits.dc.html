@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fuzzy: credits</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D10}
+a{color:#4FD1B5;text-decoration:none}a:hover{color:#9BEBD8}
+</style>
+</helmet>
+<div style="background: #0B0D10; color: #E8EAED; font-family: Inter, system-ui, sans-serif; min-height: 100vh">
+<header style="max-width: 1240px; margin: 0 auto; padding: 20px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; color: #E8EAED">
+<dc-import name="Fuzzy" mood="waiting" size="{{ 40 }}" hint-size="40px,40px"></dc-import>
+<span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700">Fuzzy</span>
+</a>
+<a href="Run.dc.html" style="font-size: 15px">Back to my run</a>
+</header>
+
+<main style="max-width: 1240px; margin: 0 auto; padding: 8px 32px 72px; display: flex; flex-direction: column; gap: 32px">
+<section style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center; background: #12161B; border: 1px solid #232A33; border-radius: 20px; padding: 28px">
+<div style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 40px; font-weight: 700">Verafy Credits</h1>
+<p style="margin: 0; font-size: 17px; line-height: 1.55; color: #B8C0C8; max-width: 640px">Every run is paid in credits. One credit is one cent. A run's cost is held when it starts and settled when it ends, and if a run fails on our side you get it all back.</p>
+</div>
+<div style="flex: 1 1 260px; display: flex; flex-direction: column; gap: 4px; align-items: flex-start">
+<span style="font-size: 13px; color: #9AA3AD">Your balance</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 44px; font-weight: 600; color: #F5B84B">500</span>
+<span style="font-size: 13px; color: #9AA3AD">Plus 500 held by a run in progress. Free credits expire in 90 days.</span>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 600">Buy a pack</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px">
+<sc-for list="{{packs}}" as="p" hint-placeholder-count="4">
+<div style="{{ p.card }}">
+<div style="display: flex; justify-content: space-between; align-items: center"><h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">{{ p.name }}</h3><span style="{{ p.tagStyle }}">{{ p.tag }}</span></div>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 30px; font-weight: 600; color: #F5B84B">{{ p.credits }}</span>
+<span style="font-size: 14px; color: #9AA3AD">{{ p.buys }}</span>
+<span style="font-size: 13px; color: #B8C0C8">{{ p.extra }}</span>
+<button type="button" onClick="{{ p.pick }}" style="{{ p.btn }}">{{ p.price }}</button>
+</div>
+</sc-for>
+</div>
+<p style="margin: 0; font-size: 14px; color: #9AA3AD">Paid by card. Credits are a prepaid balance on your Verafy account: not a token, not on chain, not transferable. Purchased credits never expire.</p>
+</section>
+
+<section style="display: flex; flex-wrap: wrap; gap: 20px">
+<div style="flex: 1 1 420px; min-width: 0; background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">What a run costs</h2>
+<table style="border-collapse: collapse; font-size: 15px">
+<tbody>
+<tr><td style="padding: 10px 0; border-bottom: 1px solid #1C2127">Sniff</td><td style="padding: 10px 0; border-bottom: 1px solid #1C2127; color: #9AA3AD">About 15 min</td><td style="padding: 10px 0; border-bottom: 1px solid #1C2127; text-align: right; font-family: 'JetBrains Mono', monospace; color: #F5B84B">100</td></tr>
+<tr><td style="padding: 10px 0; border-bottom: 1px solid #1C2127">Deep Fuzz</td><td style="padding: 10px 0; border-bottom: 1px solid #1C2127; color: #9AA3AD">About 1 hour</td><td style="padding: 10px 0; border-bottom: 1px solid #1C2127; text-align: right; font-family: 'JetBrains Mono', monospace; color: #F5B84B">500</td></tr>
+<tr><td style="padding: 10px 0; border-bottom: 1px solid #1C2127">Kitchen Sink</td><td style="padding: 10px 0; border-bottom: 1px solid #1C2127; color: #9AA3AD">Up to 4 hours, unused time refunded</td><td style="padding: 10px 0; border-bottom: 1px solid #1C2127; text-align: right; font-family: 'JetBrains Mono', monospace; color: #F5B84B">2,500</td></tr>
+<tr><td style="padding: 10px 0">Watch</td><td style="padding: 10px 0; color: #9AA3AD">Re-run on each program upgrade</td><td style="padding: 10px 0; text-align: right; font-family: 'JetBrains Mono', monospace; color: #F5B84B">300</td></tr>
+</tbody>
+</table>
+</div>
+<div style="flex: 1 1 420px; min-width: 0; background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">Ledger</h2>
+<table style="border-collapse: collapse; font-size: 14px">
+<tbody>
+<tr><td style="padding: 9px 0; border-bottom: 1px solid #1C2127; font-family: 'JetBrains Mono', monospace; color: #9AA3AD">Nov 9</td><td style="padding: 9px 8px; border-bottom: 1px solid #1C2127">Deep Fuzz on example_vault, held</td><td style="padding: 9px 0; border-bottom: 1px solid #1C2127; text-align: right; font-family: 'JetBrains Mono', monospace">-500</td></tr>
+<tr><td style="padding: 9px 0; border-bottom: 1px solid #1C2127; font-family: 'JetBrains Mono', monospace; color: #9AA3AD">Nov 9</td><td style="padding: 9px 8px; border-bottom: 1px solid #1C2127">Free grant for new accounts</td><td style="padding: 9px 0; border-bottom: 1px solid #1C2127; text-align: right; font-family: 'JetBrains Mono', monospace; color: #4FD1B5">+1,000</td></tr>
+</tbody>
+</table>
+<p style="margin: 0; font-size: 13px; color: #9AA3AD">Every charge links to the run it paid for.</p>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1060}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { picked: 'builder' };
+}
+renderVals() {
+const defs = [
+{ id: 'starter', name: 'Starter', credits: 2500, price: 25, tag: '', buys: '1 Kitchen Sink or 5 Deep Fuzz', extra: 'No bonus' },
+{ id: 'builder', name: 'Builder', credits: 10000, price: 90, tag: '10% off', buys: '4 Kitchen Sink or 20 Deep Fuzz', extra: 'Most picked' },
+{ id: 'team', name: 'Team', credits: 50000, price: 400, tag: '20% off', buys: '20 Kitchen Sink or 100 Deep Fuzz', extra: 'Shared across your team' },
+{ id: 'protocol', name: 'Protocol', credits: 250000, price: 1750, tag: '30% off', buys: '100 Kitchen Sink', extra: 'Plus a monthly Kitchen Sink on each watched program' }
+];
+const packs = defs.map((d) => {
+const on = d.id === this.state.picked;
+return {
+name: d.name,
+credits: d.credits.toLocaleString('en-US') + ' credits',
+buys: d.buys,
+extra: d.extra,
+tag: d.tag,
+tagStyle: d.tag ? 'font-size: 12px; font-weight: 600; color: #0B0D10; background: #F5B84B; border-radius: 999px; padding: 3px 9px' : 'display: none',
+price: 'Buy for $' + d.price.toLocaleString('en-US'),
+pick: () => this.setState({ picked: d.id }),
+card: 'display: flex; flex-direction: column; gap: 10px; border-radius: 16px; padding: ' + (on ? '23px' : '24px') + '; background: ' + (on ? '#122420' : '#12161B') + '; border: ' + (on ? '2px solid #4FD1B5' : '1px solid #232A33'),
+btn: 'margin-top: 6px; border-radius: 10px; padding: 12px 16px; font: 600 15px Inter, sans-serif; cursor: pointer; ' + (on ? 'background: #4FD1B5; color: #0B0D10; border: 0' : 'background: transparent; color: #E8EAED; border: 1px solid #3A4650')
+};
+});
+return { packs: packs };
+}
+}
+</script>
+</body>
+</html>

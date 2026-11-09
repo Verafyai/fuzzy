@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fuzzy mascot sheet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1240px; height: 720px; box-sizing: border-box; background: #0B0D10; color: #E8EAED; font-family: Inter, system-ui, sans-serif; padding: 48px 56px; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; gap: 48px; align-items: center">
+<dc-import name="Fuzzy" mood="waiting" size="{{ 220 }}" hint-size="220px,220px"></dc-import>
+<div style="display: flex; flex-direction: column; gap: 12px; max-width: 560px">
+<p style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #4FD1B5">Mascot</p>
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 56px; font-weight: 700; letter-spacing: -0.02em">Meet Fuzzy</h1>
+<p style="margin: 0; font-size: 18px; line-height: 1.55; color: #B8C0C8">A round, fluffy bug-hunter. Friendly on purpose, so "we broke your program" is easier to hear and more fun to share. Its face follows the run and the score.</p>
+</div>
+<div style="margin-left: auto; display: flex; flex-direction: column; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #9AA3AD">
+<div style="display: flex; align-items: center; gap: 10px"><span style="width: 28px; height: 28px; border-radius: 8px; background: #4FD1B5"></span>Fur #4FD1B5</div>
+<div style="display: flex; align-items: center; gap: 10px"><span style="width: 28px; height: 28px; border-radius: 8px; background: #2BA88E"></span>Shade #2BA88E</div>
+<div style="display: flex; align-items: center; gap: 10px"><span style="width: 28px; height: 28px; border-radius: 8px; background: #9BEBD8"></span>Belly #9BEBD8</div>
+<div style="display: flex; align-items: center; gap: 10px"><span style="width: 28px; height: 28px; border-radius: 8px; background: #F5B84B"></span>Findings #F5B84B</div>
+<div style="display: flex; align-items: center; gap: 10px"><span style="width: 28px; height: 28px; border-radius: 8px; background: #0B0D10; border: 1px solid #3A4650"></span>Ground #0B0D10</div>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px">
+<div style="background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px">
+<dc-import name="Fuzzy" mood="waiting" size="{{ 150 }}" hint-size="150px,150px"></dc-import>
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Waiting</p>
+<p style="margin: 0; font-size: 13px; color: #9AA3AD; text-align: center">The drop zone, before a run</p>
+</div>
+<div style="background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px">
+<dc-import name="Fuzzy" mood="sniffing" size="{{ 150 }}" hint-size="150px,150px"></dc-import>
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Sniffing</p>
+<p style="margin: 0; font-size: 13px; color: #9AA3AD; text-align: center">While a run is in progress</p>
+</div>
+<div style="background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px">
+<dc-import name="Fuzzy" mood="found" size="{{ 150 }}" hint-size="150px,150px"></dc-import>
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Found one</p>
+<p style="margin: 0; font-size: 13px; color: #9AA3AD; text-align: center">A finding was just proven</p>
+</div>
+<div style="background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px">
+<dc-import name="Fuzzy" mood="hardened" size="{{ 150 }}" hint-size="150px,150px"></dc-import>
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Hardened</p>
+<p style="margin: 0; font-size: 13px; color: #9AA3AD; text-align: center">Score 90 or above</p>
+</div>
+<div style="background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px">
+<dc-import name="Fuzzy" mood="broken" size="{{ 150 }}" hint-size="150px,150px"></dc-import>
+<p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">Broken</p>
+<p style="margin: 0; font-size: 13px; color: #9AA3AD; text-align: center">Score below 25</p>
+</div>
+</div>
+
+<div style="display: flex; align-items: flex-end; gap: 28px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #9AA3AD">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><dc-import name="Fuzzy" mood="waiting" size="{{ 16 }}" hint-size="16px,16px"></dc-import>16</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><dc-import name="Fuzzy" mood="waiting" size="{{ 32 }}" hint-size="32px,32px"></dc-import>32</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><dc-import name="Fuzzy" mood="waiting" size="{{ 64 }}" hint-size="64px,64px"></dc-import>64</div>
+<span style="padding-bottom: 2px">Favicon and avatar sizes. No arms, so it reads at 16 px.</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1240,"height":720}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

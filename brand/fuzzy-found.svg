@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Fuzzy, alarmed, holding up a caught bug">
+<path d="M84 56 L80 14" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<path d="M116 56 L120 14" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<circle cx="80" cy="12" r="6" fill="#F5B84B"></circle>
+<circle cx="120" cy="12" r="6" fill="#F5B84B"></circle>
+<circle cx="100" cy="112" r="64" fill="#2BA88E" stroke="#2BA88E" stroke-width="26" stroke-linecap="round" stroke-dasharray="0.01 16.75"></circle>
+<circle cx="100" cy="112" r="60" fill="#4FD1B5" stroke="#4FD1B5" stroke-width="16" stroke-linecap="round" stroke-dasharray="0.01 15.7" stroke-dashoffset="7.85"></circle>
+<circle cx="100" cy="42" r="11" fill="#4FD1B5"></circle>
+<circle cx="86" cy="48" r="9" fill="#4FD1B5"></circle>
+<circle cx="114" cy="48" r="9" fill="#4FD1B5"></circle>
+<ellipse cx="100" cy="140" rx="34" ry="26" fill="#9BEBD8"></ellipse>
+<ellipse cx="80" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<ellipse cx="120" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<circle cx="76" cy="100" r="19" fill="#FFFFFF"></circle>
+<circle cx="124" cy="100" r="19" fill="#FFFFFF"></circle>
+<circle cx="76" cy="100" r="6" fill="#0B0D10"></circle>
+<circle cx="124" cy="100" r="6" fill="#0B0D10"></circle>
+<ellipse cx="100" cy="131" rx="6" ry="7" fill="#0B0D10"></ellipse>
+<path d="M150 70 L162 60" stroke="#0B0D10" stroke-width="2.5" stroke-linecap="round"></path>
+<path d="M153 50 L143 42" stroke="#FF5A5F" stroke-width="2.5" stroke-linecap="round"></path>
+<path d="M171 50 L181 42" stroke="#FF5A5F" stroke-width="2.5" stroke-linecap="round"></path>
+<path d="M152 58 L142 60" stroke="#FF5A5F" stroke-width="2.5" stroke-linecap="round"></path>
+<path d="M172 58 L182 60" stroke="#FF5A5F" stroke-width="2.5" stroke-linecap="round"></path>
+<ellipse cx="162" cy="54" rx="11" ry="8" fill="#FF5A5F"></ellipse>
+<circle cx="158" cy="52" r="2" fill="#0B0D10"></circle>
+<circle cx="166" cy="52" r="2" fill="#0B0D10"></circle>
+<path d="M40 40 L40 58" stroke="#F5B84B" stroke-width="5" stroke-linecap="round"></path>
+<circle cx="40" cy="68" r="3" fill="#F5B84B"></circle>
+</svg>

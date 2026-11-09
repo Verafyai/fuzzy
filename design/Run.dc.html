@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fuzzy: run</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D10}
+a{color:#4FD1B5;text-decoration:none}a:hover{color:#9BEBD8}
+</style>
+</helmet>
+<div style="background: #0B0D10; color: #E8EAED; font-family: Inter, system-ui, sans-serif; min-height: 100vh">
+<header style="max-width: 1240px; margin: 0 auto; padding: 20px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; color: #E8EAED">
+<dc-import name="Fuzzy" mood="waiting" size="{{ 40 }}" hint-size="40px,40px"></dc-import>
+<span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700">Fuzzy</span>
+</a>
+<div style="display: flex; align-items: center; gap: 16px">
+<a href="Credits.dc.html" style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #F5B84B; border: 1px solid #3A3220; border-radius: 999px; padding: 8px 14px">1,000 credits</a>
+<span style="width: 36px; height: 36px; border-radius: 999px; background: #232A33; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600" aria-label="Account">R</span>
+</div>
+</header>
+
+<main style="max-width: 1240px; margin: 0 auto; padding: 16px 32px 64px; display: flex; flex-direction: column; gap: 28px">
+<section style="background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
+<div style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 13px; color: #9AA3AD">Sized up, example program</span>
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 600">example_vault</h1>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #9AA3AD; overflow-wrap: anywhere">VauLT7xExampLe1111111111111111111111111111 · Mainnet</span>
+</div>
+<dl style="flex: 1 1 520px; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">
+<div><dt style="font-size: 12px; color: #9AA3AD">Size</dt><dd style="margin: 4px 0 0; font-family: 'JetBrains Mono', monospace; font-size: 18px">212 KB</dd></div>
+<div><dt style="font-size: 12px; color: #9AA3AD">Instructions</dt><dd style="margin: 4px 0 0; font-family: 'JetBrains Mono', monospace; font-size: 18px">9, from IDL</dd></div>
+<div><dt style="font-size: 12px; color: #9AA3AD">Upgradeable</dt><dd style="margin: 4px 0 0; font-family: 'JetBrains Mono', monospace; font-size: 18px">Yes</dd></div>
+<div><dt style="font-size: 12px; color: #9AA3AD">Accounts to clone</dt><dd style="margin: 4px 0 0; font-family: 'JetBrains Mono', monospace; font-size: 18px">14</dd></div>
+</dl>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600">How hard should Fuzzy hit it?</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px">
+<sc-for list="{{tiers}}" as="t" hint-placeholder-count="3">
+<button type="button" onClick="{{ t.pick }}" style="{{ t.style }}">
+<span style="display: flex; justify-content: space-between; align-items: center"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">{{ t.name }}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 18px; color: #F5B84B">{{ t.cost }}</span></span>
+<span style="font-size: 14px; line-height: 1.5; color: #B8C0C8">{{ t.blurb }}</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #9AA3AD">{{ t.meta }}</span>
+</button>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; background: #10151A; border: 1px solid #232A33; border-radius: 14px; padding: 16px 20px">
+<span style="font-size: 15px; color: #B8C0C8">{{ summary }}</span>
+<button type="button" onClick="{{ start }}" style="background: #4FD1B5; color: #0B0D10; border: 0; font: 600 16px Inter, sans-serif; border-radius: 10px; padding: 14px 24px; cursor: pointer">{{ startLabel }}</button>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px">
+<dc-import name="Fuzzy" mood="{{ mood }}" size="{{ 112 }}" hint-size="112px,112px"></dc-import>
+<div style="flex: 1 1 420px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 600">Live run</h2><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #9AA3AD">Deep Fuzz · 23 of about 60 min · you can close this tab</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-size: 13px; color: #9AA3AD"><span>Depth so far</span><span style="font-family: 'JetBrains Mono', monospace; color: #E8EAED">61 / 100</span></div>
+<div style="height: 10px; border-radius: 999px; background: #1C2127; overflow: hidden"><div style="width: 61%; height: 100%; background: #4FD1B5; border-radius: 999px"></div></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; font-size: 14px; color: #B8C0C8"><span><b style="font-family: 'JetBrains Mono', monospace; color: #E8EAED">48%</b> branches hit</span><span><b style="font-family: 'JetBrains Mono', monospace; color: #E8EAED">9 of 11</b> attack classes tried</span><span><b style="font-family: 'JetBrains Mono', monospace; color: #E8EAED">18,402</b> attack transactions</span><span><b style="font-family: 'JetBrains Mono', monospace; color: #F5B84B">1</b> proven, <b style="font-family: 'JetBrains Mono', monospace; color: #E8EAED">22</b> leads checked</span></div>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{lanes}}" as="l" hint-placeholder-count="6">
+<div style="background: #12161B; border: 1px solid #232A33; border-radius: 12px; padding: 14px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<span style="flex: 0 0 190px; font-weight: 600; font-size: 15px">{{ l.name }}</span>
+<span style="flex: 1 1 200px; height: 8px; border-radius: 999px; background: #1C2127; overflow: hidden"><span style="{{ l.bar }}"></span></span>
+<span style="flex: 0 0 180px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #9AA3AD; text-align: right">{{ l.status }}</span>
+</div>
+</sc-for>
+</div>
+<aside style="flex: 1 1 340px; min-width: 0; background: #10151A; border: 1px solid #232A33; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-size: 14px; font-weight: 600; color: #9AA3AD">Live feed</h3>
+<sc-for list="{{feed}}" as="f" hint-placeholder-count="6">
+<div style="display: flex; gap: 10px; font-size: 13px; line-height: 1.45"><span style="font-family: 'JetBrains Mono', monospace; color: #6B7580; flex: 0 0 44px">{{ f.t }}</span><span style="{{ f.style }}">{{ f.text }}</span></div>
+</sc-for>
+</aside>
+</div>
+<a href="Report.dc.html" style="align-self: flex-start; font-size: 15px">See the example report</a>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { picked: 'deep', started: true };
+}
+renderVals() {
+const defs = [
+{ id: 'sniff', name: 'Sniff', credits: 100, blurb: 'Hygiene, static analysis and a short fuzz on empty accounts.', meta: 'About 15 min' },
+{ id: 'deep', name: 'Deep Fuzz', credits: 500, blurb: 'Every engine except the swarm, against the 14 cloned mainnet accounts.', meta: 'About 60 min' },
+{ id: 'sink', name: 'Kitchen Sink', credits: 2500, blurb: 'All six engines including the attacker swarm, several account setups.', meta: 'Up to 4 hours' }
+];
+const balance = 1000;
+const picked = defs.find((d) => d.id === this.state.picked) || defs[1];
+const tiers = defs.map((d) => {
+const on = d.id === this.state.picked;
+return {
+name: d.name,
+cost: d.credits.toLocaleString('en-US') + ' credits',
+blurb: d.blurb,
+meta: d.meta,
+pick: () => this.setState({ picked: d.id }),
+style: 'text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 10px; color: #E8EAED; font-family: Inter, sans-serif; background: ' + (on ? '#122420' : '#12161B') + '; border: ' + (on ? '2px solid #4FD1B5' : '1px solid #232A33') + '; border-radius: 16px; padding: ' + (on ? '19px' : '20px')
+};
+});
+const short = picked.credits > balance;
+const summary = short
+? picked.name + ' costs ' + picked.credits.toLocaleString('en-US') + ' credits. You have 1,000. Buy a pack to run it.'
+: picked.name + ' holds ' + picked.credits.toLocaleString('en-US') + ' credits now and settles when it ends. You keep ' + (balance - picked.credits).toLocaleString('en-US') + '.';
+const done = (w, c) => 'display: block; height: 100%; width: ' + w + '; background: ' + c + '; border-radius: 999px';
+return {
+tiers: tiers,
+summary: summary,
+startLabel: short ? 'Buy credits' : 'Start ' + picked.name,
+start: () => this.setState({ started: true }),
+mood: 'found',
+lanes: [
+{ name: 'Hygiene', bar: done('100%', '#4FD1B5'), status: 'done, 2 leads' },
+{ name: 'Static', bar: done('100%', '#4FD1B5'), status: 'done, 11 leads' },
+{ name: 'Coverage fuzzing', bar: done('48%', '#4FD1B5'), status: '48% branches' },
+{ name: 'Model-guided attacks', bar: done('62%', '#F5B84B'), status: '9 of 11 classes' },
+{ name: 'Invariant writer', bar: done('40%', '#4FD1B5'), status: '6 properties' },
+{ name: 'Attacker swarm', bar: done('0%', '#4FD1B5'), status: 'Kitchen Sink only' }
+],
+feed: [
+{ t: '22:58', text: 'Proven: withdraw accepts a vault the caller does not own. 3.2 SOL moved in replay.', style: 'color: #F5B84B; font-weight: 600' },
+{ t: '22:41', text: 'Lead from Static: unchecked owner on vault account. Writing an attack.', style: 'color: #E8EAED' },
+{ t: '21:10', text: 'Thrown out: overflow in fee math is unreachable with real mints.', style: 'color: #9AA3AD' },
+{ t: '19:32', text: 'Invariant added: vault balance equals the sum of deposits.', style: 'color: #E8EAED' },
+{ t: '12:05', text: 'Cloned 14 mainnet accounts into LiteSVM.', style: 'color: #9AA3AD' },
+{ t: '00:00', text: 'Run started. 500 credits held.', style: 'color: #9AA3AD' }
+]
+};
+}
+}
+</script>
+</body>
+</html>

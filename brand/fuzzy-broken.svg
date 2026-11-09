@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Fuzzy, dizzy with spiral eyes">
+<path d="M82 56 Q66 50 58 62" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<path d="M118 56 Q134 50 142 62" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<circle cx="57" cy="65" r="6" fill="#F5B84B"></circle>
+<circle cx="143" cy="65" r="6" fill="#F5B84B"></circle>
+<circle cx="100" cy="112" r="64" fill="#2BA88E" stroke="#2BA88E" stroke-width="20" stroke-linecap="round" stroke-dasharray="0.01 25.13"></circle>
+<circle cx="100" cy="112" r="60" fill="#4FD1B5" stroke="#4FD1B5" stroke-width="16" stroke-linecap="round" stroke-dasharray="0.01 23.56" stroke-dashoffset="11.8"></circle>
+<circle cx="100" cy="44" r="10" fill="#4FD1B5"></circle>
+<circle cx="88" cy="50" r="8" fill="#4FD1B5"></circle>
+<circle cx="112" cy="50" r="8" fill="#4FD1B5"></circle>
+<ellipse cx="100" cy="140" rx="34" ry="26" fill="#9BEBD8"></ellipse>
+<ellipse cx="80" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<ellipse cx="120" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<circle cx="78" cy="102" r="16" fill="#FFFFFF"></circle>
+<circle cx="122" cy="102" r="16" fill="#FFFFFF"></circle>
+<path d="M67 102 a11 11 0 1 1 22 0 a8 8 0 1 1 -16 0 a5 5 0 1 1 10 0" stroke="#0B0D10" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+<path d="M111 102 a11 11 0 1 1 22 0 a8 8 0 1 1 -16 0 a5 5 0 1 1 10 0" stroke="#0B0D10" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+<path d="M88 130 Q94 124 100 130 Q106 136 112 130" stroke="#0B0D10" stroke-width="3" fill="none" stroke-linecap="round"></path>
+<circle cx="48" cy="40" r="3.5" fill="#F5B84B"></circle>
+<circle cx="156" cy="34" r="3.5" fill="#F5B84B"></circle>
+<circle cx="168" cy="80" r="3" fill="#F5B84B"></circle>
+<circle cx="34" cy="86" r="3" fill="#F5B84B"></circle>
+</svg>

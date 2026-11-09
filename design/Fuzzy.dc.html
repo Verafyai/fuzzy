@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fuzzy mascot</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: {{px}}; height: {{px}}; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{isWaiting}}" hint-placeholder-val="{{ true }}">
+<svg viewBox="0 0 200 200" width="{{size}}" height="{{size}}" role="img" aria-label="Fuzzy, waiting">
+<path d="M82 56 Q74 36 66 22" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<path d="M118 56 Q126 36 134 22" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<circle cx="66" cy="20" r="6" fill="#F5B84B"></circle>
+<circle cx="134" cy="20" r="6" fill="#F5B84B"></circle>
+<circle cx="100" cy="112" r="64" fill="#2BA88E" stroke="#2BA88E" stroke-width="20" stroke-linecap="round" stroke-dasharray="0.01 25.13"></circle>
+<circle cx="100" cy="112" r="60" fill="#4FD1B5" stroke="#4FD1B5" stroke-width="16" stroke-linecap="round" stroke-dasharray="0.01 23.56" stroke-dashoffset="11.8"></circle>
+<circle cx="100" cy="44" r="10" fill="#4FD1B5"></circle>
+<circle cx="88" cy="50" r="8" fill="#4FD1B5"></circle>
+<circle cx="112" cy="50" r="8" fill="#4FD1B5"></circle>
+<ellipse cx="100" cy="140" rx="34" ry="26" fill="#9BEBD8"></ellipse>
+<ellipse cx="80" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<ellipse cx="120" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<ellipse cx="60" cy="124" rx="9" ry="5" fill="#FF8FA3" opacity="0.7"></ellipse>
+<ellipse cx="140" cy="124" rx="9" ry="5" fill="#FF8FA3" opacity="0.7"></ellipse>
+<circle cx="78" cy="102" r="16" fill="#FFFFFF"></circle>
+<circle cx="122" cy="102" r="16" fill="#FFFFFF"></circle>
+<circle cx="80" cy="104" r="9" fill="#0B0D10"></circle>
+<circle cx="124" cy="104" r="9" fill="#0B0D10"></circle>
+<circle cx="84" cy="99" r="3.5" fill="#FFFFFF"></circle>
+<circle cx="128" cy="99" r="3.5" fill="#FFFFFF"></circle>
+<path d="M93 126 Q100 133 107 126" stroke="#0B0D10" stroke-width="3" fill="none" stroke-linecap="round"></path>
+</svg>
+</sc-if>
+<sc-if value="{{isSniffing}}" hint-placeholder-val="{{ false }}">
+<svg viewBox="0 0 200 200" width="{{size}}" height="{{size}}" role="img" aria-label="Fuzzy, sniffing with a magnifying glass">
+<path d="M84 56 Q82 34 78 16" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<path d="M116 56 Q118 34 122 16" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<circle cx="78" cy="14" r="6" fill="#F5B84B"></circle>
+<circle cx="122" cy="14" r="6" fill="#F5B84B"></circle>
+<circle cx="100" cy="112" r="64" fill="#2BA88E" stroke="#2BA88E" stroke-width="20" stroke-linecap="round" stroke-dasharray="0.01 25.13"></circle>
+<circle cx="100" cy="112" r="60" fill="#4FD1B5" stroke="#4FD1B5" stroke-width="16" stroke-linecap="round" stroke-dasharray="0.01 23.56" stroke-dashoffset="11.8"></circle>
+<circle cx="100" cy="44" r="10" fill="#4FD1B5"></circle>
+<circle cx="88" cy="50" r="8" fill="#4FD1B5"></circle>
+<circle cx="112" cy="50" r="8" fill="#4FD1B5"></circle>
+<ellipse cx="100" cy="140" rx="34" ry="26" fill="#9BEBD8"></ellipse>
+<ellipse cx="80" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<ellipse cx="120" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<ellipse cx="60" cy="124" rx="9" ry="5" fill="#FF8FA3" opacity="0.7"></ellipse>
+<ellipse cx="140" cy="124" rx="9" ry="5" fill="#FF8FA3" opacity="0.7"></ellipse>
+<circle cx="78" cy="102" r="16" fill="#FFFFFF"></circle>
+<circle cx="122" cy="102" r="16" fill="#FFFFFF"></circle>
+<circle cx="85" cy="107" r="9" fill="#0B0D10"></circle>
+<circle cx="129" cy="107" r="9" fill="#0B0D10"></circle>
+<circle cx="88" cy="103" r="3" fill="#FFFFFF"></circle>
+<circle cx="132" cy="103" r="3" fill="#FFFFFF"></circle>
+<path d="M95 128 L105 128" stroke="#0B0D10" stroke-width="3" fill="none" stroke-linecap="round"></path>
+<circle cx="152" cy="138" r="18" fill="#FFFFFF" fill-opacity="0.22" stroke="#E8EAED" stroke-width="6"></circle>
+<path d="M165 151 L184 170" stroke="#E8EAED" stroke-width="8" stroke-linecap="round"></path>
+</svg>
+</sc-if>
+<sc-if value="{{isFound}}" hint-placeholder-val="{{ false }}">
+<svg viewBox="0 0 200 200" width="{{size}}" height="{{size}}" role="img" aria-label="Fuzzy, alarmed, holding up a caught bug">
+<path d="M84 56 L80 14" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<path d="M116 56 L120 14" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<circle cx="80" cy="12" r="6" fill="#F5B84B"></circle>
+<circle cx="120" cy="12" r="6" fill="#F5B84B"></circle>
+<circle cx="100" cy="112" r="64" fill="#2BA88E" stroke="#2BA88E" stroke-width="26" stroke-linecap="round" stroke-dasharray="0.01 16.75"></circle>
+<circle cx="100" cy="112" r="60" fill="#4FD1B5" stroke="#4FD1B5" stroke-width="16" stroke-linecap="round" stroke-dasharray="0.01 15.7" stroke-dashoffset="7.85"></circle>
+<circle cx="100" cy="42" r="11" fill="#4FD1B5"></circle>
+<circle cx="86" cy="48" r="9" fill="#4FD1B5"></circle>
+<circle cx="114" cy="48" r="9" fill="#4FD1B5"></circle>
+<ellipse cx="100" cy="140" rx="34" ry="26" fill="#9BEBD8"></ellipse>
+<ellipse cx="80" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<ellipse cx="120" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<circle cx="76" cy="100" r="19" fill="#FFFFFF"></circle>
+<circle cx="124" cy="100" r="19" fill="#FFFFFF"></circle>
+<circle cx="76" cy="100" r="6" fill="#0B0D10"></circle>
+<circle cx="124" cy="100" r="6" fill="#0B0D10"></circle>
+<ellipse cx="100" cy="131" rx="6" ry="7" fill="#0B0D10"></ellipse>
+<path d="M150 70 L162 60" stroke="#0B0D10" stroke-width="2.5" stroke-linecap="round"></path>
+<path d="M153 50 L143 42" stroke="#FF5A5F" stroke-width="2.5" stroke-linecap="round"></path>
+<path d="M171 50 L181 42" stroke="#FF5A5F" stroke-width="2.5" stroke-linecap="round"></path>
+<path d="M152 58 L142 60" stroke="#FF5A5F" stroke-width="2.5" stroke-linecap="round"></path>
+<path d="M172 58 L182 60" stroke="#FF5A5F" stroke-width="2.5" stroke-linecap="round"></path>
+<ellipse cx="162" cy="54" rx="11" ry="8" fill="#FF5A5F"></ellipse>
+<circle cx="158" cy="52" r="2" fill="#0B0D10"></circle>
+<circle cx="166" cy="52" r="2" fill="#0B0D10"></circle>
+<path d="M40 40 L40 58" stroke="#F5B84B" stroke-width="5" stroke-linecap="round"></path>
+<circle cx="40" cy="68" r="3" fill="#F5B84B"></circle>
+</svg>
+</sc-if>
+<sc-if value="{{isHardened}}" hint-placeholder-val="{{ false }}">
+<svg viewBox="0 0 200 200" width="{{size}}" height="{{size}}" role="img" aria-label="Fuzzy, happy, with a shield">
+<path d="M82 56 Q74 36 66 22" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<path d="M118 56 Q126 36 134 22" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<circle cx="66" cy="20" r="6" fill="#F5B84B"></circle>
+<circle cx="134" cy="20" r="6" fill="#F5B84B"></circle>
+<circle cx="100" cy="112" r="64" fill="#2BA88E" stroke="#2BA88E" stroke-width="20" stroke-linecap="round" stroke-dasharray="0.01 25.13"></circle>
+<circle cx="100" cy="112" r="60" fill="#4FD1B5" stroke="#4FD1B5" stroke-width="16" stroke-linecap="round" stroke-dasharray="0.01 23.56" stroke-dashoffset="11.8"></circle>
+<circle cx="100" cy="44" r="10" fill="#4FD1B5"></circle>
+<circle cx="88" cy="50" r="8" fill="#4FD1B5"></circle>
+<circle cx="112" cy="50" r="8" fill="#4FD1B5"></circle>
+<ellipse cx="100" cy="140" rx="34" ry="26" fill="#9BEBD8"></ellipse>
+<ellipse cx="80" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<ellipse cx="120" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<ellipse cx="60" cy="122" rx="10" ry="6" fill="#FF8FA3" opacity="0.8"></ellipse>
+<ellipse cx="140" cy="122" rx="10" ry="6" fill="#FF8FA3" opacity="0.8"></ellipse>
+<path d="M66 104 Q78 92 90 104" stroke="#0B0D10" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<path d="M110 104 Q122 92 134 104" stroke="#0B0D10" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<path d="M88 122 Q100 138 112 122" stroke="#0B0D10" stroke-width="3.5" fill="none" stroke-linecap="round"></path>
+<path d="M156 118 L176 126 L176 142 Q176 156 156 166 Q136 156 136 142 L136 126 Z" fill="#F5B84B" stroke="#0B0D10" stroke-width="2"></path>
+<path d="M146 142 L154 150 L167 134" stroke="#0B0D10" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</sc-if>
+<sc-if value="{{isBroken}}" hint-placeholder-val="{{ false }}">
+<svg viewBox="0 0 200 200" width="{{size}}" height="{{size}}" role="img" aria-label="Fuzzy, dizzy with spiral eyes">
+<path d="M82 56 Q66 50 58 62" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<path d="M118 56 Q134 50 142 62" stroke="#2BA88E" stroke-width="4" fill="none" stroke-linecap="round"></path>
+<circle cx="57" cy="65" r="6" fill="#F5B84B"></circle>
+<circle cx="143" cy="65" r="6" fill="#F5B84B"></circle>
+<circle cx="100" cy="112" r="64" fill="#2BA88E" stroke="#2BA88E" stroke-width="20" stroke-linecap="round" stroke-dasharray="0.01 25.13"></circle>
+<circle cx="100" cy="112" r="60" fill="#4FD1B5" stroke="#4FD1B5" stroke-width="16" stroke-linecap="round" stroke-dasharray="0.01 23.56" stroke-dashoffset="11.8"></circle>
+<circle cx="100" cy="44" r="10" fill="#4FD1B5"></circle>
+<circle cx="88" cy="50" r="8" fill="#4FD1B5"></circle>
+<circle cx="112" cy="50" r="8" fill="#4FD1B5"></circle>
+<ellipse cx="100" cy="140" rx="34" ry="26" fill="#9BEBD8"></ellipse>
+<ellipse cx="80" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<ellipse cx="120" cy="178" rx="15" ry="8" fill="#238C76"></ellipse>
+<circle cx="78" cy="102" r="16" fill="#FFFFFF"></circle>
+<circle cx="122" cy="102" r="16" fill="#FFFFFF"></circle>
+<path d="M67 102 a11 11 0 1 1 22 0 a8 8 0 1 1 -16 0 a5 5 0 1 1 10 0" stroke="#0B0D10" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+<path d="M111 102 a11 11 0 1 1 22 0 a8 8 0 1 1 -16 0 a5 5 0 1 1 10 0" stroke="#0B0D10" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+<path d="M88 130 Q94 124 100 130 Q106 136 112 130" stroke="#0B0D10" stroke-width="3" fill="none" stroke-linecap="round"></path>
+<circle cx="48" cy="40" r="3.5" fill="#F5B84B"></circle>
+<circle cx="156" cy="34" r="3.5" fill="#F5B84B"></circle>
+<circle cx="168" cy="80" r="3" fill="#F5B84B"></circle>
+<circle cx="34" cy="86" r="3" fill="#F5B84B"></circle>
+</svg>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mood":{"editor":"enum","options":["waiting","sniffing","found","hardened","broken"],"default":"waiting"},"size":{"editor":"int","default":200,"min":16,"max":800},"$preview":{"width":200,"height":200}}'>
+class Component extends DCLogic {
+renderVals() {
+const mood = this.props.mood ?? 'waiting';
+const size = this.props.size ?? 200;
+return {
+size: size,
+px: size + 'px',
+isWaiting: mood === 'waiting',
+isSniffing: mood === 'sniffing',
+isFound: mood === 'found',
+isHardened: mood === 'hardened',
+isBroken: mood === 'broken'
+};
+}
+}
+</script>
+</body>
+</html>

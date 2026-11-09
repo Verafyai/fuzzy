@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Fuzzy: report</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0D10}
+a{color:#4FD1B5;text-decoration:none}a:hover{color:#9BEBD8}
+</style>
+</helmet>
+<div style="background: #0B0D10; color: #E8EAED; font-family: Inter, system-ui, sans-serif; min-height: 100vh">
+<header style="max-width: 1240px; margin: 0 auto; padding: 20px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; color: #E8EAED">
+<dc-import name="Fuzzy" mood="waiting" size="{{ 40 }}" hint-size="40px,40px"></dc-import>
+<span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700">Fuzzy</span>
+</a>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<a href="Credits.dc.html" style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #F5B84B; border: 1px solid #3A3220; border-radius: 999px; padding: 8px 14px">500 credits</a>
+<a href="Run.dc.html" style="background: #4FD1B5; color: #0B0D10; font-weight: 600; border-radius: 10px; padding: 10px 16px">Run again</a>
+</div>
+</header>
+
+<main style="max-width: 1240px; margin: 0 auto; padding: 8px 32px 72px; display: flex; flex-direction: column; gap: 32px">
+<p style="margin: 0; font-size: 13px; color: #9AA3AD">Example report. The program, finding and transaction are made up to show the layout.</p>
+
+<section style="display: flex; flex-wrap: wrap; gap: 32px; align-items: center; background: #12161B; border: 1px solid #232A33; border-radius: 20px; padding: 28px">
+<div style="position: relative; width: 180px; height: 180px; flex: 0 0 180px">
+<svg viewBox="0 0 180 180" width="180" height="180" role="img" aria-label="Fuzzy Score 45 out of 100">
+<circle cx="90" cy="90" r="70" fill="none" stroke="#1C2127" stroke-width="14"></circle>
+<circle cx="90" cy="90" r="70" fill="none" stroke="#FF8A3D" stroke-width="14" stroke-linecap="round" stroke-dasharray="197.9 439.8" transform="rotate(-90 90 90)"></circle>
+</svg>
+<div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 52px; font-weight: 600; color: #FF8A3D; line-height: 1">45</span>
+<span style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; margin-top: 4px">Exposed</span>
+</div>
+</div>
+<div style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 34px; font-weight: 600">example_vault scored 45</h1>
+<p style="margin: 0; font-size: 17px; line-height: 1.55; color: #B8C0C8">Fuzzy tested it to a depth of 80, but one proven High finding caps the score at 45. Fix it and run again to lift the cap.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 20px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #9AA3AD">
+<span>Deep Fuzz</span><span>Nov 9 2026</span><span>58 min</span><span>bytecode 7f3a…c91e</span><span>Fuzzy Score v1</span>
+</div>
+</div>
+<dc-import name="Fuzzy" mood="found" size="{{ 150 }}" hint-size="150px,150px"></dc-import>
+</section>
+
+<section style="display: flex; flex-wrap: wrap; gap: 20px">
+<div style="flex: 1 1 520px; min-width: 0; background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">Depth 80 of 100</h2><span style="font-size: 13px; color: #9AA3AD">How hard Fuzzy tried</span></div>
+<sc-for list="{{parts}}" as="p" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span>{{ p.name }}</span><span style="font-family: 'JetBrains Mono', monospace; color: #9AA3AD">{{ p.score }}</span></div>
+<div style="height: 8px; border-radius: 999px; background: #1C2127; overflow: hidden"><div style="{{ p.bar }}"></div></div>
+<span style="font-size: 12px; color: #9AA3AD">{{ p.note }}</span>
+</div>
+</sc-for>
+</div>
+<div style="flex: 1 1 360px; min-width: 0; background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">What sets the cap</h2>
+<sc-for list="{{caps}}" as="c" hint-placeholder-count="5">
+<div style="{{ c.row }}"><span style="{{ c.chip }}">{{ c.sev }}</span><span style="flex: 1">{{ c.found }}</span><span style="font-family: 'JetBrains Mono', monospace; color: #9AA3AD">cap {{ c.cap }}</span></div>
+</sc-for>
+<p style="margin: 0; font-size: 13px; line-height: 1.5; color: #9AA3AD">Score = the lower of Depth and the cap from the worst proven finding. Leads never count.</p>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 600">2 proven findings</h2>
+
+<article style="background: #12161B; border: 1px solid #4A2E1C; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<span style="background: #3A2418; color: #FF8A3D; border-radius: 6px; padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600">HIGH</span>
+<h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">Withdraw accepts a vault the caller doesn't own</h3>
+<span style="margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #9AA3AD">Missing owner check, account substitution</span>
+</div>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; color: #B8C0C8; max-width: 860px">The <code style="font-family: 'JetBrains Mono', monospace; color: #E8EAED">withdraw</code> instruction checks that the vault account has the right layout but never checks which program owns it. An attacker passes a look-alike vault they created, with a balance they set, and withdraws real SOL from the pool against it.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<ol style="flex: 1 1 360px; margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.7; color: #E8EAED">
+<li>Create an account with the vault's layout, owned by the attacker's program.</li>
+<li>Write a balance of 3.2 SOL into it.</li>
+<li>Call <code style="font-family: 'JetBrains Mono', monospace">withdraw</code> with the fake vault and the real pool.</li>
+</ol>
+<table style="flex: 1 1 360px; border-collapse: collapse; font-size: 14px">
+<thead><tr><th style="text-align: left; font-weight: 500; color: #9AA3AD; padding: 6px 8px; border-bottom: 1px solid #232A33">Account</th><th style="text-align: right; font-weight: 500; color: #9AA3AD; padding: 6px 8px; border-bottom: 1px solid #232A33">Before</th><th style="text-align: right; font-weight: 500; color: #9AA3AD; padding: 6px 8px; border-bottom: 1px solid #232A33">After</th></tr></thead>
+<tbody>
+<tr><td style="padding: 8px; border-bottom: 1px solid #1C2127">Real pool</td><td style="padding: 8px; text-align: right; font-family: 'JetBrains Mono', monospace; border-bottom: 1px solid #1C2127">41.70 SOL</td><td style="padding: 8px; text-align: right; font-family: 'JetBrains Mono', monospace; color: #FF8A3D; border-bottom: 1px solid #1C2127">38.50 SOL</td></tr>
+<tr><td style="padding: 8px">Attacker</td><td style="padding: 8px; text-align: right; font-family: 'JetBrains Mono', monospace">0.05 SOL</td><td style="padding: 8px; text-align: right; font-family: 'JetBrains Mono', monospace; color: #F5B84B">3.25 SOL</td></tr>
+</tbody>
+</table>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; background: #0B0D10; border: 1px solid #232A33; border-radius: 10px; padding: 12px 14px">
+<code style="flex: 1 1 400px; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #9BEBD8">npx fuzzy replay FZ-8K2Q-0041</code>
+<button type="button" style="background: transparent; color: #E8EAED; border: 1px solid #3A4650; border-radius: 8px; padding: 8px 14px; font: 500 14px Inter, sans-serif; cursor: pointer">Copy</button>
+<button type="button" style="background: transparent; color: #E8EAED; border: 1px solid #3A4650; border-radius: 8px; padding: 8px 14px; font: 500 14px Inter, sans-serif; cursor: pointer">Download transaction</button>
+</div>
+<p style="margin: 0; font-size: 14px; color: #9AA3AD"><b style="color: #E8EAED">Fix:</b> require <code style="font-family: 'JetBrains Mono', monospace">vault.owner == program_id</code>, or use Anchor's <code style="font-family: 'JetBrains Mono', monospace">Account&lt;Vault&gt;</code>, which checks it for you.</p>
+</article>
+
+<article style="background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 20px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<span style="background: #1E2329; color: #AEB6BF; border-radius: 6px; padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600">LOW</span>
+<h3 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">A dependency has a published security advisory</h3>
+<span style="margin-left: auto; font-size: 14px; color: #9AA3AD">Found by cargo audit, confirmed in the built program</span>
+</article>
+</section>
+
+<details style="background: #10151A; border: 1px solid #232A33; border-radius: 16px; padding: 18px 24px">
+<summary style="cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600">37 leads Fuzzy checked and could not exploit</summary>
+<p style="margin: 12px 0 0; font-size: 14px; line-height: 1.6; color: #9AA3AD">Shown for completeness. Each one was turned into an attack and replayed; none of them broke anything, so none count toward the score. Example: Static flagged unchecked arithmetic in the fee calculation, but no real mint can reach the overflow.</p>
+</details>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 600">Attack classes tried</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px">
+<sc-for list="{{classes}}" as="k" hint-placeholder-count="12">
+<div style="background: #12161B; border: 1px solid #232A33; border-radius: 10px; padding: 12px 14px; display: flex; justify-content: space-between; gap: 10px; font-size: 14px"><span>{{ k.name }}</span><span style="{{ k.style }}">{{ k.result }}</span></div>
+</sc-for>
+</div>
+</section>
+
+<section style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+<div style="flex: 999 1 520px; min-width: 0; background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">Sealed on Solana</h2>
+<p style="margin: 0; font-size: 15px; line-height: 1.55; color: #B8C0C8">The report's hash is anchored on chain, so anyone can check this exact report covers this exact bytecode.</p>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #9AA3AD; overflow-wrap: anywhere">report sha256 9c41…e07b · tx 4ZpQ…Lw8m</div>
+<p style="margin: 0; font-size: 13px; color: #9AA3AD">Not your program? Findings go only to you. Report them through the program's security contact before sharing.</p>
+</div>
+<div style="flex: 1 1 340px; min-width: 0; background: #12161B; border: 1px solid #232A33; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600">Badge</h2>
+<div style="align-self: flex-start; display: flex; align-items: center; gap: 10px; background: #0B0D10; border: 1px solid #2E3A40; border-radius: 999px; padding: 6px 14px 6px 6px">
+<dc-import name="Fuzzy" mood="waiting" size="{{ 28 }}" hint-size="28px,28px"></dc-import>
+<span style="font-size: 13px">Fuzzed by Fuzzy</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #FF8A3D; font-weight: 600">45</span><span style="font-size: 12px; color: #9AA3AD">Deep Fuzz, Nov 9 2026</span>
+</div>
+<p style="margin: 0; font-size: 13px; color: #9AA3AD">The badge always carries the tier and date, and turns stale when the program is upgraded.</p>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1880}}'>
+class Component extends DCLogic {
+renderVals() {
+const bar = (pct, c) => 'height: 100%; width: ' + pct + '%; background: ' + c + '; border-radius: 999px';
+const parts = [
+{ name: 'Branch coverage', got: 24, of: 40, note: '61% of sBPF branches executed' },
+{ name: 'Instruction coverage', got: 18, of: 20, note: '9 of 9 instructions; most error paths reached' },
+{ name: 'Attack classes tried', got: 18, of: 20, note: '10 of 11 that apply to this program' },
+{ name: 'Real state', got: 10, of: 10, note: '14 cloned mainnet accounts' },
+{ name: 'Effort', got: 10, of: 10, note: 'Full Deep Fuzz budget used' }
+].map((p) => ({ name: p.name, score: p.got + ' / ' + p.of, note: p.note, bar: bar(Math.round(p.got / p.of * 100), '#4FD1B5') }));
+const chip = (bg, fg) => 'flex: 0 0 76px; text-align: center; background: ' + bg + '; color: ' + fg + '; border-radius: 6px; padding: 3px 0; font-family: JetBrains Mono, monospace; font-size: 12px; font-weight: 600';
+const capRow = (hit) => 'display: flex; align-items: center; gap: 12px; font-size: 14px; padding: 6px 8px; border-radius: 8px; background: ' + (hit ? '#1F1712' : 'transparent');
+const caps = [
+{ sev: 'CRITICAL', cap: 20, found: 'None proven', chip: chip('#3A1A1C', '#FF6B70'), row: capRow(false) },
+{ sev: 'HIGH', cap: 45, found: '1 proven, this sets the cap', chip: chip('#3A2418', '#FF8A3D'), row: capRow(true) },
+{ sev: 'MEDIUM', cap: 70, found: 'None proven', chip: chip('#3A3220', '#F5B84B'), row: capRow(false) },
+{ sev: 'LOW', cap: 90, found: '1 proven', chip: chip('#1E2329', '#AEB6BF'), row: capRow(false) },
+{ sev: 'NONE', cap: 100, found: '', chip: chip('#14201D', '#4FD1B5'), row: capRow(false) }
+];
+const hit = 'color: #FF8A3D; font-weight: 600', ok = 'color: #4FD1B5', na = 'color: #6B7580';
+const classes = [
+['Missing signer check', 'held', ok], ['Missing owner check', 'broke it', hit], ['Account substitution', 'broke it', hit],
+['PDA seed collision', 'held', ok], ['Arithmetic overflow', 'held', ok], ['Close, then reuse', 'held', ok],
+['Unchecked CPI target', 'held', ok], ['Unchecked mint or authority', 'held', ok], ['Lamport draining', 'held', ok],
+['Reinitialization', 'held', ok], ['Price manipulation', 'no oracle, skipped', na], ['Compute exhaustion', 'not tried', na]
+].map((c) => ({ name: c.at(0), result: c.at(1), style: c.at(2) }));
+return { parts: parts, caps: caps, classes: classes };
+}
+}
+</script>
+</body>
+</html>

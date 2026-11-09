@@ -1,0 +1,11 @@
+{
+  "name": "fuzzy",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Fuzzy: pay-per-run security fuzzing for Solana programs, at fuzzy.verafy.ai",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}
