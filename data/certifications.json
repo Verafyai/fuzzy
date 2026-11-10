@@ -334,29 +334,6 @@
    "record": "7G25XfyBXUAQhLyRRKNWXtJkKjf5Hx3NL331LZozapZ2"
   },
   {
-   "program": "proVF4pMXVaYqmy4NjniPh4pqKNfMmsihgd4wdkCX3u",
-   "name": "OKX DEX Router Program",
-   "level": 0,
-   "levelName": "Not certified",
-   "score": 33,
-   "depth": 33,
-   "tier": "Deep Fuzz",
-   "bytecodeHash": "a8b2a437c4ee56ee8d911130e46d116f22280e9ce7ce2b6ff55fd077d4b9d6bf",
-   "reportHash": "e50fe34e02c49a023f81c82ed49ea535e6a5c0c0798375d07efcd99a0b7fb329",
-   "ruling": "995CozoDJKuapK2TgP4f89XNbBwTV7K3o4HvdCE2trJk",
-   "certification": "6nyScsZ5wmzjHCRaxo3hmSXMVw7fjefzzXXyZ6WnkhVg",
-   "certifySignature": "2UD5tLitLzeerSn9F1z25sqYocgxDi3Fr3LpT8XR9ckeYCVbeTZxUNPLnVPAEmHAdKbZpa45WUjKLYjBdJC5BsPL",
-   "jurors": 4,
-   "families": 4,
-   "jurorsScripted": true,
-   "certifiedAt": "2026-11-10T04:31:03.492Z",
-   "lookup": "the jury did not certify this build",
-   "history": [],
-   "recordSignature": "4FSACb3HFW3teGi7Di7oiye3CKYf9qtcoe6CTRA9FuUsci7uRk7VGhqPJXSJVgY7SwQnxz1eV1qq12ABPRuhgpiD",
-   "records": 1,
-   "record": "5z5MKeztLvxXYApfMjiHayZWMr9uBpmmF4kNDh2a5Lvi"
-  },
-  {
    "program": "99vQwtBwYtrqqD9YSXbdum3KBdxPAVxYTaQ3cfnJSrN2",
    "name": "Relay Bridge Program",
    "level": 2,
@@ -711,29 +688,6 @@
    "record": "FpBymdb53tqxTecf9uyhibhXDegAYisSrZX5rSzmrnBL"
   },
   {
-   "program": "3TK9D8aoBFYjYZtKCjciPrVrRStsnvo7KmpcJqDavpaU",
-   "name": "Kipseli Program",
-   "level": 0,
-   "levelName": "Not certified",
-   "score": 12,
-   "depth": 12,
-   "tier": "Deep Fuzz",
-   "bytecodeHash": "54de36a12a4752316b75da688b238fc91f029fb60237c4cce41b5f8c8c710f8c",
-   "reportHash": "3f9d0c656ac9b4ae6a056c806623971790a74342b8f6ccbee090c57fff8261a9",
-   "ruling": "x1cZxxkRUXkGhfSjiBADZeYykLymX9xUNrEi3hC2EXM",
-   "certification": "B8CH7NkhhastDSE5NJinQGBXKfjkAd27Cqi4rzfngUW7",
-   "certifySignature": "5ZGBVJQSqz8tFhczwGFZ1kCuXFYboKENemLEw3Mt9VKT3iGuCxmdsamY9NfQ9ywUpF2qBjH5TAx4UKU5d1DGUtvn",
-   "jurors": 4,
-   "families": 4,
-   "jurorsScripted": true,
-   "certifiedAt": "2026-11-10T04:40:06.830Z",
-   "lookup": "the jury did not certify this build",
-   "history": [],
-   "recordSignature": "sJgAyWdRNXnqXKZFaHvdY7m1rFk76LvX2bbYuj9WEuarVVkQtp3TBLFM83mfSe5Y4XUEBJY4JbpeaDt7y6L3rVp",
-   "records": 1,
-   "record": "41MJyXMGgNG5mK2HtrUQz57LJ3788BnJLRNF4XEdDj39"
-  },
-  {
    "program": "jupeiUmn818Jg1ekPURTpr4mFo29p46vygyykFJ3wZC",
    "name": "Jupiter Lend Liquidity Program",
    "level": 0,
@@ -1008,29 +962,6 @@
    "recordSignature": "GLH7rVMXUsk6C4GuX915jL1Ep6UDFkNKS9MMLpzKC6SQMpSxYNuKR42fTgSdsZJ5dLrHjE8MZdrDvMFruWPX2vo",
    "records": 1,
    "record": "Hat9mGyLi7t6aQa4ZLiLFEKGog6Ppu4GyPPuNXr1t4JA"
-  },
-  {
-   "program": "GMGNreQcJFufBiCTLDBgKhYEfEe9B454UjpDr5CaSLA1",
-   "name": "GMGN Program 2",
-   "level": 2,
-   "levelName": "Fuzzed",
-   "score": 45,
-   "depth": 45,
-   "tier": "Deep Fuzz",
-   "bytecodeHash": "7ec0837b409e1d4324d3bb0a1aea0bc63ff3068036d1841a638de4ec3c714a64",
-   "reportHash": "4bb9c47d087afaee3b7f0c079604291532d27ba703ba43b906fbddd3f69b06d0",
-   "ruling": "H6WLxJ61AfuZ3KadYXv2cJdFeiJdAW5xdistXY6XwzFK",
-   "certification": "8m2sNgzk5Xm5Q9k5oCX6ukWvEnxdB2bWwgmLCwCRenk2",
-   "certifySignature": "5NA1pqftM2rZDPDk5DZ6JySp3jBQA6yD6UJwdxc7Qvorb1MBqSrHDwKNU9cPbXgsQQLwmm5NnpKSJpFZ8UNrCkHx",
-   "jurors": 4,
-   "families": 4,
-   "jurorsScripted": true,
-   "certifiedAt": "2026-11-10T04:49:10.015Z",
-   "lookup": "certified Fuzzed",
-   "history": [],
-   "recordSignature": "4ot7pRZzLf4P8sziCKBQ2Td1q5Z2wasYu3JZC1E1sC8mruFX7ETYmdARjugCj3hMWRTvaT7uy62Xw1DLTa2h8vZ",
-   "records": 1,
-   "record": "974GbrpxVNvUVWAwPDUNESkKNEFJBmg7pJHeWmpSK3EB"
   },
   {
    "program": "SHARKobtfF1bHhxD2eqftjHBdVSCbKo9JtgK71FhELP",
@@ -2451,6 +2382,99 @@
    "recordSignature": "47HHgAtCNDrognTSE8Qb3VoagyH9ixzeZrzzUBkerMPpQcZN8QNgSjZTyzawKKtHrp9W6oiQ2iZovU2C6xEdAErQ",
    "records": 1,
    "record": "5pcvhQvecKjNzZpLh2FBGufiXtbv5aZGqTFeAL4kfyrQ"
+  },
+  {
+   "program": "proVF4pMXVaYqmy4NjniPh4pqKNfMmsihgd4wdkCX3u",
+   "name": "OKX DEX Router Program",
+   "level": 2,
+   "levelName": "Fuzzed",
+   "score": 40,
+   "depth": 40,
+   "tier": "Deep Fuzz",
+   "bytecodeHash": "1cc114679cdb7f67b1d0fbad9a55f9725cb07c6b5220dddc74a85b129f20a4ec",
+   "reportHash": "2ca27c78c84c668a56260d4f9887e29c47b9da1c1388968259066b9ee7f8dd39",
+   "ruling": "BNJsKvmYZG57BE1UTvVvWG6bGPny3z5DA4v51BS9j11v",
+   "certification": "2ZWJ98rnzXYeH312Xf9gP7XYHW4zCzbuKi6FEPfJm1p7",
+   "record": "FZ6iHmYNY2LRHSfkjgtEAMKkCdLJvnWWwJ1aP6vxGcj4",
+   "supersedes": null,
+   "certifySignature": "3Y59vNS326y8VebUyML5vUcoGZ1FbQkScJX9xKP7bye6TcVaiQxPMpQLavVGQWeEthe3Pdnh1mV1vo9kzNVJzaAc",
+   "jurors": 4,
+   "families": 4,
+   "jurorsScripted": true,
+   "certifiedAt": "2026-11-10T15:59:24.341Z",
+   "lookup": "certified Fuzzed",
+   "history": [
+    {
+     "levelName": "Not certified",
+     "score": 33,
+     "ruling": "995CozoDJKuapK2TgP4f89XNbBwTV7K3o4HvdCE2trJk",
+     "reportHash": "e50fe34e02c49a023f81c82ed49ea535e6a5c0c0798375d07efcd99a0b7fb329",
+     "certifiedAt": "2026-11-10T04:31:03.492Z",
+     "replacedAt": "2026-11-10T15:59:24.342Z"
+    }
+   ]
+  },
+  {
+   "program": "3TK9D8aoBFYjYZtKCjciPrVrRStsnvo7KmpcJqDavpaU",
+   "name": "Kipseli Program",
+   "level": 0,
+   "levelName": "Not certified",
+   "score": 12,
+   "depth": 12,
+   "tier": "Deep Fuzz",
+   "bytecodeHash": "03882d00e885bd591985341450f8883015ee969c305901457de640038da0bd40",
+   "reportHash": "e63156e63ff30b6a4ed9d8244dde1428d9b16f2dfe1f452b54d1c7508f68c4a2",
+   "ruling": "BeF1d1BigY1zRESUc87Pj5TYJxBUTU4YrYRCZUc3XJ2Q",
+   "certification": "DRvJ2S5bjFnNjLi9fg25zxcTjwibq3tTZf3PyuDwFdXY",
+   "record": "DGjLTHX8gRNHexATDJpet7k7N7aRmmoJ8TXVMPEuMqko",
+   "supersedes": null,
+   "certifySignature": "5XrTAUPmBQ7wNGcXdyP7aG2xqow2Emc6kdUeTT1UgJE9Hbk8TcDhJQR8KiKS7XQfaP8wZRTXCL3kyVFYWsoU2BcL",
+   "jurors": 4,
+   "families": 4,
+   "jurorsScripted": true,
+   "certifiedAt": "2026-11-10T15:59:56.722Z",
+   "lookup": "the jury did not certify this build",
+   "history": [
+    {
+     "levelName": "Not certified",
+     "score": 12,
+     "ruling": "x1cZxxkRUXkGhfSjiBADZeYykLymX9xUNrEi3hC2EXM",
+     "reportHash": "3f9d0c656ac9b4ae6a056c806623971790a74342b8f6ccbee090c57fff8261a9",
+     "certifiedAt": "2026-11-10T04:40:06.830Z",
+     "replacedAt": "2026-11-10T15:59:56.722Z"
+    }
+   ]
+  },
+  {
+   "program": "GMGNreQcJFufBiCTLDBgKhYEfEe9B454UjpDr5CaSLA1",
+   "name": "GMGN Program 2",
+   "level": 2,
+   "levelName": "Fuzzed",
+   "score": 50,
+   "depth": 50,
+   "tier": "Deep Fuzz",
+   "bytecodeHash": "cd8069b03397c3bdb80bcda8be73b89c86364924d43c344e8ee8e3349391c2c1",
+   "reportHash": "a7cacfb9c827c690c01ef7e9923b92b0a782a9c45e3322fba57f35797954f7ee",
+   "ruling": "D7dzGw7WKWmniTjHpHCQVgVMQvqoftynd1fSm7EZWSm5",
+   "certification": "3RmJ1DVUxhQWntE6odDppjAyGwT1Sd1hEEG9kXYSUZni",
+   "record": "7FiKBn7v1fs9Th8ZDVZ6wJQyTq1WZL8rug5xEyJuh7QW",
+   "supersedes": null,
+   "certifySignature": "Y6XjgTHEa4d4MQy5ffWwFB6CMJcKMqonfKryjzo6mUs8H7yNdG2rwmusCvrkp4rQRdkqqGWa4bHqpvAW1Kxgz47",
+   "jurors": 4,
+   "families": 4,
+   "jurorsScripted": true,
+   "certifiedAt": "2026-11-10T16:00:29.417Z",
+   "lookup": "certified Fuzzed",
+   "history": [
+    {
+     "levelName": "Fuzzed",
+     "score": 45,
+     "ruling": "H6WLxJ61AfuZ3KadYXv2cJdFeiJdAW5xdistXY6XwzFK",
+     "reportHash": "4bb9c47d087afaee3b7f0c079604291532d27ba703ba43b906fbddd3f69b06d0",
+     "certifiedAt": "2026-11-10T04:49:10.015Z",
+     "replacedAt": "2026-11-10T16:00:29.417Z"
+    }
+   ]
   }
  ]
 }

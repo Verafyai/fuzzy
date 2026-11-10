@@ -2,7 +2,7 @@
  "kind": "fuzzy.registry/1",
  "engine": "fuzzy-score/1",
  "source": "Orb program directory (orbmarkets.io/programs), the first 100 programs it listed on 2026-11-09. Stake and Ed25519 SigVerify are native built-ins Fuzzy cannot load, so SPL Token and Token-2022 take their places.",
- "generatedAt": "2026-11-10T06:14:18.966Z",
+ "generatedAt": "2026-11-10T16:04:29.593Z",
  "programs": [
   {
    "rank": 1,
@@ -511,7 +511,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "5b6ceda57863f0dcc3e0e3623052f8342c2c81883379699e71d7ed5383cb3dcf",
-    "reportHash": "6a4dab2c844866d30ddc59533c6a2a9c2ed524f2e3711922d91f7cd9fca1b148"
+    "reportHash": "6a4dab2c844866d30ddc59533c6a2a9c2ed524f2e3711922d91f7cd9fca1b148",
+    "record": "DaLqnFd9MBunu5pvLAkJUWHYiJqqBHw6BXet9LCpUWLR",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -839,7 +842,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "51a5f6a7fb5a812de7686e593ce6159f6ee59b15771a3d5d37ab661c46d64586",
-    "reportHash": "e4a26213ed135392699a8ef51eaf5b590dbd1b313cc0484f2cf29879f47c86ed"
+    "reportHash": "e4a26213ed135392699a8ef51eaf5b590dbd1b313cc0484f2cf29879f47c86ed",
+    "record": "4Nt3VdoC1DTr8kQpAkkD11FS16ahxVLdurzrVg2t8auj",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -1005,7 +1011,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "f520eaf096361abbb9639ea4dc3e5388a87b9330e121f476607b87c46ef67954",
-    "reportHash": "a6dea222af873708b8a5dd97310c35c2c7c249559d0dbe104fe986a9727e78db"
+    "reportHash": "a6dea222af873708b8a5dd97310c35c2c7c249559d0dbe104fe986a9727e78db",
+    "record": "Ex7FA6SuY8PvLCSoHrJpMgLJGDBMhQ6QuWzYuDYwvg2Q",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -1327,7 +1336,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "05249b60f8ddf02a53d0f8a43980fde40cce33f73526355b4ef08e292279819f",
-    "reportHash": "7ba6cd4abe8de6a1f55d22053223fa647ca6360d99e638eb7301df7003f6cfff"
+    "reportHash": "7ba6cd4abe8de6a1f55d22053223fa647ca6360d99e638eb7301df7003f6cfff",
+    "record": "EyzqYJsdUZR9yGXje1Y2NGxCDhvJCjXe598ojbeyBqUZ",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -2038,7 +2050,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "7a03a1465ca5f2ed1331188adb8feb024d6663b78f00f1f3f5346909946083b5",
-    "reportHash": "ac889c1a855c8f9b99ac4e1c6924ed6dfdc718469b70ac9651d76b3462a2ad12"
+    "reportHash": "ac889c1a855c8f9b99ac4e1c6924ed6dfdc718469b70ac9651d76b3462a2ad12",
+    "record": "7G9MM1PQGyiEoNdWh6S4AxGAqecijPWho8JCcCdyRYxk",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -2314,7 +2329,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "03c1327f06030312b3a2f8bc8d2272c65de37fe0d103a71d58d75d66358b17e9",
-    "reportHash": "b468ba7d2eee37978890b73d852a29b9dd574ceced116a4ab7158922cdf01053"
+    "reportHash": "b468ba7d2eee37978890b73d852a29b9dd574ceced116a4ab7158922cdf01053",
+    "record": "6XY1QkLo4c27BdFvkV96Cic6a9S1FvEu8N6LAaQ1UbUw",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -2731,7 +2749,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "94da79f11a6c57646c7483cbee37dbb135d91dbe4c2a6200e3ef24f4ca776273",
-    "reportHash": "35ccb54ec6bf8bc8b0d0b8498e755382ec5a0088cd32eb03d95091b64e1e9b0e"
+    "reportHash": "35ccb54ec6bf8bc8b0d0b8498e755382ec5a0088cd32eb03d95091b64e1e9b0e",
+    "record": "CZgjrajrvx1DzDMG7uAzrx1wxnkubKANTAEcg9hKJJDo",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -4003,7 +4024,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "5409ba8fb81f957149f1a3d203140ce65d62acf45695ffe0ac9bfaf7f6d95cc2",
-    "reportHash": "d6c09ca26192c47b71f447570b6fc853701d4701fe36da5935d541a68195d4a4"
+    "reportHash": "d6c09ca26192c47b71f447570b6fc853701d4701fe36da5935d541a68195d4a4",
+    "record": "AJqXXKgwH9JGH49cgr73G89JRoPpWbXRNPHpidppDfRV",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -4230,7 +4254,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "d2d66df0c8e3f5f7d33b2df3d4931055c017f992883f1b81b54f18db0c5bf145",
-    "reportHash": "bb69f5116c1457fc7c4fa74e5b9e3ba2c888311024eeff5a4df528eea1896094"
+    "reportHash": "bb69f5116c1457fc7c4fa74e5b9e3ba2c888311024eeff5a4df528eea1896094",
+    "record": "FCR7dVFq32A5baHHFjEZKqHGzNY7kjBhgMFgoFTisK8v",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -5413,7 +5440,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "2d9e1c76fd3f760542b19067f3eafaef5febb66bcbfe86bb09f5c7c7b16591de",
-    "reportHash": "0199bb99c5f6a6fbad4ff61f8957be6edae928d1e63628ded72ae729ef30444a"
+    "reportHash": "0199bb99c5f6a6fbad4ff61f8957be6edae928d1e63628ded72ae729ef30444a",
+    "record": "4s44oq7ga8M9eNGownx14FmHSvcQ2wvsFzdxQDWcm1MA",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -5558,7 +5588,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "1277d92c7f159ffb18b9d77b409e7260acff53a3f0679a76e9496be9563f3008",
-    "reportHash": "f265527f51d99cf973d9449300248f6ad750d6914d2aae22d75d84b1258ac998"
+    "reportHash": "f265527f51d99cf973d9449300248f6ad750d6914d2aae22d75d84b1258ac998",
+    "record": "49pamXzsLa1PJvPpkpJeE9jQ7N2Aa9F64fgR8gghin78",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -5923,7 +5956,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "d7709524ab16022f59521b3b44df1476572b5109afce0515ac86c1e44430763f",
-    "reportHash": "9458e4fdac5da3562f2d512d42a52f4a2d825cc61a84d8fa5b24b89966ebda96"
+    "reportHash": "9458e4fdac5da3562f2d512d42a52f4a2d825cc61a84d8fa5b24b89966ebda96",
+    "record": "3shQhJyRFGfZNZQkSmiKE1A4hWVN77t9Si17w4HcnSSf",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -6396,7 +6432,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "ca7a32627e284798de74eab2c8c3fe5c904c02b282f93a3314d5ad5bc92e5a67",
-    "reportHash": "593554ec3994372d85f144338aefe6e8a62e1e85611dd0ea5322ca294b97f20d"
+    "reportHash": "593554ec3994372d85f144338aefe6e8a62e1e85611dd0ea5322ca294b97f20d",
+    "record": "HSwzgtPeyZPuWHnJgZqDGkpUG8gjFgRydPjo257JSU4Q",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -6759,7 +6798,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "30985f5e1f232840adc006befacd95cac2bf09f33e467c3b1cbc4a0ff4a8d00b",
-    "reportHash": "2ad70de2364715cd76e1d17feeb6bfa4319ee4daf7df9329bdc34e4f49093392"
+    "reportHash": "2ad70de2364715cd76e1d17feeb6bfa4319ee4daf7df9329bdc34e4f49093392",
+    "record": "7G25XfyBXUAQhLyRRKNWXtJkKjf5Hx3NL331LZozapZ2",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -6770,22 +6812,22 @@
    "description": "OKX DEX's swap router on Solana.",
    "site": "https://web3.okx.com",
    "status": "scanned",
-   "score": 33,
-   "depth": 33,
+   "score": 40,
+   "depth": 40,
    "ceiling": 100,
    "depthParts": {
     "branchCoverage": 0,
-    "instructionCoverage": 4,
-    "attackClasses": 9,
+    "instructionCoverage": 9,
+    "attackClasses": 11,
     "realState": 10,
     "effort": 10
    },
    "grade": "Shallow run",
    "branch": {
-    "instructions": 331884,
+    "instructions": 333198,
     "instructionsExecuted": 0,
     "instructionCoverage": 0,
-    "branches": 56530,
+    "branches": 56718,
     "branchesTaken": 0,
     "branchCoverage": 0,
     "invocationsTraced": 0,
@@ -6798,11 +6840,11 @@
    "leadClasses": {
     "missing_signer": 1
    },
-   "transactions": 209,
-   "durationMs": 257630,
+   "transactions": 181,
+   "durationMs": 243896,
    "state": "mainnet",
-   "replayedCalls": 5,
-   "replayedFromSlot": 467570935,
+   "replayedCalls": 7,
+   "replayedFromSlot": 467777092,
    "instructionsTried": [
     {
      "name": "create_token_account",
@@ -6816,12 +6858,22 @@
     },
     {
      "name": "swap_tob",
+     "succeeded": true,
+     "failed": true
+    },
+    {
+     "name": "set_token_ledger",
+     "succeeded": true,
+     "failed": false
+    },
+    {
+     "name": "swap_tob_with_token_ledger_v3",
      "succeeded": false,
      "failed": true
     },
     {
      "name": "swap_tob_v3",
-     "succeeded": false,
+     "succeeded": true,
      "failed": true
     },
     {
@@ -6869,7 +6921,7 @@
     {
      "id": "unchecked_mint",
      "name": "Unchecked mint or authority",
-     "status": "not tried"
+     "status": "held"
     },
     {
      "id": "lamport_draining",
@@ -6897,11 +6949,11 @@
    "upgradeable": true,
    "upgradeAuthority": "CjoV5B96reuCfPh2rRK11G1QptG97jZdyZArTn3EN1Mj",
    "bytes": 3742733,
-   "bytecodeSha256": "541398d48dca4c608bb548a90abb7eec6808aa9fcbf815d0534405c3ecbd6752",
+   "bytecodeSha256": "1ca9fb7cbb9f67837af2ebdffddd583bcca5f4b6f80e400c56a5f990a39e609a",
    "engine": "fuzzy-engine/0.3.0",
    "tier": "Deep Fuzz",
-   "scannedAt": "2026-11-10T03:39:04.550Z",
-   "certification": "Recorded, not certified",
+   "scannedAt": "2026-11-10T15:54:12.435Z",
+   "certification": "Devnet: Fuzzed",
    "addons": {
     "verified": {
      "verified": false,
@@ -6951,21 +7003,32 @@
     "note": "Invariants were derived from the IDL. A violation is a counterexample: the exact sequence of calls, which replays from its seed. Property results are reported beside the score and never change it."
    },
    "devnetCertification": {
-    "level": 0,
-    "levelName": "Not certified",
-    "score": 33,
+    "level": 2,
+    "levelName": "Fuzzed",
+    "score": 40,
     "program": "proVF4pMXVaYqmy4NjniPh4pqKNfMmsihgd4wdkCX3u",
     "tier": "Deep Fuzz",
-    "history": [],
-    "certification": "6nyScsZ5wmzjHCRaxo3hmSXMVw7fjefzzXXyZ6WnkhVg",
-    "ruling": "995CozoDJKuapK2TgP4f89XNbBwTV7K3o4HvdCE2trJk",
-    "certifySignature": "2UD5tLitLzeerSn9F1z25sqYocgxDi3Fr3LpT8XR9ckeYCVbeTZxUNPLnVPAEmHAdKbZpa45WUjKLYjBdJC5BsPL",
-    "certifiedAt": "2026-11-10T04:31:03.492Z",
+    "history": [
+     {
+      "levelName": "Not certified",
+      "score": 33,
+      "ruling": "995CozoDJKuapK2TgP4f89XNbBwTV7K3o4HvdCE2trJk",
+      "reportHash": "e50fe34e02c49a023f81c82ed49ea535e6a5c0c0798375d07efcd99a0b7fb329",
+      "certifiedAt": "2026-11-10T04:31:03.492Z",
+      "replacedAt": "2026-11-10T15:59:24.342Z"
+     }
+    ],
+    "certification": "2ZWJ98rnzXYeH312Xf9gP7XYHW4zCzbuKi6FEPfJm1p7",
+    "ruling": "BNJsKvmYZG57BE1UTvVvWG6bGPny3z5DA4v51BS9j11v",
+    "certifySignature": "3Y59vNS326y8VebUyML5vUcoGZ1FbQkScJX9xKP7bye6TcVaiQxPMpQLavVGQWeEthe3Pdnh1mV1vo9kzNVJzaAc",
+    "certifiedAt": "2026-11-10T15:59:24.341Z",
     "jurors": 4,
     "families": 4,
     "jurorsScripted": true,
-    "bytecodeHash": "a8b2a437c4ee56ee8d911130e46d116f22280e9ce7ce2b6ff55fd077d4b9d6bf",
-    "reportHash": "e50fe34e02c49a023f81c82ed49ea535e6a5c0c0798375d07efcd99a0b7fb329"
+    "bytecodeHash": "1cc114679cdb7f67b1d0fbad9a55f9725cb07c6b5220dddc74a85b129f20a4ec",
+    "reportHash": "2ca27c78c84c668a56260d4f9887e29c47b9da1c1388968259066b9ee7f8dd39",
+    "record": "FZ6iHmYNY2LRHSfkjgtEAMKkCdLJvnWWwJ1aP6vxGcj4",
+    "supersedes": null
    }
   },
   {
@@ -7160,7 +7223,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "f8c1dbb74d6175113c9eb8659f5d28b86775b2c39d1f47a0ce51c21f7f5d1e60",
-    "reportHash": "6d30fd5346ff03734b5d977fb5d208d47e40818fd542111b0f8595481023141f"
+    "reportHash": "6d30fd5346ff03734b5d977fb5d208d47e40818fd542111b0f8595481023141f",
+    "record": "HQqH7bWWi4S5QctdFDdxpYbBaDWK3iExD3zGta4mhnEW",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -7485,7 +7551,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "3192a190b0aa4ade360844924118cebd47a5479b26658764ae285362f2ede6d0",
-    "reportHash": "911c4991be287fa87dcccb453eb7d50dd5a7e2b0cfd90c314967fdbc01c9f0c3"
+    "reportHash": "911c4991be287fa87dcccb453eb7d50dd5a7e2b0cfd90c314967fdbc01c9f0c3",
+    "record": "BpVecqmRT3ShKHM1xfGGj5hJwfpUqu9JQUCCkkZoH7dY",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -8439,7 +8508,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "31ac04c9159fa7090430759ec47e13f6a901cd708464656131be2addb5c36996",
-    "reportHash": "381d7939718dc92bfd037a83436fc939048325526c6ad0d33772335e896925fb"
+    "reportHash": "381d7939718dc92bfd037a83436fc939048325526c6ad0d33772335e896925fb",
+    "record": "DQFjmYLiKhD1yCHY3t59hHUr116HmnNKbTm7eAfeRU8M",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -8655,7 +8727,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "95a1ad817421ac7747a00e0448d4966f16600e507f3fecf949ad42826ac90b3c",
-    "reportHash": "566d9182bb53513e63c7b3545bf657a4fc0059f2d46439a0ab44c339edecc0b4"
+    "reportHash": "566d9182bb53513e63c7b3545bf657a4fc0059f2d46439a0ab44c339edecc0b4",
+    "record": "6dK3bozkVvocgyZQETpA7qZe9gDSkYrFcyUFY8HiVvs5",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -8973,7 +9048,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "9ce4a4342cc1bf1dbc7f94da433811593ebd8bcb3ae47487c74421726c0d1978",
-    "reportHash": "3119f3bb80bbf5fd6283ab24872d379d8018722ab599cb469405cceb915cb9fe"
+    "reportHash": "3119f3bb80bbf5fd6283ab24872d379d8018722ab599cb469405cceb915cb9fe",
+    "record": "BmxXuki6G8rtnQEXeLz8a6z4GDVvRNAuQiB6RtBDwSd6",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -9128,7 +9206,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "dab4fe5b310af3f5e2a849266b4def1bfaa3ba003684d22d3f85c408373cb282",
-    "reportHash": "ef596b3e08f8f688035d0a03be14c016d2624063ed662af2d2b85b8e088c4cdf"
+    "reportHash": "ef596b3e08f8f688035d0a03be14c016d2624063ed662af2d2b85b8e088c4cdf",
+    "record": "2gQVM3NSSKfjWHuQha4Jkk7mVdMjLvxWq75NqjfE319u",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -9285,7 +9366,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "3849aece6fee86df0090d2824396f29220b5948da34d2ab5c7167655684a6467",
-    "reportHash": "ab62298823ef5af517f5c89fa2ed10cfe435a19187ebc906b836ed3f371784d4"
+    "reportHash": "ab62298823ef5af517f5c89fa2ed10cfe435a19187ebc906b836ed3f371784d4",
+    "record": "xNE3dtED1jZGJKjYuLVSmntkstFDYvG7sW1cCNLr8Fw",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -9821,7 +9905,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "1dc2dd8b6fcdd01ed9818333a9fb02aac19a1eb06fb74ec1db83bdb7dd5fce16",
-    "reportHash": "3917cf37bcfb03aa01f6a578f4ea54335252c9f5d9525dc5529c8c3dfaaf5bd2"
+    "reportHash": "3917cf37bcfb03aa01f6a578f4ea54335252c9f5d9525dc5529c8c3dfaaf5bd2",
+    "record": "JWKvLm97qShq2wWP6hwcAWuKGNxG7voEnXGDZyW7Uta",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -9982,7 +10069,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "1ada810f38b2303daedca3450d5926300841bd9030651ec951b2fe87c682c01c",
-    "reportHash": "7420434af6a006f236d7c6d5115702f04b3576529fc722d74ea7df047ea209c7"
+    "reportHash": "7420434af6a006f236d7c6d5115702f04b3576529fc722d74ea7df047ea209c7",
+    "record": "38BBRhA1jWnMRyqzQf7tCvrXxEksKsruwmr329RWrq6z",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -10137,7 +10227,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "ad8c82508145bb807a6711bed591a4c416dde590686efc1576c5f6dd36100faa",
-    "reportHash": "f1c801e1100d2d6e94c09a968a2fce1bfb3a4a92ea41d3ed0ddd763c7a1282fa"
+    "reportHash": "f1c801e1100d2d6e94c09a968a2fce1bfb3a4a92ea41d3ed0ddd763c7a1282fa",
+    "record": "Ct1WepAdSGompfcbh2Wg5XejpsL3bEt9u7JeZ6S6wCN",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -10292,7 +10385,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "5d09585d4f0a9647d3fa6b328e11d4484ac5ae7e5d6eeb30ada8edd7606f4e76",
-    "reportHash": "f058c2afd237524457337d80ede2672f23313a52cf234d16149a7878d8652d69"
+    "reportHash": "f058c2afd237524457337d80ede2672f23313a52cf234d16149a7878d8652d69",
+    "record": "3u13G2anYVidSZjLikp9ay4FCb8mgaVhjVQqs1obqSwv",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -10775,7 +10871,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "c9f45da65b0c87ca76c1ed5ad0d1ef2ead7c3392e8e41f194d50296820a22bb9",
-    "reportHash": "76e956050dcdf083a895cd6052023b353cf780350162c804772abd875af51e5c"
+    "reportHash": "76e956050dcdf083a895cd6052023b353cf780350162c804772abd875af51e5c",
+    "record": "HaovQUoJGwrNrUgMhjwRoc57RbDryp4kcL1LuYFxn5Np",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -10936,7 +11035,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "73a51e971415c9d899280943220835bdc855ee3389cf60dc11e79c6b33cfa8cf",
-    "reportHash": "ec7d0e30ca67acf17ae97b689110e404cc105f57909c2fe15061cda34feca4b3"
+    "reportHash": "ec7d0e30ca67acf17ae97b689110e404cc105f57909c2fe15061cda34feca4b3",
+    "record": "Htsvg834PD9DwEQc2N23adFLAj3DgjkJvTj6nTbqWo1R",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -11091,7 +11193,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "6a2397cb06fe96f178b901d34204be29783e0d8e1ef742d45d4b1e5688249c73",
-    "reportHash": "256627b067e0441d7c7a2a115b6d7f4b50aa192232229c4509aec57f16845255"
+    "reportHash": "256627b067e0441d7c7a2a115b6d7f4b50aa192232229c4509aec57f16845255",
+    "record": "7ix9oPcehjMEyg2yd32MRWmEa7X72svU7GqQGeWrhstJ",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -11246,7 +11351,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "187d96b7418b5e4041a18ccb5d08d18eb213d0531bc9761b52b994433f69743d",
-    "reportHash": "92fa7b1f2fc7eb9f5bd8f74e8e9bdd27b958cb3242620175e5aececeaf399baa"
+    "reportHash": "92fa7b1f2fc7eb9f5bd8f74e8e9bdd27b958cb3242620175e5aececeaf399baa",
+    "record": "FpBymdb53tqxTecf9uyhibhXDegAYisSrZX5rSzmrnBL",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -11269,13 +11377,13 @@
    },
    "grade": "Shallow run",
    "branch": {
-    "instructions": 77387,
+    "instructions": 77322,
     "instructionsExecuted": 1336,
-    "instructionCoverage": 0.017263881530489616,
-    "branches": 21604,
+    "instructionCoverage": 0.017278394247432813,
+    "branches": 21594,
     "branchesTaken": 197,
-    "branchCoverage": 0.009118681725606368,
-    "invocationsTraced": 34,
+    "branchCoverage": 0.009122904510512179,
+    "invocationsTraced": 35,
     "invocationsFailed": 0,
     "method": "agave-ledger-tool program run --mode interpreter --trace"
    },
@@ -11283,11 +11391,11 @@
    "provenBySeverity": {},
    "leads": 0,
    "leadClasses": {},
-   "transactions": 34,
-   "durationMs": 316589,
+   "transactions": 35,
+   "durationMs": 292061,
    "state": "empty",
    "replayedCalls": 1,
-   "replayedFromSlot": 467528989,
+   "replayedFromSlot": 467777094,
    "instructionsTried": [
     {
      "name": "instruction 0c86e380",
@@ -11362,10 +11470,10 @@
    "upgradeable": true,
    "upgradeAuthority": "8vfidczMKnpCvL9vPWQRqiNAdPeRJUWksbirM2KzERhn",
    "bytes": 747312,
-   "bytecodeSha256": "8caaeae2f9ab597a68f0f40958f00f84c2c806a9a471fa576de42d057ea47d88",
+   "bytecodeSha256": "926272fa4cad2afce54df421a9f0ea8ee96f94b329afacf4a6a08cc6a211e629",
    "engine": "fuzzy-engine/0.3.0",
    "tier": "Deep Fuzz",
-   "scannedAt": "2026-11-10T01:10:09.984Z",
+   "scannedAt": "2026-11-10T15:55:00.505Z",
    "certification": "Recorded, not certified",
    "addons": {
     "verified": {
@@ -11398,16 +11506,27 @@
     "score": 12,
     "program": "3TK9D8aoBFYjYZtKCjciPrVrRStsnvo7KmpcJqDavpaU",
     "tier": "Deep Fuzz",
-    "history": [],
-    "certification": "B8CH7NkhhastDSE5NJinQGBXKfjkAd27Cqi4rzfngUW7",
-    "ruling": "x1cZxxkRUXkGhfSjiBADZeYykLymX9xUNrEi3hC2EXM",
-    "certifySignature": "5ZGBVJQSqz8tFhczwGFZ1kCuXFYboKENemLEw3Mt9VKT3iGuCxmdsamY9NfQ9ywUpF2qBjH5TAx4UKU5d1DGUtvn",
-    "certifiedAt": "2026-11-10T04:40:06.830Z",
+    "history": [
+     {
+      "levelName": "Not certified",
+      "score": 12,
+      "ruling": "x1cZxxkRUXkGhfSjiBADZeYykLymX9xUNrEi3hC2EXM",
+      "reportHash": "3f9d0c656ac9b4ae6a056c806623971790a74342b8f6ccbee090c57fff8261a9",
+      "certifiedAt": "2026-11-10T04:40:06.830Z",
+      "replacedAt": "2026-11-10T15:59:56.722Z"
+     }
+    ],
+    "certification": "DRvJ2S5bjFnNjLi9fg25zxcTjwibq3tTZf3PyuDwFdXY",
+    "ruling": "BeF1d1BigY1zRESUc87Pj5TYJxBUTU4YrYRCZUc3XJ2Q",
+    "certifySignature": "5XrTAUPmBQ7wNGcXdyP7aG2xqow2Emc6kdUeTT1UgJE9Hbk8TcDhJQR8KiKS7XQfaP8wZRTXCL3kyVFYWsoU2BcL",
+    "certifiedAt": "2026-11-10T15:59:56.722Z",
     "jurors": 4,
     "families": 4,
     "jurorsScripted": true,
-    "bytecodeHash": "54de36a12a4752316b75da688b238fc91f029fb60237c4cce41b5f8c8c710f8c",
-    "reportHash": "3f9d0c656ac9b4ae6a056c806623971790a74342b8f6ccbee090c57fff8261a9"
+    "bytecodeHash": "03882d00e885bd591985341450f8883015ee969c305901457de640038da0bd40",
+    "reportHash": "e63156e63ff30b6a4ed9d8244dde1428d9b16f2dfe1f452b54d1c7508f68c4a2",
+    "record": "DGjLTHX8gRNHexATDJpet7k7N7aRmmoJ8TXVMPEuMqko",
+    "supersedes": null
    }
   },
   {
@@ -11562,7 +11681,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "afc2ffb48042500766b47dada39603d2aeb36caab3751ad37b4ffafcd437883b",
-    "reportHash": "6a759e7ca1398dc3d884aaae0b9690324040eebc99d10612867f371ac0bf644d"
+    "reportHash": "6a759e7ca1398dc3d884aaae0b9690324040eebc99d10612867f371ac0bf644d",
+    "record": "FqKtyeD4FiWG8jyBuAhG8PbaZeJaaXd2MNd8vyb4gJsf",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -12028,7 +12150,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "a82b474c8e04a061cf8124cc89ae9e4adc39ba97e10fc0b274da9a443f5c627b",
-    "reportHash": "8fa9c94df8a840d9c70b1bb4d7c4508dc472b780d6001bd580b504dc6cb2e5de"
+    "reportHash": "8fa9c94df8a840d9c70b1bb4d7c4508dc472b780d6001bd580b504dc6cb2e5de",
+    "record": "9FNfKZLbHdaxDoNeM8G5GM2atTvhDGUmngJW1bpwvovJ",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -12209,7 +12334,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "f9061f03a81b89db29f4603677e3b3d89b3bbf08d67827b2832f18a4e2b61acb",
-    "reportHash": "51dd5c3130be4ec81e16a3be249c9a5b02ee1f03fa45076d0a22fc1a48461359"
+    "reportHash": "51dd5c3130be4ec81e16a3be249c9a5b02ee1f03fa45076d0a22fc1a48461359",
+    "record": "wtw8FTQBrdRF8sW1W9YaKd8Qa89SNzeUqVwD5iaZfqi",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -12389,7 +12517,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "a89179ae024ac36aa5fc308251caa84cd0a3390ae66d8523514004a86d5148bb",
-    "reportHash": "8fa6b4820448f6145ec15817b925fdfd2cc358ff458281f907269706bfc0515e"
+    "reportHash": "8fa6b4820448f6145ec15817b925fdfd2cc358ff458281f907269706bfc0515e",
+    "record": "Hq3y1scnzG3uTHkL5LYK3Hotfm2ZNRJUoNPuS6eHNePw",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -12544,7 +12675,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "b6de6e9b2ebecf7170dd7ebf4f23e1295625eb0fb3d9533fbb6f2205800e2d7c",
-    "reportHash": "bc39a7dca60da947fbc0585cdd35c17e2504d2eec3fe59d32bbb5509ee546e50"
+    "reportHash": "bc39a7dca60da947fbc0585cdd35c17e2504d2eec3fe59d32bbb5509ee546e50",
+    "record": "S7DD8T4fAWMHoxAttfUbUNyszNfBTQ6uLdp6B1Fthnd",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -13671,7 +13805,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "515541c84caa71a2f142c603fc1e2372196825003e66126d1e824dd9213ea056",
-    "reportHash": "38206bb1029eb5c2e0d9b3a6dd14b61927f7ebb839388367a4e067429c27ca33"
+    "reportHash": "38206bb1029eb5c2e0d9b3a6dd14b61927f7ebb839388367a4e067429c27ca33",
+    "record": "Carakg3wDusxPPeke4ZPJnkDEiMzgrQcTosWFnmP242n",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -13826,7 +13963,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "594ddd559a0f05d72e5e0746671aa1846e414c3f4f5f0185687fbbc156bb1e73",
-    "reportHash": "73152eaca9f547b8567ed1082f041096ce39b6fe48d8894cac3a7937ee118ecd"
+    "reportHash": "73152eaca9f547b8567ed1082f041096ce39b6fe48d8894cac3a7937ee118ecd",
+    "record": "2KXAGmRVcmrwEVA6zLPzPpVcDVUZaR9G8TZQjPNjyQ9c",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -14037,7 +14177,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "16c8b301828ed1e51a574706ddecd0b0e946580a0b33216f884f9f061b4a5f9e",
-    "reportHash": "b245331ce7248b202b7b848722100c8c8624a108c6346bf80572a87c99bcff9d"
+    "reportHash": "b245331ce7248b202b7b848722100c8c8624a108c6346bf80572a87c99bcff9d",
+    "record": "DD3nhXVf88TJo3eVVD7ykqtFYZLwCUkncy5v2J5U3ekH",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -14213,7 +14356,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "d16949ec46aa3f0663dd11ebe956b555879036a4001a2e93e3e3d59c18893773",
-    "reportHash": "71b794d7f4da7af687eda9f9bb101d81d3024e4c77ac0dccb783382576160f22"
+    "reportHash": "71b794d7f4da7af687eda9f9bb101d81d3024e4c77ac0dccb783382576160f22",
+    "record": "GnHxeM9XNW7SLpiKoT9TUuuQJGYYu39ucQqRas5ZWhrf",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -15410,7 +15556,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "8190d3f7ceb6cb7a7a8d8924bff89f9f611e15ce1f806f2b6237f3311a98f697",
-    "reportHash": "ed5da64da5d386a319bc2a0a4c0faa5abf5e52a72f738bae28d29ac0e57e76d9"
+    "reportHash": "ed5da64da5d386a319bc2a0a4c0faa5abf5e52a72f738bae28d29ac0e57e76d9",
+    "record": "9DJVVm5HjY354YrLzWE4KS7bn2gHQmq2GwNb78khFpHL",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -15593,7 +15742,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "9af9e3b1cbc9d89340af4d9d46e4c88d3dc2fc67e0090f9370047d97532ff09d",
-    "reportHash": "4c73824bc91a4a598a366e0d50e03fd4dad7a133ab1c11c00d48aeae8eec314c"
+    "reportHash": "4c73824bc91a4a598a366e0d50e03fd4dad7a133ab1c11c00d48aeae8eec314c",
+    "record": "EJGtYWpNRdFHRuzqvYZLZk5CbCDQtH2hLjxQTWJ8bdVi",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -15902,7 +16054,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "a3c23d248fa6c4b26a84e2194e53d3a5d6a74d10c878eba10a23589c7b18fdcb",
-    "reportHash": "dff2c96792c54aee1298b3a69e258cd134c5c42cc0f24bfd47540a1f4a469785"
+    "reportHash": "dff2c96792c54aee1298b3a69e258cd134c5c42cc0f24bfd47540a1f4a469785",
+    "record": "5KqMM3mN7ihK7eMqejctrjNqcyWsajiPHF86JpZtLKe4",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -16182,7 +16337,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "f4f830919517d0d452faad436ace949507759b4bf08120709ecd71858beec6b1",
-    "reportHash": "32dd590a8d70bbc7b25876a7246e686ec1a6655ff9a3eccdd851cf9e50a8c731"
+    "reportHash": "32dd590a8d70bbc7b25876a7246e686ec1a6655ff9a3eccdd851cf9e50a8c731",
+    "record": "CVwF7boqBJUNFfb4FU3GQNQpvXaRvUANSnrBrr3S3RbT",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -16365,7 +16523,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "719b9e80d632562f075ba27a8ce474d09a52e603c8c63dec7504ff420c246c29",
-    "reportHash": "01b1b5014014ea6f41c50252ad360fa3366d602fef27f8341daee9ca74443cf9"
+    "reportHash": "01b1b5014014ea6f41c50252ad360fa3366d602fef27f8341daee9ca74443cf9",
+    "record": "BS3zfpdK5kyhQST8w6VybCMzSxT7YSp5q9UBFNKh1br9",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -16565,7 +16726,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "2c7c3eb61b32b9c1d0754463e67518048a4b7a13d7df9dfdfb475e76739dd77a",
-    "reportHash": "20d46e54c1e92f4636e9040993f0e6281e388edbac64cc3cac297d9fb9ed6d53"
+    "reportHash": "20d46e54c1e92f4636e9040993f0e6281e388edbac64cc3cac297d9fb9ed6d53",
+    "record": "5pcvhQvecKjNzZpLh2FBGufiXtbv5aZGqTFeAL4kfyrQ",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -16746,7 +16910,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "06e0f78bef551b169251bf3468ca2aa540f53a653c7efc6c37b804e4fad584e2",
-    "reportHash": "214381b83138cc213996249bea02cd9fa5fe9bdafd114cef6a70119af8400596"
+    "reportHash": "214381b83138cc213996249bea02cd9fa5fe9bdafd114cef6a70119af8400596",
+    "record": "Hat9mGyLi7t6aQa4ZLiLFEKGog6Ppu4GyPPuNXr1t4JA",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -16757,22 +16924,22 @@
    "description": "Orb lists it as a trading sniper program. Fuzzy has no further description for it yet.",
    "site": null,
    "status": "scanned",
-   "score": 45,
-   "depth": 45,
+   "score": 50,
+   "depth": 50,
    "ceiling": 100,
    "depthParts": {
     "branchCoverage": 0,
     "instructionCoverage": 20,
     "attackClasses": 10,
     "realState": 10,
-    "effort": 5
+    "effort": 10
    },
-   "grade": "Shallow run",
+   "grade": "Shaky",
    "branch": {
-    "instructions": 143150,
+    "instructions": 143185,
     "instructionsExecuted": 0,
     "instructionCoverage": 0,
-    "branches": 21824,
+    "branches": 21880,
     "branchesTaken": 0,
     "branchCoverage": 0,
     "invocationsTraced": 0,
@@ -16783,14 +16950,19 @@
    "provenBySeverity": {},
    "leads": 0,
    "leadClasses": {},
-   "transactions": 340,
-   "durationMs": 319805,
+   "transactions": 395,
+   "durationMs": 271139,
    "state": "mainnet",
-   "replayedCalls": 1,
-   "replayedFromSlot": 467572962,
+   "replayedCalls": 2,
+   "replayedFromSlot": 467778239,
    "instructionsTried": [
     {
      "name": "instruction f8c69e91",
+     "succeeded": true,
+     "failed": true
+    },
+    {
+     "name": "instruction 1af6388c",
      "succeeded": true,
      "failed": true
     }
@@ -16861,11 +17033,11 @@
    "idlInstructions": null,
    "upgradeable": true,
    "upgradeAuthority": "dgmgqBJi4DczjSWpv5QeFco8Q8JG3uiNsxXahKbAU4F",
-   "bytes": 1264328,
-   "bytecodeSha256": "7ec0837b409e1d4324d3bb0a1aea0bc63ff3068036d1841a638de4ec3c714a64",
+   "bytes": 1314328,
+   "bytecodeSha256": "3124108d173eab9d34a22133e1af627faa28c276cc2e5e95000d4483751ed5c6",
    "engine": "fuzzy-engine/0.3.0",
    "tier": "Deep Fuzz",
-   "scannedAt": "2026-11-10T03:47:20.021Z",
+   "scannedAt": "2026-11-10T15:58:44.978Z",
    "certification": "Devnet: Fuzzed",
    "addons": {
     "verified": {
@@ -16895,19 +17067,30 @@
    "devnetCertification": {
     "level": 2,
     "levelName": "Fuzzed",
-    "score": 45,
+    "score": 50,
     "program": "GMGNreQcJFufBiCTLDBgKhYEfEe9B454UjpDr5CaSLA1",
     "tier": "Deep Fuzz",
-    "history": [],
-    "certification": "8m2sNgzk5Xm5Q9k5oCX6ukWvEnxdB2bWwgmLCwCRenk2",
-    "ruling": "H6WLxJ61AfuZ3KadYXv2cJdFeiJdAW5xdistXY6XwzFK",
-    "certifySignature": "5NA1pqftM2rZDPDk5DZ6JySp3jBQA6yD6UJwdxc7Qvorb1MBqSrHDwKNU9cPbXgsQQLwmm5NnpKSJpFZ8UNrCkHx",
-    "certifiedAt": "2026-11-10T04:49:10.015Z",
+    "history": [
+     {
+      "levelName": "Fuzzed",
+      "score": 45,
+      "ruling": "H6WLxJ61AfuZ3KadYXv2cJdFeiJdAW5xdistXY6XwzFK",
+      "reportHash": "4bb9c47d087afaee3b7f0c079604291532d27ba703ba43b906fbddd3f69b06d0",
+      "certifiedAt": "2026-11-10T04:49:10.015Z",
+      "replacedAt": "2026-11-10T16:00:29.417Z"
+     }
+    ],
+    "certification": "3RmJ1DVUxhQWntE6odDppjAyGwT1Sd1hEEG9kXYSUZni",
+    "ruling": "D7dzGw7WKWmniTjHpHCQVgVMQvqoftynd1fSm7EZWSm5",
+    "certifySignature": "Y6XjgTHEa4d4MQy5ffWwFB6CMJcKMqonfKryjzo6mUs8H7yNdG2rwmusCvrkp4rQRdkqqGWa4bHqpvAW1Kxgz47",
+    "certifiedAt": "2026-11-10T16:00:29.417Z",
     "jurors": 4,
     "families": 4,
     "jurorsScripted": true,
-    "bytecodeHash": "7ec0837b409e1d4324d3bb0a1aea0bc63ff3068036d1841a638de4ec3c714a64",
-    "reportHash": "4bb9c47d087afaee3b7f0c079604291532d27ba703ba43b906fbddd3f69b06d0"
+    "bytecodeHash": "cd8069b03397c3bdb80bcda8be73b89c86364924d43c344e8ee8e3349391c2c1",
+    "reportHash": "a7cacfb9c827c690c01ef7e9923b92b0a782a9c45e3322fba57f35797954f7ee",
+    "record": "7FiKBn7v1fs9Th8ZDVZ6wJQyTq1WZL8rug5xEyJuh7QW",
+    "supersedes": null
    }
   },
   {
@@ -17073,7 +17256,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "1031591cf485108e845c403b24aa2cd8c08d54f2592683cbc504c029da19ad93",
-    "reportHash": "f416cd40c08e1dfb5f6aa3ebbfa076d2084386d79d252f4dadd0698e245befa6"
+    "reportHash": "f416cd40c08e1dfb5f6aa3ebbfa076d2084386d79d252f4dadd0698e245befa6",
+    "record": "9Zr1HvXLE12d4bLi3hXdKzPMgHDxPtBvymPQTB3kaUYe",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -17228,7 +17414,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "fc0dffc9835d7bb5ece0b7328dabd6b21b2f695ed11c55b28d326debb8dbbeb0",
-    "reportHash": "2d724b79448d84c0548744bbf7e4f50fc4a79699e9c7d169379a4d741f04a4e3"
+    "reportHash": "2d724b79448d84c0548744bbf7e4f50fc4a79699e9c7d169379a4d741f04a4e3",
+    "record": "7pa7q18i7Vmd1WeJrVV36Nrtt5s6Piv3EM2DxypfGBEC",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -17383,7 +17572,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "d911fcae9a7e7c77cddeda5575c83f5d0df699a8b91b3a8ae6a368da30fd9240",
-    "reportHash": "173bc5ac246ee8ab586f5b42fd3de405132ed29332f7e671e075f3cf205f275e"
+    "reportHash": "173bc5ac246ee8ab586f5b42fd3de405132ed29332f7e671e075f3cf205f275e",
+    "record": "DUdTU5XmKiLAcshuCYPRfRiE9DmZ5VnDLKZUNp3iRasc",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -17538,7 +17730,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "5b6548fd3cc081472dea87c1f3c676799486ca633f1556b465d594bd2e707814",
-    "reportHash": "05fc3357ecd572a9b022c37635b1ff3bb262744306a52115aac649df9c7e0d1b"
+    "reportHash": "05fc3357ecd572a9b022c37635b1ff3bb262744306a52115aac649df9c7e0d1b",
+    "record": "CvyxWqhU1euCSsQmdpAKBnFjLC7LCpbCB6i2h6RFBZh7",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -17718,7 +17913,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "3a702bdefbce9eac65f42abc5e94947898dfcda1fefdd59c69ad948d0ce06a99",
-    "reportHash": "4c76e70c1f5b9e0a5fe0e84217fbb9930526369f225ac501bedc38b1fa9ea9bf"
+    "reportHash": "4c76e70c1f5b9e0a5fe0e84217fbb9930526369f225ac501bedc38b1fa9ea9bf",
+    "record": "4BeiSkw5Aw9uebPk1xX2hhzx9E5hFKVdvrhdNWTA1oSy",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -17893,7 +18091,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "bfda2d6e6b5a6683fae9e5cf91160b80d277381e846e123ba8ce657059ecd327",
-    "reportHash": "2995663a8e76fa192891e66c449b7cb2388c46fbc3a1341834bb45d57eb3bf31"
+    "reportHash": "2995663a8e76fa192891e66c449b7cb2388c46fbc3a1341834bb45d57eb3bf31",
+    "record": "Fg9QMGeHmK8gX5gw2Dx54rdrw2Fk6aGXRKYmh46EKCq8",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -18059,7 +18260,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "3b15736f1a1c93fc0e90c6670464e0731d5422da6fba330055ccad94c4137cba",
-    "reportHash": "58bdd611b89e771c6a07af851703a12344198d8129136f1f3153eb3f3ad07805"
+    "reportHash": "58bdd611b89e771c6a07af851703a12344198d8129136f1f3153eb3f3ad07805",
+    "record": "AYMHN7up1dVEwNpTPKGVzsHgNsMJgxhdrhYSDnBSrFiz",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -18229,7 +18433,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "0e1b8c9bce12fcae8874ca68de39fce51eb894593dac41441c288d0592bbd86e",
-    "reportHash": "5ddcdf9f5e56e211a3a5f1f5c48611cf783adb9b2f8bd83fe4895f47414afeae"
+    "reportHash": "5ddcdf9f5e56e211a3a5f1f5c48611cf783adb9b2f8bd83fe4895f47414afeae",
+    "record": "EtJ62rcTzsivk7Tm4fdESHf2gyTnVKmqVDonZ465LKHY",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -18384,7 +18591,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "0a8c1d4ebc9be401671c00a04abd3d960e1b377d311d047caf95910d066149e2",
-    "reportHash": "346762696a86e74456ebf9d07a04698055c97fe860e367f71c019313c60b420d"
+    "reportHash": "346762696a86e74456ebf9d07a04698055c97fe860e367f71c019313c60b420d",
+    "record": "HiBXzgAdSpZQzH1YU8tXUgWjEbyk221zaTrDeVLbkfZv",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -18749,7 +18959,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "9d61a5ab098e39fc1b0f2e31b71aead9f7a1079c62f5747aca04c0210ce9d95f",
-    "reportHash": "c4ed6412b9deba874eedd6e63bed6881798ae704572e7b25e8a111080305c891"
+    "reportHash": "c4ed6412b9deba874eedd6e63bed6881798ae704572e7b25e8a111080305c891",
+    "record": "GV7C3dWDPrN9yjiMnLdGpiTeSTzg31oMp2tgA3XQqXwu",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -18904,7 +19117,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "8ab9b7a51db873fe7ce24fb83c5cb2c57e2afecf1a66239605e5eb901371c939",
-    "reportHash": "38d0254399aa4882ca3c8ba1d1d3c05ef60f55ed664236fd1f621f201cfb5cf6"
+    "reportHash": "38d0254399aa4882ca3c8ba1d1d3c05ef60f55ed664236fd1f621f201cfb5cf6",
+    "record": "BoBFeZfu5KQEPZC9psGagnQk9nmXhTH9qxEFtYBikuEP",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -19135,7 +19351,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "ee9283426facf1df50f5d8c3f53589a4322448dd756d19e0ecb2f49907cd10a2",
-    "reportHash": "b64867d0a276d94bba36cc4996c21c2447889bca41ba50d498cce9f9f52586a6"
+    "reportHash": "b64867d0a276d94bba36cc4996c21c2447889bca41ba50d498cce9f9f52586a6",
+    "record": "DVw9J4njLPFXAuSrJ2KvCQvtUJmpHHabbgPcesTnWJrj",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -19461,7 +19680,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "5a2d2d32f539e65f7eaeead928d3218272722c340aaa6f378db042b9015f6637",
-    "reportHash": "89c7ec3fce37f666fee881d368ce76ca143fae51d4bf167d76b07fb9260b1bff"
+    "reportHash": "89c7ec3fce37f666fee881d368ce76ca143fae51d4bf167d76b07fb9260b1bff",
+    "record": "Dg7FjAJ5CoccuFyk7PhVVAinzH2muEBC6EsKB41WYhfa",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -21172,7 +21394,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "8fbdc5cf1a446b467460764990a2002360ebde330513fa45d8e57e7ce2b00e15",
-    "reportHash": "5d7fb493f58d75483db1e4950ef72f19a23b94dc073fe286c3d874ec870265d4"
+    "reportHash": "5d7fb493f58d75483db1e4950ef72f19a23b94dc073fe286c3d874ec870265d4",
+    "record": "73JLdtXdgTmXMLXJ3SfJdzG1TdTfFdqCYqwi2itsf8hZ",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -21348,7 +21573,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "5509c61ae5f9fb793ae7f1b05b1c0c5cfdbc4f777782ab6ad211327a9635588e",
-    "reportHash": "dc365742c66b668a1976dbdc4589f7d3c5e0d6638c21cccb4e9b29bc1bd47ca1"
+    "reportHash": "dc365742c66b668a1976dbdc4589f7d3c5e0d6638c21cccb4e9b29bc1bd47ca1",
+    "record": "3AMuzfaR1LAaEkbrhXVUZmb37wBy3FJ2FEWWg6fZs82t",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -21509,7 +21737,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "b5149b0ce7755fbd3b08bbd145fda2d5e49b954d1ff25606600dd65141c42183",
-    "reportHash": "2f52860df4bdf2b15cfdce90ec8f6a04442e1de7defbb800fef5ec526fea5175"
+    "reportHash": "2f52860df4bdf2b15cfdce90ec8f6a04442e1de7defbb800fef5ec526fea5175",
+    "record": "561rFwviAjZ2ExpG8Sgw2RxrToa2MdaWgC2pjFxH8jds",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -22739,7 +22970,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "3dde54d202caa2d10514fd58a154df5f26f07643f9f5fd0402ff08084f0cb954",
-    "reportHash": "0f99b7dcd037dfa61b4c7c8f79bd8d65f0d9aa810724c284dd251be3819b207a"
+    "reportHash": "0f99b7dcd037dfa61b4c7c8f79bd8d65f0d9aa810724c284dd251be3819b207a",
+    "record": "Htfk3Rh6xMGVKxr8UM2g9mzFbsDeb5kJCbfytJCuNzni",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -23021,7 +23255,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "3f4a951238225053fd9f7abc4f292b2da2e2ff9ae18df84864395615997aabbc",
-    "reportHash": "d4f9bd2a208a6c2e06933abd24253f9736d1e4a85970bdcdd7bc20efcc16d477"
+    "reportHash": "d4f9bd2a208a6c2e06933abd24253f9736d1e4a85970bdcdd7bc20efcc16d477",
+    "record": "5PnFGi7uuXCFxTmYGm3tN297tJSkctHRkjsJDudrNLoi",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -23292,7 +23529,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "cb1df04a6e0652acba96fe4ff4470627ffce757f14b516d923e87ddd81db609f",
-    "reportHash": "c22d286663087b19e39fd5daf6b0186542dad115c0f15a762027eb58e5caa958"
+    "reportHash": "c22d286663087b19e39fd5daf6b0186542dad115c0f15a762027eb58e5caa958",
+    "record": "7FEQdEVJ4fCZDTzKDJXMzMbcLELG2vkGW6C7cFB8YvHD",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -23449,7 +23689,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "a33830b2b069e718ff709121913aa421489a97dd631895dec36fd3318334c5a8",
-    "reportHash": "ac5917ea8fe21a867ddc7694eba3dc5ab252d893ee9f2f8186b41fe4426fabc4"
+    "reportHash": "ac5917ea8fe21a867ddc7694eba3dc5ab252d893ee9f2f8186b41fe4426fabc4",
+    "record": "6VBcxsPXQ4qvK3fRpn3PLZV4yre1tUzFwA3Q5GMh6Hrm",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -23788,7 +24031,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "48e1238d06f460b3875b09c909f04fccd922367870684c2878ef4d772faabdda",
-    "reportHash": "648cdf2cdbfab29245c1ec090443d2197aed76a94e82848797e1f9f44aa7a166"
+    "reportHash": "648cdf2cdbfab29245c1ec090443d2197aed76a94e82848797e1f9f44aa7a166",
+    "record": "74fntBHjiY5aUmRekih3mVvQh3eFeSXt2XqPM8SENz4L",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -23971,7 +24217,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "99ee61a5159e15a359b01298b52c9f9f912eb19e47bdfe83987c16de52a4b1ff",
-    "reportHash": "20a0fee704bba20794591764b37f1804c8728e715cb28079ced1f79cb6b57ecd"
+    "reportHash": "20a0fee704bba20794591764b37f1804c8728e715cb28079ced1f79cb6b57ecd",
+    "record": "JE181USoYumeN6TKwaTZUJQSHUaVagDiNZAucQQC9RpW",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -24295,7 +24544,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "f878f7aa22ff190348863b4316e7facda04b2f1078f317c4cdc1818a1ce7c526",
-    "reportHash": "d2591b96fa47f128867b1668bfca8f8170a29e1a5d59d4ca4415d7b3b138b95d"
+    "reportHash": "d2591b96fa47f128867b1668bfca8f8170a29e1a5d59d4ca4415d7b3b138b95d",
+    "record": "8joGzco3wuV8jyEWsv8at2itG41T5SSCPiqQPEfjhyx7",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -24450,7 +24702,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "32c95cb1c72c96486c14dd4790ca75e0fbe6ac8567f9b685d3784fec69740f86",
-    "reportHash": "6c5dccdad2cd9069f83fa759639c34af1aac7629d095a1a81df398cd6784f81b"
+    "reportHash": "6c5dccdad2cd9069f83fa759639c34af1aac7629d095a1a81df398cd6784f81b",
+    "record": "2EjRk3nLV4zQcVSc1wS12s53N2gA5zQD6mxFhc73CWpy",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -24620,7 +24875,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "4159610d690c5bf5ba5d6ba0d8ddd6649c02c722bcff4251dd62fc954cb4cb94",
-    "reportHash": "ed2bc70f70367697c30c7037e20fae34dd9115992e67b5a5abb9af07f8093146"
+    "reportHash": "ed2bc70f70367697c30c7037e20fae34dd9115992e67b5a5abb9af07f8093146",
+    "record": "9HAuqJxqJZNm38y4pPtM6Vt4SPKP9toS1FcpDDgJcwAG",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -24775,7 +25033,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "82e71b87f999fd36bfb448767e049691d92be192373699ec446f0e99ba7cbad2",
-    "reportHash": "941723432860073b8a2e7fc9fd0adec024ea23d9257a41060160a47ae1b7d656"
+    "reportHash": "941723432860073b8a2e7fc9fd0adec024ea23d9257a41060160a47ae1b7d656",
+    "record": "5oY5eRa6eeMUV8jr9ndLULnJDxmHm8zxfohArtCSNT4y",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -25131,7 +25392,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "5ac3605ac584fb090320495be17086a62b1d801ad94854d8818bc530ed744736",
-    "reportHash": "d5faa258b8568945a331352b1a90616190576d21abee1f56f96280e80bd60a06"
+    "reportHash": "d5faa258b8568945a331352b1a90616190576d21abee1f56f96280e80bd60a06",
+    "record": "F8TEUfoyJa7TCo3X6n7p7Ta5XWjufjiaKEx6XfgB8B9B",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -25354,7 +25618,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "5d60af1004f21d528789d18822c5e4103b44ca6da202464ea4dda62873387b98",
-    "reportHash": "a4a47d2162fd1aa5c70df54bf369ff229c2052ecb3c46ac37e54a6fa36be2114"
+    "reportHash": "a4a47d2162fd1aa5c70df54bf369ff229c2052ecb3c46ac37e54a6fa36be2114",
+    "record": "JD8Tun9dCX7hoshfVf5ZcJWWjnKWFKELJaKrrvyEob4L",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -25655,7 +25922,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "5363e74d6ee924a66101e1f9323af30daa3111aa8c0b7fe21ef3a857a1e4da32",
-    "reportHash": "3950801b4d1e479a5cfb02ef3a43cd08dcf568f1f2ef02f2761b3df3ccbbb5cb"
+    "reportHash": "3950801b4d1e479a5cfb02ef3a43cd08dcf568f1f2ef02f2761b3df3ccbbb5cb",
+    "record": "5j2hicExpY1ZCZVvCJqviXonWqjJ73rHQiz5zZsNfote",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -25810,7 +26080,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "15df5e031a12148dc1405bdeaaf455bfe1ba7193757d80e00f3a2b8c32c067d5",
-    "reportHash": "fcf3c5c034f2df05c7414b65448fbdd264ce42fea96d105ff77a39bd3f45dca7"
+    "reportHash": "fcf3c5c034f2df05c7414b65448fbdd264ce42fea96d105ff77a39bd3f45dca7",
+    "record": "6KKQHiupwx4F1RebuPmNZAuY1A3A29XhiVnh2i8aVNWS",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -25965,7 +26238,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "a7fdf48428a321ba10698d691895de0dfefe2c8682ac33cdfb02ce4a1437a150",
-    "reportHash": "f069f24958aa15e36478a0970499518682d939644ef32633b3e82553b6cd5fef"
+    "reportHash": "f069f24958aa15e36478a0970499518682d939644ef32633b3e82553b6cd5fef",
+    "record": "99MvLzAuknopiutnKp42rcab5dGPdBfGnvFc8hpFh5S1",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -26126,7 +26402,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "b20e8a4bbc619e68d041b29e1060754cd24b352a49d043216c5415c90bef5996",
-    "reportHash": "9400c0217ed0352727a88b928c60efd096be1bcd8e71fea078f0e2e00f1abeb6"
+    "reportHash": "9400c0217ed0352727a88b928c60efd096be1bcd8e71fea078f0e2e00f1abeb6",
+    "record": "HdMb3yWJebZnBT3Mn2PQr8jUGLqUVmr1CdRsNyvXHAbR",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -26302,8 +26581,12 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "3421f2c73e8e0a59697d311c86aece030d858ee1f1ca96ae1019f02430ecfcbb",
-    "reportHash": "def9431c9965ab687fd101d0a27306b0a39446ae9b6fe716499ee0f7cb885c0c"
-   }
+    "reportHash": "def9431c9965ab687fd101d0a27306b0a39446ae9b6fe716499ee0f7cb885c0c",
+    "record": "AvhCX1mJSbHmbdWbmFqU1LNEDmAiNjcbyLg62LWuhozw",
+    "records": 1,
+    "supersedes": null
+   },
+   "rescanError": "Timed out"
   },
   {
    "rank": 82,
@@ -26699,7 +26982,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "3f3e98031af3e52cd970b7095d9d705c35029f676e4976bca996ca403bc55bd1",
-    "reportHash": "06a67b94aa5fb95ddd41e0082f3c35b520d588c89aad2b1806392c495ca51b41"
+    "reportHash": "06a67b94aa5fb95ddd41e0082f3c35b520d588c89aad2b1806392c495ca51b41",
+    "record": "Hk7DnvQCeArC66PUXunPJSo8kAhUy8AvXQNuH4cx3Drc",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -26983,7 +27269,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "abbe67181ec4edcad11f4a0773d8bf658b2e599d6f1365ebfee1ab0f85fe9bb4",
-    "reportHash": "bd153053c1bb781eafd7a3754beebaf12542171e510c2a5c4a4b56b8306dc62f"
+    "reportHash": "bd153053c1bb781eafd7a3754beebaf12542171e510c2a5c4a4b56b8306dc62f",
+    "record": "8HoyuBab15U7jVv3kC8Z4UChtfpK1LzzroZpyUEeSC5o",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -27304,7 +27593,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "ccdac46adb68c570556bd15f7caddc52dd16fb96e0bbc8f5a46129555adbeeb2",
-    "reportHash": "b2158e792e1a0ff817f98d7c81b6002691357b56eed56b435dc75d48166bfe01"
+    "reportHash": "b2158e792e1a0ff817f98d7c81b6002691357b56eed56b435dc75d48166bfe01",
+    "record": "CqLWAHbw22UrSrZbg8QTDkYH15snquwUBb7XriJubeCn",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -27559,7 +27851,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "46fc6f624531b035050552e3e885ffcbdb0d92b6ea4d1452a0419d7d90d5cf0c",
-    "reportHash": "72b35f40e13563ac9667022bf79b000401c903084e9100ae8785169165c9cbfd"
+    "reportHash": "72b35f40e13563ac9667022bf79b000401c903084e9100ae8785169165c9cbfd",
+    "record": "BSqsw3HpwtGwoXNBYyPBVDN1u6EhHwGcBePAND7EU36q",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -27908,7 +28203,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "1ce157e3e1a62963a5325d461c3295e2976eab453aa18c3f2cc489f26190c0ab",
-    "reportHash": "b33b640b1844ed7bb429a21ff81b667ae44564ba19726ff4c4a16e40b267197c"
+    "reportHash": "b33b640b1844ed7bb429a21ff81b667ae44564ba19726ff4c4a16e40b267197c",
+    "record": "F58TN7vx1LFeCSmuy5tdn9SFrNjAkDQggNfCNMsnu5wC",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -28069,7 +28367,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "e5c7a28fb16211ceda60433146672a935d414879a9ab30db414e169f9f5e94af",
-    "reportHash": "6bf39b7a482308daceaa8167edb1ba06fca9b0df62c0c633bc9b915cb34729fe"
+    "reportHash": "6bf39b7a482308daceaa8167edb1ba06fca9b0df62c0c633bc9b915cb34729fe",
+    "record": "E8ZF4SLRbPrHShQhdsqh5VVGU5hbCPdYutD9aj14FaVp",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -28345,7 +28646,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "9f2ac9dad099e59606189cede00ce46c0a2be1cab0fd686c61903e26dcc71854",
-    "reportHash": "194d09f69dd4a36adcdc867e9312f5535fef52099baf4078703427ba835deb85"
+    "reportHash": "194d09f69dd4a36adcdc867e9312f5535fef52099baf4078703427ba835deb85",
+    "record": "gVrru9ZAL6ckbKgqYEfAFNjyBBULqcQeu5NDas2ZzBS",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -28661,7 +28965,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "99273080086009fc1018547b4368535ba919b3567c46b055293954f1a9097721",
-    "reportHash": "84cf16a0856cdf2c43c6248fff4b98c120e436fdcf6c81016d0a701b231b85fd"
+    "reportHash": "84cf16a0856cdf2c43c6248fff4b98c120e436fdcf6c81016d0a701b231b85fd",
+    "record": "HN1ThpoeoHDbQLJA76JSkt71ZLcjnDtzzQtVmJHpm5nh",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -28822,7 +29129,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "c917d9a74f06eefdb21f0ae277afeb854444ee6ba58f86653687ad49d39995d3",
-    "reportHash": "396af1ae344ff82d08c59c62270c69eafdb336eae55c5919a054023a878a701f"
+    "reportHash": "396af1ae344ff82d08c59c62270c69eafdb336eae55c5919a054023a878a701f",
+    "record": "CgFwDHk3xtaLT4LuQwATfCeEkcwgagbhQ7aMCuQgZDWT",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -28993,7 +29303,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "53386fe7b99836e7e870fb96026e165ba8213206e0bb305716fb2538a1b192fa",
-    "reportHash": "846da612f5d22948c49511675122bd11c65191b21d7b7edfc3be680188e5cbce"
+    "reportHash": "846da612f5d22948c49511675122bd11c65191b21d7b7edfc3be680188e5cbce",
+    "record": "2i7R5GFvtMxweQ3T1sUzL4tUL3i8QcHeHtyUrgu2dU1c",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -29159,7 +29472,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "5e6214859447be838e4e2f68240cae738fa60facf59da01fa1721f15326c1706",
-    "reportHash": "e426c637a52da088181cbda6d2d174ca2cf4fe6298ba653f4b0140a82a756a54"
+    "reportHash": "e426c637a52da088181cbda6d2d174ca2cf4fe6298ba653f4b0140a82a756a54",
+    "record": "GLAtkiVhJ91x8c1Bk1KwpzjMfwxmVyee9Zcn3WvkXgbn",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -29325,7 +29641,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "541b6ebc8213a8af6171dfbac9eb2add979dae0f678205d906474b031b5bc5b0",
-    "reportHash": "03f8ac62d6e4056cd7dcbc6839f41e6137c88ccd76ab87dd6024e7a618cf436f"
+    "reportHash": "03f8ac62d6e4056cd7dcbc6839f41e6137c88ccd76ab87dd6024e7a618cf436f",
+    "record": "5tX9iZBYPoypzjbzGnvxnYrogDL8CLQdqaLVhd8uP4Eb",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -30091,7 +30410,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "2bc227a7354f1182165ce2f0976fc7ebd20ac535a2dd946fa450054f35075a46",
-    "reportHash": "2228b0f8f28772fb4966adad6c538e7f7f507a98e210b8ed98e34575067e26eb"
+    "reportHash": "2228b0f8f28772fb4966adad6c538e7f7f507a98e210b8ed98e34575067e26eb",
+    "record": "C5iU8YD9gifibeVb7tciginbzJsULPFvej2hWCdpsEu",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -30257,7 +30579,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "11b1db096e4f16273fb9340e6d8e60d2a3a85657c8aaa0e51d93763a8a650e6c",
-    "reportHash": "4016685fe60355bf5399aedd7668330a061bf9db8fb5cd14a788a4d730d2ba54"
+    "reportHash": "4016685fe60355bf5399aedd7668330a061bf9db8fb5cd14a788a4d730d2ba54",
+    "record": "2A8g2i5gpuDdsUmwwzK1DaJNEb8R3eKxH5qr2A41n6Ho",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -30625,7 +30950,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "9a68cf1deeb4a72abb39faad4f3c3772bae25bfbede4b5a7d1bc434a18be9ccf",
-    "reportHash": "a533f0396c6ee8b9653e0ffae29beb434a0bfe773f9f617fbb33776c133554fb"
+    "reportHash": "a533f0396c6ee8b9653e0ffae29beb434a0bfe773f9f617fbb33776c133554fb",
+    "record": "7ygXaHXMtsKKuYdmyjy7FEAbGrTehcM7oXD9Qt3NsvcS",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -30786,7 +31114,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "950df0db90a58a06dc229e4edb26dabe1d56a1b64abfb753070ab1010aca447e",
-    "reportHash": "9b05666814dfb45bed55fde8eb2326e9caaa903e084ae45190f6fdb46f2b1202"
+    "reportHash": "9b05666814dfb45bed55fde8eb2326e9caaa903e084ae45190f6fdb46f2b1202",
+    "record": "GvU6NK6w3r9zGf18jjo1g7ySC2AAgbYKghnLZhgn1g2a",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -30941,7 +31272,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "faa555154ae9cabfe89e7b11f5ffda8741e8d4a9af6dd05820af288ba126958a",
-    "reportHash": "7c1f78713e5d5441e08bb3033b851c18a1e9706adc731b3a6689547143b36d9d"
+    "reportHash": "7c1f78713e5d5441e08bb3033b851c18a1e9706adc731b3a6689547143b36d9d",
+    "record": "FPrRad3rv1X4EuNjpkrDwUPsrzF14xbGNXzztzz2JvMm",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -31112,7 +31446,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "ce6b1f9e0ecf4ef3437b941ed7003992a0bed9afe27038c16aa693bea427a507",
-    "reportHash": "0bd296523dc79cf770c83f5ac2109c925474f351701d63bb02be769694e7d3af"
+    "reportHash": "0bd296523dc79cf770c83f5ac2109c925474f351701d63bb02be769694e7d3af",
+    "record": "7sDrNruWdaiF592grjZbCFntKg1StsEMxKqL372MBdUK",
+    "records": 1,
+    "supersedes": null
    }
   },
   {
@@ -31747,7 +32084,10 @@
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "766533347d1e477537185192a8018962150898d457a0e4e98c0c5a2ba9133afd",
-    "reportHash": "b5dcb7434ba6eb7499707ca6cb4d8917cef35ffd6c861b2e2b628b40db06aae1"
+    "reportHash": "b5dcb7434ba6eb7499707ca6cb4d8917cef35ffd6c861b2e2b628b40db06aae1",
+    "record": "AozdKDVpoSPwRT5PaQFFa9vusu72zVnXFyCpJ53uTeR1",
+    "records": 1,
+    "supersedes": null
    }
   }
  ]
