@@ -374,7 +374,7 @@ export async function runHistory({ program, programId, history, idl, seed, budge
           `Replayed against cloned mainnet state with the attacker as the user, ${name} accepted a do-nothing program in place of ${argName(call, n)} (${x.address}) and went on as if it had run. The attacker ended ahead of making the same call honestly: ${ahead}.`,
           `Check the program account's address before calling it.`, twist, t));
       } else {
-        leads.push({ class: 'unchecked_cpi', instruction: name, title: `${name} calls whatever program is passed as ${argName(call, n)}`, detail: 'A do-nothing program in its place was called and the instruction still succeeded on cloned mainnet state. No funds moved in this run, so it is not counted.' });
+        leads.push({ class: 'unchecked_cpi', instruction: name, title: `${name} calls whatever program is passed as ${argName(call, n)}`, detail: 'A do-nothing program in its place was called and the instruction still succeeded on cloned mainnet state. The attacker took nothing that was not already theirs, so it is not counted.' });
       }
     }
 
@@ -448,16 +448,22 @@ export async function runHistory({ program, programId, history, idl, seed, budge
     return out;
   }
 
-  /** The attacker is ahead when no asset is worse than the honest run and at least one is better. */
+  /** The attacker is ahead when no asset is worse than the honest run, at least one is better, and on at least
+   *  one of those the attacker ends up with more than they started with. Ending ahead of the honest run only by
+   *  not paying their own money (a CPI proxy that forwards the caller's own transfer) is not a theft. */
   function dominance(a, b) {
     const keys = new Set([...a.keys(), ...b.keys()]);
     const better = [];
+    let gained = false;
     for (const key of keys) {
       const x = a.get(key) ?? 0n, y = b.get(key) ?? 0n;
       if (x < y) return null;
-      if (x > y) better.push(key === 'SOL' ? `${fmtSol(x - y)} more` : `${x - y} more base units of mint ${key}`);
+      if (x > y) {
+        better.push(key === 'SOL' ? `${fmtSol(x - y)} more` : `${x - y} more base units of mint ${key}`);
+        if (x > 0n) gained = true;
+      }
     }
-    return better.length ? better.join(', ') : null;
+    return better.length && gained ? better.join(', ') : null;
   }
 
   const replayed = [...kinds.values()].filter((k2) => k2.ok).length;

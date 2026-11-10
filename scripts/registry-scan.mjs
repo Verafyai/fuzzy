@@ -11,6 +11,8 @@ const concurrency = Number(args.concurrency || 4);
 const timeoutMs = Number(args.timeout || 240) * 1000;
 mkdirSync(reports, { recursive: true });
 const { programs, source } = JSON.parse(readFileSync('data/registry-programs.json', 'utf8'));
+// A program whose rescan fails keeps its last published row, marked with why the rescan failed.
+const previous = existsSync('data/registry.json') ? Object.fromEntries((JSON.parse(readFileSync('data/registry.json', 'utf8')).programs || []).filter((x) => x.status === 'scanned').map((x) => [x.address, x])) : {};
 
 function scan(p) {
   const out = join(reports, `${p.address}.json`);
@@ -70,7 +72,9 @@ async function worker() {
         certification: 'Not certified',
       };
     } else {
-      row = { ...row, status: 'not scanned', reason: r.error, certification: 'Not certified' };
+      row = previous[p.address]
+        ? { ...previous[p.address], ...p, rescanError: r.error }
+        : { ...row, status: 'not scanned', reason: r.error, certification: 'Not certified' };
     }
     results[i] = row;
     done++;
