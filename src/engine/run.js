@@ -27,6 +27,7 @@ export async function fuzz({ program, idl: rawIdl = null, name, source = {}, tie
   const idl = rawIdl ? readIdl(rawIdl) : null;
   const runSeed = seed || hash.slice(0, 16);
   const t0 = Date.now();
+  onEvent({ type: 'phase', id: 'ingest', text: `Read the program: ${elf.sbfInstructions.toLocaleString("en-US")} machine instructions, sha256 ${hash.slice(0, 12)}…, ${idl ? `IDL with ${idl.instructions.length} instructions` : 'no IDL'}`, budget: { txs: t.budget.txs, ms: t.budget.ms } });
   // With a coverage measurer (Deep Fuzz), record every invocation's inputs to trace afterwards.
   const invocations = [];
   const seenInvocations = new Set();
@@ -45,6 +46,7 @@ export async function fuzz({ program, idl: rawIdl = null, name, source = {}, tie
   if (source.address) {
     try {
       const url = rpcUrl || RPC[source.network || 'mainnet'];
+      onEvent({ type: 'phase', id: 'replay', text: 'Fetching recent mainnet calls and the accounts they touched' });
       const history = await fetchHistory(source.address, { rpcUrl: url, onEvent, limit: t.historyLimit || 10 });
       if (history.calls.length) {
         hist = await runHistory({ program, programId: source.address, history, idl, seed: runSeed, budget: { txs: Math.floor(t.budget.txs / 2), ms: Math.floor(t.budget.ms / 2) }, onEvent });
@@ -57,6 +59,7 @@ export async function fuzz({ program, idl: rawIdl = null, name, source = {}, tie
   const remainingMs = Math.max(5_000, t.budget.ms - (Date.now() - t0));
   const raw = idl || !hist ? await runSniff({ program, idl, seed: runSeed, budget: { txs: t.budget.txs, ms: remainingMs }, onEvent }) : null;
 
+  onEvent({ type: 'phase', id: 'grade', text: 'Scoring the run' });
   const seenKeys = new Set();
   const findings = [...(hist?.findings || []), ...(raw?.findings || [])]
     .filter((f) => { const key = `${f.class}|${f.instruction}|${f.account || ''}`; if (seenKeys.has(key)) return false; seenKeys.add(key); return true; })

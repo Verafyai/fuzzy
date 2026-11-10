@@ -153,11 +153,13 @@ export async function runSniff({ program, idl, seed = 'fuzzy', budget = { txs: 6
   }
 
   // 1. Learn the working paths, in order, so later instructions see earlier state.
+  onEvent({ type: 'phase', id: 'learn', text: `Calling ${idl.instructions.length} instructions as an honest user` });
   const steps = [];
   for (let round = 0; round < 3 && !outOfBudget(); round++) {
     let progress = false;
     for (const ix of idl.instructions) {
       if (steps.some((s) => s.ix === ix.name)) continue;
+      onEvent({ type: 'activity', text: `Learning: calling ${ix.name} as the owner` });
       for (const args of argCombos(ix, (c) => c.typical)) {
         if (outOfBudget()) break;
         const step = { ix: ix.name, args, accounts: honestAccounts(ix), payer: 'owner' };
@@ -169,6 +171,7 @@ export async function runSniff({ program, idl, seed = 'fuzzy', budget = { txs: 6
     if (!progress) break;
   }
   onEvent({ type: 'note', text: `Learned ${steps.length} of ${idl.instructions.length} instructions.` });
+  onEvent({ type: 'phase', id: 'attack', text: `Attacking ${steps.length} working ${steps.length === 1 ? 'path' : 'paths'}` });
   if (unsupported.size) onEvent({ type: 'note', text: `Could not encode arguments for ${[...unsupported].join(', ')}.` });
 
   // 2. Attack every working step.
@@ -181,6 +184,7 @@ export async function runSniff({ program, idl, seed = 'fuzzy', budget = { txs: 6
     const signerIdx = step.accounts.map((a, j) => (a.signer ? j : -1)).filter((j) => j >= 0);
     if (signerIdx.length) {
       tried.add('missing_signer'); tried.add('lamport_draining');
+      onEvent({ type: 'activity', text: `Missing signer: calling ${step.ix} with each required signature dropped` });
       for (const j of signerIdx) {
         const accounts = step.accounts.map((a, n) => (n === j ? { ...a, signer: false } : a.role === 'wallet' ? { ...a, label: 'new:loot' } : a));
         const attack = { ix: step.ix, args: step.args, accounts, payer: 'attacker' };
@@ -206,6 +210,7 @@ export async function runSniff({ program, idl, seed = 'fuzzy', budget = { txs: 6
     const wrote = await stateWritten(prefix, step);
     if (wrote) {
       tried.add('reinitialization');
+      onEvent({ type: 'activity', text: `Reinitialization: running ${step.ix} again as a stranger` });
       const attack = { ix: step.ix, args: step.args, accounts: asAttacker(step.accounts), payer: 'attacker' };
       const { world, result } = await run([...prefix, step], attack);
       if (result.ok && authorityTakeover(world, result)) {
@@ -233,6 +238,7 @@ export async function runSniff({ program, idl, seed = 'fuzzy', budget = { txs: 6
     const stateIdx = step.accounts.map((a, j) => (a.role === 'state' ? j : -1)).filter((j) => j >= 0);
     if (stateIdx.length) {
       tried.add('missing_owner'); tried.add('account_substitution');
+      onEvent({ type: 'activity', text: `Owner checks: passing ${step.ix} look-alike accounts owned by another program` });
       for (const j of stateIdx) {
         const accounts = asAttacker(step.accounts).map((a, n) => (n === j ? { ...a, label: a.label.replace('state:', 'fake:') } : a));
         const attack = { ix: step.ix, args: step.args, accounts, payer: 'attacker' };
@@ -257,6 +263,7 @@ export async function runSniff({ program, idl, seed = 'fuzzy', budget = { txs: 6
     // Arithmetic: the extreme values for every numeric argument.
     if (ix.args.some((a) => isNumeric(a.type))) {
       tried.add('arithmetic');
+      onEvent({ type: 'activity', text: `Arithmetic: ${step.ix} with 0, 1 and maximum values` });
       for (const args of argCombos(ix, (c) => (c.extreme.length ? c.extreme : c.typical))) {
         if (outOfBudget()) break;
         const { result } = await run(prefix, { ...step, args });
@@ -269,6 +276,7 @@ export async function runSniff({ program, idl, seed = 'fuzzy', budget = { txs: 6
 
   // 3. Fill the rest of the budget with mixed calls, for coverage of error paths.
   tried.add('compute_exhaustion');
+  onEvent({ type: 'activity', text: 'Mixed calls by the owner, a stranger and the attacker, for coverage' });
   let n = 0;
   while (!outOfBudget() && n < 60) {
     const ix = idl.instructions[n % idl.instructions.length];

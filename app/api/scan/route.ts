@@ -120,6 +120,6 @@ export async function POST(request: NextRequest) {
       controller.close();
     },
   });
-  const response = new NextResponse(stream, { headers: { "content-type": "application/x-ndjson", "cache-control": "no-store" } });
+  const response = new NextResponse(stream, { headers: { "content-type": "application/x-ndjson", "cache-control": "no-store, no-transform", "x-accel-buffering": "no" } });
   return applyVisitorCookie(response, request, charge.visitorId, charge.minted);
 }

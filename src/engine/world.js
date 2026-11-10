@@ -79,7 +79,14 @@ function role(signer, writable) {
  * Send one step. A step: { ix, args, accounts: [{ label, signer, writable }], payer }.
  * Returns the outcome with lamport changes for every account it touched.
  */
+let sends = 0;
+/** Give the event loop a turn every few transactions, so progress streams out while a run is busy. */
+export async function breathe() {
+  if (++sends % 8 === 0) await new Promise((resolve) => setImmediate(resolve));
+}
+
 export async function send(world, step) {
+  await breathe();
   const ix = world.idl ? world.idl.instructions.find((i) => i.name === step.ix) : null;
   let data;
   if (ix) {

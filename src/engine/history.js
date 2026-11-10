@@ -9,7 +9,7 @@ import { LiteSVM } from 'litesvm';
 import { recordInvocation } from './record.js';
 import * as k from '@solana/kit';
 import { createHash } from 'node:crypto';
-import { signerFor, ACTOR_FUNDS, FEE_PER_SIGNATURE } from './world.js';
+import { signerFor, ACTOR_FUNDS, FEE_PER_SIGNATURE, breathe } from './world.js';
 import { fmtSol } from './sniff.js';
 
 const UPGRADEABLE = 'BPFLoaderUpgradeab1e11111111111111111111111';
@@ -31,8 +31,11 @@ export async function fetchHistory(programId, { rpcUrl, limit = 10, onEvent = ()
   const sigs = (await rpc(rpcUrl, 'getSignaturesForAddress', [programId, { limit: 60 }])).filter((s) => !s.err).slice(0, limit * 2);
   const calls = [];
   const seen = new Set();
+  onEvent({ type: 'activity', text: `Found ${sigs.length} recent transactions; reading them one by one` });
+  let read = 0;
   for (const s of sigs) {
     if (calls.length >= limit) break;
+    onEvent({ type: 'activity', text: `Reading recent transaction ${++read} of ${sigs.length}: ${s.signature.slice(0, 12)}…` });
     const tx = await rpc(rpcUrl, 'getTransaction', [s.signature, { encoding: 'json', maxSupportedTransactionVersion: 0, commitment: 'confirmed' }]).catch(() => null);
     if (!tx) continue;
     const msg = tx.transaction.message;
@@ -60,6 +63,7 @@ export async function fetchHistory(programId, { rpcUrl, limit = 10, onEvent = ()
     });
   }
   onEvent({ type: 'note', text: `Found ${calls.length} recent calls to replay.` });
+  onEvent({ type: 'activity', text: 'Cloning the accounts those calls touched' });
 
   const addresses = [...new Set(calls.flatMap((c) => [c.feePayer, ...c.accounts.map((a) => a.address), ...c.prefix.flatMap((p) => [p.programId, ...p.accounts.map((a) => a.address)])]))].filter((a) => a !== programId);
   const accounts = {};
@@ -127,6 +131,7 @@ async function makeHistoryWorld({ program, programId, history, seed }) {
 
 /** Send one call. accounts: [{ address, signer, writable }]; payer: 'attacker' or an address. */
 async function sendCall(world, call, payerAddress) {
+  await breathe();
   const attackerAddr = world.attacker.address;
   const signerOf = (address) => (address === attackerAddr ? world.attacker : fakeSigner(address));
   const metas = call.accounts.map((a) => {
@@ -180,6 +185,7 @@ function snap(world, addresses) {
 
 /** Attack every replayable call. */
 export async function runHistory({ program, programId, history, idl, seed, budget, onEvent = () => {} }) {
+  onEvent({ type: 'phase', id: 'replay', text: `Replaying ${history.calls.length} recent mainnet calls on cloned accounts` });
   const t0 = Date.now();
   let txs = 0;
   const findings = [], leads = [];
@@ -221,6 +227,7 @@ export async function runHistory({ program, programId, history, idl, seed, budge
   for (const call of history.calls) {
     if (outOfBudget()) break;
     const name = nameOf(call.data);
+    onEvent({ type: 'activity', text: `Replaying ${name} as it ran on mainnet` });
     const honest = await attempt(call, call.feePayer);
     mark(name, honest.r.ok);
     if (!honest.r.ok && process.env.FUZZY_DEBUG) console.error(name, honest.r.error, honest.r.logs.slice(-4));
@@ -235,6 +242,7 @@ export async function runHistory({ program, programId, history, idl, seed, budge
       if (!a.signer) continue;
       // 1. The signer drops out: the attacker pays, payouts go to the attacker.
       tried.add('missing_signer'); tried.add('lamport_draining');
+      onEvent({ type: 'activity', text: `Missing signer: ${name} without ${argName(call, j)}'s signature` });
       // Signatures are not verified in replay, so every other signer must become the attacker:
       // an attack may never rely on a signature the attacker does not hold.
       const asAttacker = (x) => (x.signer ? { ...x, address: world0.attacker.address } : x);
@@ -254,6 +262,7 @@ export async function runHistory({ program, programId, history, idl, seed, budge
       }
       // 2. The attacker signs in the signer's place.
       tried.add('account_substitution');
+      onEvent({ type: 'activity', text: `Substitution: the attacker signs ${name} in ${argName(call, j)}'s place` });
       const swapped = { ...call, prefix: attackerPrefix, accounts: redirect(call.accounts.map((x, n) => (n === j ? { ...x, address: world0.attacker.address } : asAttacker(x)))) };
       const s = await attempt(swapped, world0.attacker.address);
       mark(name, s.r.ok);
@@ -274,6 +283,7 @@ export async function runHistory({ program, programId, history, idl, seed, budge
       for (const { n } of victimTokens) {
         if (outOfBudget()) break;
         tried.add('unchecked_mint');
+        onEvent({ type: 'activity', text: `Token owner: ${name} with ${argName(call, n)} swapped for an attacker-owned account` });
         const placeholder = (await signerFor(seed, `loot-token:${call.accounts[n].address}`)).address;
         const tokenCall = { ...call, prefix: attackerPrefix, lootTokens: { [placeholder]: call.accounts[n].address }, accounts: call.accounts.map((x, m) => (m === j ? { ...x, address: world0.attacker.address } : m === n ? { ...x, address: placeholder } : asAttacker(x))) };
         const t = await attempt(tokenCall, world0.attacker.address);

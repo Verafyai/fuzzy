@@ -36,6 +36,7 @@ const STEPS = [
 ];
 
 type Phase = "idle" | "running" | "done" | "error";
+const STAGES: [string, string][] = [["ingest", "Read"], ["replay", "Replay"], ["learn", "Learn"], ["attack", "Attack"], ["grade", "Grade"]];
 
 function Tile({ a, on, disabled, note, onClick }: { a: Addon; on: boolean; disabled?: boolean; note?: string; onClick: () => void }) {
   return (
@@ -64,6 +65,12 @@ export function Scanner() {
   const [found, setFound] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [report, setReport] = useState<any>(null);
+  const [stage, setStage] = useState<string | null>(null);
+  const [seen, setSeen] = useState<string[]>([]);
+  const [activity, setActivity] = useState<string>("");
+  const [budget, setBudget] = useState<{ txs: number; ms: number }>({ txs: 600, ms: 40_000 });
+  const [startedAt, setStartedAt] = useState(0);
+  const [now, setNow] = useState(0);
   const [jobNote, setJobNote] = useState<string | null>(null);
   const [job, setJob] = useState<any>(null);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -76,6 +83,11 @@ export function Scanner() {
     fetch("/api/jobs").then((r) => r.json()).then((j) => setMachine(Boolean(j.configured))).catch(() => setMachine(false));
     return () => { if (timer.current) clearInterval(timer.current); };
   }, []);
+  useEffect(() => {
+    if (phase !== "running") return;
+    const id = setInterval(() => setNow(Date.now()), 250);
+    return () => clearInterval(id);
+  }, [phase]);
 
   const deployed = !program && network === "mainnet";
   const quick = deployed ? QUICK.filter((a) => picked.includes(a.id) || (a.id === "verified" && picked.includes("advisories"))).map((a) => a.id) : [];
@@ -120,6 +132,7 @@ export function Scanner() {
     event.preventDefault();
     if (!ready) return;
     setPhase("running"); setFeed([]); setTransactions(0); setFound(0); setError(null); setReport(null); setJob(null); setJobNote(null);
+    setStage(null); setSeen([]); setActivity("Sending your program to Fuzzy"); setStartedAt(Date.now()); setNow(Date.now());
     track("fuzzy_run_start", { tier: "sniff", input: program ? "file" : "address", has_idl: Boolean(idl), addons: count });
     let response: Response;
     try {
@@ -162,6 +175,14 @@ export function Scanner() {
   function handle(event: any) {
     if (event.type === "charged") setFeed((f) => [...f, event.mock ? "Run started. Mock data: credits are not connected on this deploy, so nothing was spent." : "Run started."]);
     if (event.type === "note") setFeed((f) => [...f, event.text]);
+    if (event.type === "phase") {
+      setStage(event.id);
+      setSeen((s) => (s.includes(event.id) ? s : [...s, event.id]));
+      setFeed((f) => [...f, event.text]);
+      setActivity(event.text);
+      if (event.budget) setBudget(event.budget);
+    }
+    if (event.type === "activity") setActivity(event.text);
     if (event.type === "progress") setTransactions(event.transactions);
     if (event.type === "finding") { setFound((n) => n + 1); setFeed((f) => [...f, `Proven: ${event.finding.title}`]); }
     if (event.type === "report") {
@@ -170,6 +191,13 @@ export function Scanner() {
       track("fuzzy_run_complete", { score: event.report.score.score, grade: event.report.score.grade, proven: event.report.findings.length });
     }
     if (event.type === "error") { setPhase("error"); setError(event.message); }
+  }
+
+  /** Share of the run's budget used: whichever of time or transactions is further along, held under 100 until the report arrives. */
+  function progress() {
+    const byTime = budget.ms ? (now - startedAt) / (budget.ms + 15_000) : 0;
+    const byTxs = budget.txs ? transactions / budget.txs : 0;
+    return Math.min(0.96, Math.max(byTime, byTxs, 0.03));
   }
 
   function download() {
@@ -251,11 +279,23 @@ export function Scanner() {
       </div>
 
       {phase === "running" || feed.length ? (
-        <section className="panel stack" aria-live="polite" style={{ gap: 10 }}>
-          <div className="row" style={{ justifyContent: "space-between" }}>
-            <h3>{phase === "running" ? "Fuzzy is attacking your program" : "Run log"}</h3>
-            <span className="mono muted" style={{ fontSize: 13 }}>{transactions.toLocaleString("en-US")} transactions, {found} proven</span>
+        <section className="panel stack runlog" aria-live="polite" style={{ gap: 14 }}>
+          <div className="row" style={{ justifyContent: "space-between", gap: 10 }}>
+            <h3 className="row" style={{ gap: 10 }}>{phase === "running" ? <span className="spinner" aria-hidden="true" /> : null}{phase === "running" ? "Fuzzy is attacking your program" : "Run log"}</h3>
+            <span className="mono muted" style={{ fontSize: 13 }}>{phase === "running" ? `${Math.round((now - startedAt) / 1000)}s, ` : ""}{transactions.toLocaleString("en-US")} transactions, {found} proven</span>
           </div>
+          {phase === "running" ? (
+            <>
+              <ol className="stages">
+                {STAGES.map(([id, label]) => {
+                  const state = stage === id ? "now" : seen.includes(id) ? "done" : "todo";
+                  return <li key={id} data-state={state}>{state === "done" ? "✓ " : ""}{label}</li>;
+                })}
+              </ol>
+              <div className="bar" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress() * 100)}><span style={{ width: `${Math.round(progress() * 100)}%` }} /></div>
+              <p className="mono" style={{ fontSize: 13, color: "var(--text)", minHeight: 20 }}>{activity}</p>
+            </>
+          ) : null}
           <ul className="list" style={{ fontSize: 14 }}>
             {feed.map((line, i) => <li key={i} style={{ color: line.startsWith("Proven") ? "var(--critical)" : "var(--text-2)" }}>{line}</li>)}
           </ul>
