@@ -2058,26 +2058,6 @@
    ]
   },
   {
-   "program": "T1TANpTeScyeqVzzgNViGDNrkQ6qHz9KrSBS4aNXvGT",
-   "name": "Titan Exchange Program",
-   "level": 0,
-   "levelName": "Not certified",
-   "score": 20,
-   "depth": 34,
-   "tier": "Deep Fuzz",
-   "bytecodeHash": "2c7c3eb61b32b9c1d0754463e67518048a4b7a13d7df9dfdfb475e76739dd77a",
-   "reportHash": "e36a3ccbc53fea07c487ea6fa3db8da828bbfa2b864ea7d46db6452b16c5649c",
-   "ruling": "8eJhXHWJkhB1SiekSP8ASrwP2TWWMiFZvcp15NRrWSJz",
-   "certification": "81TyF5FRxt2AmYABWALgDjc64YTs9PbFm6kkL5Nx2j7W",
-   "certifySignature": "3J9gX69CsJVWQtcNq4ioW4H7azHJLP2DiLhfc6z8ptWmuRKa4ELDang5STHArVUpVtEQd4mKFZ8k1XvifBhaehYB",
-   "jurors": 4,
-   "families": 4,
-   "jurorsScripted": true,
-   "certifiedAt": "2026-11-10T06:05:16.876Z",
-   "lookup": "the jury did not certify this build",
-   "history": []
-  },
-  {
    "program": "B72M6nyCLFgWiJtAN4naUTminMiTmyGcEqQHXwVeRdht",
    "name": "BinaryFi Program",
    "level": 2,
@@ -2140,6 +2120,35 @@
      "reportHash": "8e285546eb6437351894f064da8efe849e5908c7e417e32fc7eac62100a8ec11",
      "certifiedAt": "2026-11-10T05:01:05.398Z",
      "replacedAt": "2026-11-10T06:06:31.612Z"
+    }
+   ]
+  },
+  {
+   "program": "T1TANpTeScyeqVzzgNViGDNrkQ6qHz9KrSBS4aNXvGT",
+   "name": "Titan Exchange Program",
+   "level": 0,
+   "levelName": "Not certified",
+   "score": 34,
+   "depth": 34,
+   "tier": "Deep Fuzz",
+   "bytecodeHash": "2c7c3eb61b32b9c1d0754463e67518048a4b7a13d7df9dfdfb475e76739dd77a",
+   "reportHash": "20d46e54c1e92f4636e9040993f0e6281e388edbac64cc3cac297d9fb9ed6d53",
+   "ruling": "H6oxgepaVrXkMZ93cbsA6uYHj9YbzV9XXWz24yG7Ptpo",
+   "certification": "81TyF5FRxt2AmYABWALgDjc64YTs9PbFm6kkL5Nx2j7W",
+   "certifySignature": "4xhG3yE4enJq9BsJLWgr7TMUJ2BFL5MZ3t672yjM8ABKoBu4NyWbhY2MoGniWnYUasE1zW88ExomWPvg2jJQNJ2N",
+   "jurors": 4,
+   "families": 4,
+   "jurorsScripted": true,
+   "certifiedAt": "2026-11-10T06:14:18.842Z",
+   "lookup": "the jury did not certify this build",
+   "history": [
+    {
+     "levelName": "Not certified",
+     "score": 20,
+     "ruling": "8eJhXHWJkhB1SiekSP8ASrwP2TWWMiFZvcp15NRrWSJz",
+     "reportHash": "e36a3ccbc53fea07c487ea6fa3db8da828bbfa2b864ea7d46db6452b16c5649c",
+     "certifiedAt": "2026-11-10T06:05:16.876Z",
+     "replacedAt": "2026-11-10T06:14:18.843Z"
     }
    ]
   }

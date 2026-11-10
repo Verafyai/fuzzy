@@ -2,7 +2,7 @@
  "kind": "fuzzy.registry/1",
  "engine": "fuzzy-score/1",
  "source": "Orb program directory (orbmarkets.io/programs), the first 100 programs it listed on 2026-11-09. Stake and Ed25519 SigVerify are native built-ins Fuzzy cannot load, so SPL Token and Token-2022 take their places.",
- "generatedAt": "2026-11-10T06:06:40.265Z",
+ "generatedAt": "2026-11-10T06:14:18.966Z",
  "programs": [
   {
    "rank": 1,
@@ -16376,17 +16376,17 @@
    "description": "Titan's swap aggregator.",
    "site": null,
    "status": "scanned",
-   "score": 20,
+   "score": 34,
    "depth": 34,
-   "ceiling": 20,
+   "ceiling": 100,
    "depthParts": {
     "branchCoverage": 0,
-    "instructionCoverage": 7,
-    "attackClasses": 12,
+    "instructionCoverage": 9,
+    "attackClasses": 10,
     "realState": 10,
     "effort": 5
    },
-   "grade": "Broken",
+   "grade": "Shallow run",
    "branch": {
     "instructions": 241518,
     "instructionsExecuted": 0,
@@ -16398,21 +16398,19 @@
     "invocationsFailed": 120,
     "method": "agave-ledger-tool program run --mode interpreter --trace"
    },
-   "proven": 2,
-   "provenBySeverity": {
-    "critical": 2
-   },
+   "proven": 0,
+   "provenBySeverity": {},
    "leads": 0,
    "leadClasses": {},
-   "transactions": 313,
-   "durationMs": 345411,
+   "transactions": 368,
+   "durationMs": 317700,
    "state": "mainnet",
-   "replayedCalls": 6,
-   "replayedFromSlot": 467600886,
+   "replayedCalls": 7,
+   "replayedFromSlot": 467613975,
    "instructionsTried": [
     {
-     "name": "instruction 2a020009",
-     "succeeded": true,
+     "name": "instruction 2a02204e",
+     "succeeded": false,
      "failed": true
     },
     {
@@ -16421,23 +16419,28 @@
      "failed": true
     },
     {
-     "name": "instruction 2a02fe87",
+     "name": "instruction 2a029075",
      "succeeded": false,
      "failed": true
     },
     {
-     "name": "instruction 2a028084",
+     "name": "instruction 2a0040ee",
      "succeeded": false,
      "failed": true
     },
     {
-     "name": "instruction 2a00b7df",
+     "name": "instruction 2a02888a",
      "succeeded": false,
      "failed": true
     },
     {
-     "name": "instruction 2a00e5c9",
-     "succeeded": false,
+     "name": "instruction 2a00000a",
+     "succeeded": true,
+     "failed": true
+    },
+    {
+     "name": "instruction 2a0200ca",
+     "succeeded": true,
      "failed": true
     }
    ],
@@ -16455,7 +16458,7 @@
     {
      "id": "account_substitution",
      "name": "Account substitution",
-     "status": "broke it"
+     "status": "held"
     },
     {
      "id": "pda_seed",
@@ -16495,7 +16498,7 @@
     {
      "id": "price_manipulation",
      "name": "Price manipulation",
-     "status": "held"
+     "status": "not tried"
     },
     {
      "id": "compute_exhaustion",
@@ -16511,7 +16514,7 @@
    "bytecodeSha256": "a2da33e3ea745398a60e322139e2e258ebad9df6ce0895c5f126606b2d5a33e9",
    "engine": "fuzzy-engine/0.3.0",
    "tier": "Deep Fuzz",
-   "scannedAt": "2026-11-10T05:27:22.444Z",
+   "scannedAt": "2026-11-10T06:13:35.854Z",
    "certification": "Recorded, not certified",
    "addons": {
     "verified": {
@@ -16541,19 +16544,28 @@
    "devnetCertification": {
     "level": 0,
     "levelName": "Not certified",
-    "score": 20,
+    "score": 34,
     "program": "T1TANpTeScyeqVzzgNViGDNrkQ6qHz9KrSBS4aNXvGT",
     "tier": "Deep Fuzz",
-    "history": [],
+    "history": [
+     {
+      "levelName": "Not certified",
+      "score": 20,
+      "ruling": "8eJhXHWJkhB1SiekSP8ASrwP2TWWMiFZvcp15NRrWSJz",
+      "reportHash": "e36a3ccbc53fea07c487ea6fa3db8da828bbfa2b864ea7d46db6452b16c5649c",
+      "certifiedAt": "2026-11-10T06:05:16.876Z",
+      "replacedAt": "2026-11-10T06:14:18.843Z"
+     }
+    ],
     "certification": "81TyF5FRxt2AmYABWALgDjc64YTs9PbFm6kkL5Nx2j7W",
-    "ruling": "8eJhXHWJkhB1SiekSP8ASrwP2TWWMiFZvcp15NRrWSJz",
-    "certifySignature": "3J9gX69CsJVWQtcNq4ioW4H7azHJLP2DiLhfc6z8ptWmuRKa4ELDang5STHArVUpVtEQd4mKFZ8k1XvifBhaehYB",
-    "certifiedAt": "2026-11-10T06:05:16.876Z",
+    "ruling": "H6oxgepaVrXkMZ93cbsA6uYHj9YbzV9XXWz24yG7Ptpo",
+    "certifySignature": "4xhG3yE4enJq9BsJLWgr7TMUJ2BFL5MZ3t672yjM8ABKoBu4NyWbhY2MoGniWnYUasE1zW88ExomWPvg2jJQNJ2N",
+    "certifiedAt": "2026-11-10T06:14:18.842Z",
     "jurors": 4,
     "families": 4,
     "jurorsScripted": true,
     "bytecodeHash": "2c7c3eb61b32b9c1d0754463e67518048a4b7a13d7df9dfdfb475e76739dd77a",
-    "reportHash": "e36a3ccbc53fea07c487ea6fa3db8da828bbfa2b864ea7d46db6452b16c5649c"
+    "reportHash": "20d46e54c1e92f4636e9040993f0e6281e388edbac64cc3cac297d9fb9ed6d53"
    }
   },
   {
