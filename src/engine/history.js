@@ -179,7 +179,9 @@ async function sendCall(world, call, payerAddress) {
     return meta;
   });
   const payer = signerOf(payerAddress);
-  const prefixIxs = (call.prefix || []).map((p) => ({
+  // Priority fees are dropped, so the attacker's SOL moves only by the signature fee and what the call itself moved.
+  const COMPUTE_BUDGET = 'ComputeBudget111111111111111111111111111111';
+  const prefixIxs = (call.prefix || []).filter((p) => !(p.programId === COMPUTE_BUDGET && p.data[0] === 3)).map((p) => ({
     programAddress: p.programId,
     accounts: p.accounts.map((a) => {
       const meta = { address: a.address, role: a.signer ? (a.writable ? k.AccountRole.WRITABLE_SIGNER : k.AccountRole.READONLY_SIGNER) : a.writable ? k.AccountRole.WRITABLE : k.AccountRole.READONLY };
@@ -338,7 +340,11 @@ export async function runHistory({ program, programId, history, idl, seed, budge
         const tokenCall = { ...call, prefix: attackerPrefix, lootTokens: { [placeholder]: call.accounts[n].address }, accounts: call.accounts.map((x, m) => (m === j ? { ...x, address: world0.attacker.address } : m === n ? { ...x, address: placeholder } : asAttacker(x))) };
         const t = await attempt(tokenCall, world0.attacker.address);
         mark(name, t.r.ok);
-        const gains = t.r.ok ? tokenGainOf(t.world, t.r) : [];
+        // Tokens bought with the attacker's own SOL are a trade, not a theft: beyond signature fees, the attacker
+        // must not have paid anything for them.
+        const signatures = new Set([world0.attacker.address, ...[...tokenCall.accounts, ...(tokenCall.prefix || []).flatMap((p) => p.accounts)].filter((x) => x.signer).map((x) => x.address)]).size;
+        const paidOnlyFees = t.r.ok && gainOf(t.world, t.r) >= -(BigInt(FEE_PER_SIGNATURE) * BigInt(signatures));
+        const gains = paidOnlyFees ? tokenGainOf(t.world, t.r) : [];
         if (gains.length) {
           const g = gains[0];
           findings.push(finding('account_substitution', 'critical', name, argName(call, j), `${name} lets any signer act as ${argName(call, j)} and take their tokens`,

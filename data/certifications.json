@@ -3,23 +3,6 @@
  "note": "Devnet certifications only. Jurors voted by script in these runs. Every scanned build has a record; shallow runs are recorded as Not certified.",
  "certifications": [
   {
-   "program": "B72M6nyCLFgWiJtAN4naUTminMiTmyGcEqQHXwVeRdht",
-   "name": "BinaryFi Program",
-   "level": 1,
-   "levelName": "Sniffed",
-   "score": 47,
-   "bytecodeHash": "9d61a5ab098e39fc1b0f2e31b71aead9f7a1079c62f5747aca04c0210ce9d95f",
-   "reportHash": "a660ee2422685c91448c51618f380a5fa0145a59d007def26d7450aadf39978e",
-   "ruling": "yo3aAgyGtB3gvTUVszihEef4DfzToXrCKixvKU9H4jo",
-   "certification": "4u9DJHVPVtG6wcs8U1uzF2oRFX1gq9Eg492WEo9eTvq5",
-   "certifySignature": "3MWgdaRv3wP9dcFs3XtpdVBGBazVxYJhW1bMi6TxQjDP9HL2wCu8VKQ9JMEbXLVYUccQeqvTftE53FvUPTaJpytP",
-   "jurors": 4,
-   "families": 4,
-   "jurorsScripted": true,
-   "certifiedAt": "2026-11-09T21:26:07.806Z",
-   "lookup": "certified Sniffed"
-  },
-  {
    "program": "pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ",
    "name": "Pump.fun Fees Program",
    "level": 0,
@@ -718,26 +701,6 @@
    "history": []
   },
   {
-   "program": "L2TExMFKdjpN9kozasaurPirfHy9P8sbXoAN1qA3S95",
-   "name": "Lighthouse Protocol Program",
-   "level": 0,
-   "levelName": "Not certified",
-   "score": 12,
-   "depth": 12,
-   "tier": "Deep Fuzz",
-   "bytecodeHash": "a89179ae024ac36aa5fc308251caa84cd0a3390ae66d8523514004a86d5148bb",
-   "reportHash": "c2f6902fbde391401abe753ed1bc57ee636d2033e3fd33de07af0371cd656716",
-   "ruling": "DsdGFH5U8U8cRzRMBfSYXsa6tMAUWZEibJk9PWmpiY2P",
-   "certification": "2SZ7N9e9oKePJRZBk11EbLzK7qkLcibssTGe7UHgVYMY",
-   "certifySignature": "4VRw8QCpDYvik7NA1bpsqT5hokvuuz54aEA1DE2JfTZWbTqqGXTZPiV5ePJ8BPXDP9MRXN4uazUe57M9v6ypKg9z",
-   "jurors": 4,
-   "families": 4,
-   "jurorsScripted": true,
-   "certifiedAt": "2026-11-10T04:42:15.297Z",
-   "lookup": "the jury did not certify this build",
-   "history": []
-  },
-  {
    "program": "FLUX6xBayGxLX9UcimVRxXFMHH6q43mAbRvDzSpCsvfK",
    "name": "Flux Program",
    "level": 0,
@@ -858,35 +821,6 @@
    "history": []
   },
   {
-   "program": "MAyhSmzXzV1pTf7LsNkrNwkWKTo4ougAJ1PPg47MD4e",
-   "name": "Pump Mayhem Program",
-   "level": 0,
-   "levelName": "Not certified",
-   "score": 12,
-   "depth": 12,
-   "tier": "Deep Fuzz",
-   "bytecodeHash": "9af9e3b1cbc9d89340af4d9d46e4c88d3dc2fc67e0090f9370047d97532ff09d",
-   "reportHash": "29ad3e8982184152b910d007a52d430c83ca56288bb399ab667e88cd8adb0d88",
-   "ruling": "67LLV51c3YgXaMYKZ14cjMGzJapG3EDpVaL7jW8267Lg",
-   "certification": "2z5FdncZ7Jx4xbpQoNKeaodNUqMy4WXr3DQCs32bDohQ",
-   "certifySignature": "5qxeKPFed7BdYLsZcVNP3xcrfZ5CuyX5nqxHN699Hn2ecku1D677Hb3L8enUtKfEnUzSSmsommm8QWcMJVAWLp3J",
-   "jurors": 4,
-   "families": 4,
-   "jurorsScripted": true,
-   "certifiedAt": "2026-11-10T04:46:18.075Z",
-   "lookup": "the jury did not certify this build",
-   "history": [
-    {
-     "levelName": "Sniffed",
-     "score": 47,
-     "ruling": "3peB3u17scMMqYC2Q5yhSmfF2Ro5nhxBGivSiyn5eTi6",
-     "reportHash": "df088c920bae6a08c73ea66eeb8d21d96e3bebfb500d39fe873002d91acc1d83",
-     "certifiedAt": "2026-11-09T21:23:17.996Z",
-     "replacedAt": "2026-11-10T04:46:18.075Z"
-    }
-   ]
-  },
-  {
    "program": "24Uqj9JCLxUeoC3hGfh5W3s9FM9uCHDS2SG3LYwBpyTi",
    "name": "Meteora Dynamic Vault Program",
    "level": 0,
@@ -925,35 +859,6 @@
    "certifiedAt": "2026-11-10T04:47:30.497Z",
    "lookup": "certified Fuzzed",
    "history": []
-  },
-  {
-   "program": "61DFfeTKM7trxYcPQCM78bJ794ddZprZpAwAnLiwTpYH",
-   "name": "Jupiter Order Engine Program",
-   "level": 0,
-   "levelName": "Not certified",
-   "score": 18,
-   "depth": 18,
-   "tier": "Deep Fuzz",
-   "bytecodeHash": "719b9e80d632562f075ba27a8ce474d09a52e603c8c63dec7504ff420c246c29",
-   "reportHash": "fea0ed81c609e2e4ae692bad62161c0d5e20c0eb28459e990019bba195b58668",
-   "ruling": "HyrAqNcbuEpp6L9W1DcmmJgJAxUYRaLs6cKF3SLuZFkw",
-   "certification": "B274bNC4HPWZ7yVpuebvq4WsmhtQhRhQwjovtsPJ1s8p",
-   "certifySignature": "5nynob4kLHwrLN1kESEhHvzK1Ax3aa3sYw2DD1nXoTyfh16W1qFT4iHFaQGS6Hed1xFvUoeE4uzYx2DsBrvMGkqf",
-   "jurors": 4,
-   "families": 4,
-   "jurorsScripted": true,
-   "certifiedAt": "2026-11-10T04:48:02.727Z",
-   "lookup": "the jury did not certify this build",
-   "history": [
-    {
-     "levelName": "Sniffed",
-     "score": 50,
-     "ruling": "5Yz8kipbBZ4NndLciYqDf4GGmXEWSXwpePryMHgNem1B",
-     "reportHash": "4fd94edb19f47c9f64bd06f977f684448d0471a2fb2a9aca8910bc5906e694c1",
-     "certifiedAt": "2026-11-09T21:23:50.287Z",
-     "replacedAt": "2026-11-10T04:48:02.727Z"
-    }
-   ]
   },
   {
    "program": "CLEANALo6FtS6quqTTEXDGFFTuSKMkeKGgcweeiPRJzK",
@@ -1421,35 +1326,6 @@
    "certifiedAt": "2026-11-10T05:00:33.120Z",
    "lookup": "the jury did not certify this build",
    "history": []
-  },
-  {
-   "program": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s",
-   "name": "Metaplex Token Metadata Program",
-   "level": 0,
-   "levelName": "Not certified",
-   "score": 38,
-   "depth": 38,
-   "tier": "Deep Fuzz",
-   "bytecodeHash": "99ee61a5159e15a359b01298b52c9f9f912eb19e47bdfe83987c16de52a4b1ff",
-   "reportHash": "8e285546eb6437351894f064da8efe849e5908c7e417e32fc7eac62100a8ec11",
-   "ruling": "6jiZFiJ5Fsqwcnh8R15fu5rmUimJ22jGeK4Wiv4NZPpy",
-   "certification": "4jYnYAAUPT696wYTT7KsFzdWxqeYVmdnKzRWuMBBtkqt",
-   "certifySignature": "26fgeaaM6dqzJsjPjqmjiZniHbD66QXjVkUQe2P2ZoLqiAVYQCphgJLe3xWQbFL4jt5UoWuRg6VXnVGJZejSCvN3",
-   "jurors": 4,
-   "families": 4,
-   "jurorsScripted": true,
-   "certifiedAt": "2026-11-10T05:01:05.398Z",
-   "lookup": "the jury did not certify this build",
-   "history": [
-    {
-     "levelName": "Sniffed",
-     "score": 47,
-     "ruling": "4U3MdahRJgaX1VtoTzgAgW2jHDQVrgcpqhXs6t6oKVvf",
-     "reportHash": "120a37b8ab3fcedac977fe2e84272dc82aca9159a9af4a86f028029987c7e219",
-     "certifiedAt": "2026-11-09T21:26:40.037Z",
-     "replacedAt": "2026-11-10T05:01:05.398Z"
-    }
-   ]
   },
   {
    "program": "swapNyd8XiQwJ6ianp9snpu4brUqFxadzvHebnAXjJZ",
@@ -2075,6 +1951,195 @@
      "reportHash": "930dfee622d3e6c5d4c83dd270a6d9b9e24a70919fa9d5f101a5810a7b4f91d7",
      "certifiedAt": "2026-11-09T21:28:26.083Z",
      "replacedAt": "2026-11-10T05:18:18.343Z"
+    }
+   ]
+  },
+  {
+   "program": "L2TExMFKdjpN9kozasaurPirfHy9P8sbXoAN1qA3S95",
+   "name": "Lighthouse Protocol Program",
+   "level": 0,
+   "levelName": "Not certified",
+   "score": 23,
+   "depth": 23,
+   "tier": "Deep Fuzz",
+   "bytecodeHash": "a89179ae024ac36aa5fc308251caa84cd0a3390ae66d8523514004a86d5148bb",
+   "reportHash": "8fa6b4820448f6145ec15817b925fdfd2cc358ff458281f907269706bfc0515e",
+   "ruling": "6vCRqCgaofG6SnMs9vqAhEpNEEutCqWEYUtQZ784Rrg2",
+   "certification": "2SZ7N9e9oKePJRZBk11EbLzK7qkLcibssTGe7UHgVYMY",
+   "certifySignature": "38e9sqkrCB93tm3wZY4Yc5RPRKFcxr5j9utsMo87S7g59bC8KrEN14YxkTf1z2RWd1kboEakvUSCz6LLYvdYeGc5",
+   "jurors": 4,
+   "families": 4,
+   "jurorsScripted": true,
+   "certifiedAt": "2026-11-10T06:03:40.205Z",
+   "lookup": "the jury did not certify this build",
+   "history": [
+    {
+     "levelName": "Not certified",
+     "score": 12,
+     "ruling": "DsdGFH5U8U8cRzRMBfSYXsa6tMAUWZEibJk9PWmpiY2P",
+     "reportHash": "c2f6902fbde391401abe753ed1bc57ee636d2033e3fd33de07af0371cd656716",
+     "certifiedAt": "2026-11-10T04:42:15.297Z",
+     "replacedAt": "2026-11-10T06:03:40.206Z"
+    }
+   ]
+  },
+  {
+   "program": "MAyhSmzXzV1pTf7LsNkrNwkWKTo4ougAJ1PPg47MD4e",
+   "name": "Pump Mayhem Program",
+   "level": 2,
+   "levelName": "Fuzzed",
+   "score": 48,
+   "depth": 48,
+   "tier": "Deep Fuzz",
+   "bytecodeHash": "9af9e3b1cbc9d89340af4d9d46e4c88d3dc2fc67e0090f9370047d97532ff09d",
+   "reportHash": "4c73824bc91a4a598a366e0d50e03fd4dad7a133ab1c11c00d48aeae8eec314c",
+   "ruling": "Hi4g4Y66XyrjxzfVZFuQwFoAYBtBXj1DFGZ7Qh7T5wy4",
+   "certification": "2z5FdncZ7Jx4xbpQoNKeaodNUqMy4WXr3DQCs32bDohQ",
+   "certifySignature": "2pGuP51kdHZE8dB2uY4fJLjAXV5PGGqC15uVVSK2s6nffs6YZiFyTxg54nGUvmF3FDSzVkPJ9NNZuReXByqzaugg",
+   "jurors": 4,
+   "families": 4,
+   "jurorsScripted": true,
+   "certifiedAt": "2026-11-10T06:04:12.528Z",
+   "lookup": "certified Fuzzed",
+   "history": [
+    {
+     "levelName": "Sniffed",
+     "score": 47,
+     "ruling": "3peB3u17scMMqYC2Q5yhSmfF2Ro5nhxBGivSiyn5eTi6",
+     "reportHash": "df088c920bae6a08c73ea66eeb8d21d96e3bebfb500d39fe873002d91acc1d83",
+     "certifiedAt": "2026-11-09T21:23:17.996Z",
+     "replacedAt": "2026-11-10T04:46:18.075Z"
+    },
+    {
+     "levelName": "Not certified",
+     "score": 12,
+     "ruling": "67LLV51c3YgXaMYKZ14cjMGzJapG3EDpVaL7jW8267Lg",
+     "reportHash": "29ad3e8982184152b910d007a52d430c83ca56288bb399ab667e88cd8adb0d88",
+     "certifiedAt": "2026-11-10T04:46:18.075Z",
+     "replacedAt": "2026-11-10T06:04:12.528Z"
+    }
+   ]
+  },
+  {
+   "program": "61DFfeTKM7trxYcPQCM78bJ794ddZprZpAwAnLiwTpYH",
+   "name": "Jupiter Order Engine Program",
+   "level": 0,
+   "levelName": "Not certified",
+   "score": 18,
+   "depth": 18,
+   "tier": "Deep Fuzz",
+   "bytecodeHash": "719b9e80d632562f075ba27a8ce474d09a52e603c8c63dec7504ff420c246c29",
+   "reportHash": "01b1b5014014ea6f41c50252ad360fa3366d602fef27f8341daee9ca74443cf9",
+   "ruling": "8DsDc3m4KKjnC7FJsUx1xqhDRgkk44sBcLwqKG1EWqWz",
+   "certification": "B274bNC4HPWZ7yVpuebvq4WsmhtQhRhQwjovtsPJ1s8p",
+   "certifySignature": "18MFuWdJpoe8jkYNwcXapjEE8vAXhAkkj4JDuUMQMqoNnLt9hMGF9nyFcUi5ewEMDy9bWqkv83duuz5YwNRD7p9",
+   "jurors": 4,
+   "families": 4,
+   "jurorsScripted": true,
+   "certifiedAt": "2026-11-10T06:04:44.618Z",
+   "lookup": "the jury did not certify this build",
+   "history": [
+    {
+     "levelName": "Sniffed",
+     "score": 50,
+     "ruling": "5Yz8kipbBZ4NndLciYqDf4GGmXEWSXwpePryMHgNem1B",
+     "reportHash": "4fd94edb19f47c9f64bd06f977f684448d0471a2fb2a9aca8910bc5906e694c1",
+     "certifiedAt": "2026-11-09T21:23:50.287Z",
+     "replacedAt": "2026-11-10T04:48:02.727Z"
+    },
+    {
+     "levelName": "Not certified",
+     "score": 18,
+     "ruling": "HyrAqNcbuEpp6L9W1DcmmJgJAxUYRaLs6cKF3SLuZFkw",
+     "reportHash": "fea0ed81c609e2e4ae692bad62161c0d5e20c0eb28459e990019bba195b58668",
+     "certifiedAt": "2026-11-10T04:48:02.727Z",
+     "replacedAt": "2026-11-10T06:04:44.618Z"
+    }
+   ]
+  },
+  {
+   "program": "T1TANpTeScyeqVzzgNViGDNrkQ6qHz9KrSBS4aNXvGT",
+   "name": "Titan Exchange Program",
+   "level": 0,
+   "levelName": "Not certified",
+   "score": 20,
+   "depth": 34,
+   "tier": "Deep Fuzz",
+   "bytecodeHash": "2c7c3eb61b32b9c1d0754463e67518048a4b7a13d7df9dfdfb475e76739dd77a",
+   "reportHash": "e36a3ccbc53fea07c487ea6fa3db8da828bbfa2b864ea7d46db6452b16c5649c",
+   "ruling": "8eJhXHWJkhB1SiekSP8ASrwP2TWWMiFZvcp15NRrWSJz",
+   "certification": "81TyF5FRxt2AmYABWALgDjc64YTs9PbFm6kkL5Nx2j7W",
+   "certifySignature": "3J9gX69CsJVWQtcNq4ioW4H7azHJLP2DiLhfc6z8ptWmuRKa4ELDang5STHArVUpVtEQd4mKFZ8k1XvifBhaehYB",
+   "jurors": 4,
+   "families": 4,
+   "jurorsScripted": true,
+   "certifiedAt": "2026-11-10T06:05:16.876Z",
+   "lookup": "the jury did not certify this build",
+   "history": []
+  },
+  {
+   "program": "B72M6nyCLFgWiJtAN4naUTminMiTmyGcEqQHXwVeRdht",
+   "name": "BinaryFi Program",
+   "level": 2,
+   "levelName": "Fuzzed",
+   "score": 47,
+   "depth": 47,
+   "tier": "Deep Fuzz",
+   "bytecodeHash": "9d61a5ab098e39fc1b0f2e31b71aead9f7a1079c62f5747aca04c0210ce9d95f",
+   "reportHash": "c4ed6412b9deba874eedd6e63bed6881798ae704572e7b25e8a111080305c891",
+   "ruling": "5N2iawfakiF2cLCUfCP5ChWYxwumRLKBNPgb81VAQnZj",
+   "certification": "4u9DJHVPVtG6wcs8U1uzF2oRFX1gq9Eg492WEo9eTvq5",
+   "certifySignature": "47FXs9kGiBa87Ar1BJLDNyKhM3KBRJKaB6x8CL5zBNTvQVpks1yHEApGuSfpkakGGNumVAorYqfFtGi6rHj4BsLr",
+   "jurors": 4,
+   "families": 4,
+   "jurorsScripted": true,
+   "certifiedAt": "2026-11-10T06:05:59.514Z",
+   "lookup": "certified Fuzzed",
+   "history": [
+    {
+     "levelName": "Sniffed",
+     "score": 47,
+     "ruling": "yo3aAgyGtB3gvTUVszihEef4DfzToXrCKixvKU9H4jo",
+     "reportHash": "a660ee2422685c91448c51618f380a5fa0145a59d007def26d7450aadf39978e",
+     "certifiedAt": "2026-11-09T21:26:07.806Z",
+     "replacedAt": "2026-11-10T06:05:59.514Z"
+    }
+   ]
+  },
+  {
+   "program": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s",
+   "name": "Metaplex Token Metadata Program",
+   "level": 2,
+   "levelName": "Fuzzed",
+   "score": 40,
+   "depth": 40,
+   "tier": "Deep Fuzz",
+   "bytecodeHash": "99ee61a5159e15a359b01298b52c9f9f912eb19e47bdfe83987c16de52a4b1ff",
+   "reportHash": "20a0fee704bba20794591764b37f1804c8728e715cb28079ced1f79cb6b57ecd",
+   "ruling": "HCVCKMZ3zqJuMpNCAP8ho39rZERHPZZjXL8ApWxsWR8j",
+   "certification": "4jYnYAAUPT696wYTT7KsFzdWxqeYVmdnKzRWuMBBtkqt",
+   "certifySignature": "597PRruWr48mhMwQPiriocRBFvwjGMq7Q4CLUwcDZ5yKRUQ8vH9Tn5vdaQ3TanzpABb2AKiZjbMeyaPKs7P9nQ9s",
+   "jurors": 4,
+   "families": 4,
+   "jurorsScripted": true,
+   "certifiedAt": "2026-11-10T06:06:31.612Z",
+   "lookup": "certified Fuzzed",
+   "history": [
+    {
+     "levelName": "Sniffed",
+     "score": 47,
+     "ruling": "4U3MdahRJgaX1VtoTzgAgW2jHDQVrgcpqhXs6t6oKVvf",
+     "reportHash": "120a37b8ab3fcedac977fe2e84272dc82aca9159a9af4a86f028029987c7e219",
+     "certifiedAt": "2026-11-09T21:26:40.037Z",
+     "replacedAt": "2026-11-10T05:01:05.398Z"
+    },
+    {
+     "levelName": "Not certified",
+     "score": 38,
+     "ruling": "6jiZFiJ5Fsqwcnh8R15fu5rmUimJ22jGeK4Wiv4NZPpy",
+     "reportHash": "8e285546eb6437351894f064da8efe849e5908c7e417e32fc7eac62100a8ec11",
+     "certifiedAt": "2026-11-10T05:01:05.398Z",
+     "replacedAt": "2026-11-10T06:06:31.612Z"
     }
    ]
   }
