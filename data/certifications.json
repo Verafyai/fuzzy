@@ -1,6 +1,6 @@
 {
- "kind": "fuzzy.devnet-certifications/1",
- "note": "Devnet certifications only. Jurors voted by script in these runs.",
+ "kind": "fuzzy.devnet-certifications/2",
+ "note": "Devnet certifications only. Jurors voted by script in these runs. Every scanned build has a record; shallow runs are recorded as Not certified.",
  "certifications": [
   {
    "program": "TessVdML9pBGgG9yGks7o4HewRaXVAMuoVj4x83GLQH",
@@ -205,6 +205,26 @@
    "jurorsScripted": true,
    "certifiedAt": "2026-11-09T21:28:26.083Z",
    "lookup": "certified Sniffed"
+  },
+  {
+   "program": "pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ",
+   "name": "Pump.fun Fees Program",
+   "level": 0,
+   "levelName": "Not certified",
+   "score": 18,
+   "depth": 18,
+   "tier": "Deep Fuzz",
+   "bytecodeHash": "5b6ceda57863f0dcc3e0e3623052f8342c2c81883379699e71d7ed5383cb3dcf",
+   "reportHash": "6a4dab2c844866d30ddc59533c6a2a9c2ed524f2e3711922d91f7cd9fca1b148",
+   "ruling": "Azm8D4Au7RAXzXuY1aTR8Ez4NCYmodvLEzcGWZC6f9aW",
+   "certification": "ANfrqSwGaK5WdqhhT83PHqEo2h7DrVYzRcty8yGCNL6L",
+   "certifySignature": "2jiTj4nMwNmQBsZSGw1eb4wEn4qpqXxZpiLMPZ5CTX1qBKwQPq1BU4tBq7GqsZDf7bCYdQAv38UZgSZxN1AJqq3k",
+   "jurors": 4,
+   "families": 4,
+   "jurorsScripted": true,
+   "certifiedAt": "2026-11-10T04:23:17.547Z",
+   "lookup": "the jury did not certify this build",
+   "history": []
   }
  ]
 }
