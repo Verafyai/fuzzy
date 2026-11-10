@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Info } from "@/components/fuzzy/info";
 import { COLUMN_HELP, STATE_LABEL, scoreColor } from "@/lib/assessments";
 import { Stamp } from "@/components/fuzzy/stamp";
+import { certLevel } from "@/lib/grade";
 
 export type RegistryRow = {
   rank: number;
@@ -48,7 +49,7 @@ export function Registry({ rows }: { rows: RegistryRow[] }) {
   const cats = useMemo(() => ["All", ...Array.from(new Set(rows.map((r) => r.category))).sort()], [rows]);
   const shown = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    const list = rows.filter((r) => (cat === "All" || r.category === cat) && (!certOnly || Boolean(r.devnetCertification)) && (!needle || r.name.toLowerCase().includes(needle) || r.address.toLowerCase().includes(needle)));
+    const list = rows.filter((r) => (cat === "All" || r.category === cat) && (!certOnly || certLevel(r.devnetCertification) > 0) && (!needle || r.name.toLowerCase().includes(needle) || r.address.toLowerCase().includes(needle)));
     return [...list].sort((a, b) => (sort === "name" ? a.name.localeCompare(b.name) : sort === "score" ? (b.score ?? -1) - (a.score ?? -1) : a.rank - b.rank));
   }, [rows, q, cat, sort, certOnly]);
   const href = (r: RegistryRow) => `/programs/${r.address}`;
