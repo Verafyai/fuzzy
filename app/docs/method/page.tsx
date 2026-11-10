@@ -40,8 +40,8 @@ export default function MethodPage() {
           <li>Reads the program&apos;s Anchor IDL and builds the accounts it expects, funded as if users had deposited.</li>
           <li>Calls every instruction as an honest owner would, to learn which paths work and in what order.</li>
           <li>For a deployed program, replays its recent mainnet calls on cloned copies of the accounts they touched, then attacks those calls too. This works without an IDL.</li>
-          <li>Attacks each working path: drops each required signature, re-runs setup as a stranger, swaps in a look-alike account owned by another program, and sends extreme arguments.</li>
-          <li>Keeps a finding only if the attack transaction succeeds and moves funds to the attacker or writes the attacker in as an authority. Everything else is a lead: shown, never scored.</li>
+          <li>Attacks each working path: drops each required signature, re-runs setup as a stranger, swaps in a look-alike account owned by another program, sends extreme arguments, passes a do-nothing program in place of each program the call uses, closes and revives accounts in one transaction, tries non-canonical PDA bumps, and passes price accounts the attacker made.</li>
+          <li>Keeps a finding only if the attack transaction succeeds and moves funds to the attacker, writes the attacker in as an authority, or leaves the attacker ahead of making the same calls honestly. Everything else is a lead: shown, never scored.</li>
           <li>Never sends anything to mainnet or devnet. Fetching a deployed program is a read.</li>
         </ul>
       </section>
@@ -72,13 +72,14 @@ export default function MethodPage() {
         <div className="tablewrap">
           <table className="data">
             <thead><tr><th>Class</th><th>The attack</th><th>Counts as proof when</th><th>Status</th></tr></thead>
-            <tbody>{ASSESSMENTS.map((a) => <tr key={a.id}><td>{a.name}</td><td className="quiet" style={{ fontSize: 13 }}>{a.how}</td><td className="quiet" style={{ fontSize: 13 }}>{a.proof || "Not built yet."}</td><td className="status" style={{ color: a.built ? "var(--teal)" : "var(--medium)" }}>{a.built ? "runs today" : "planned"}</td></tr>)}</tbody>
+            <tbody>{ASSESSMENTS.map((a) => <tr key={a.id}><td>{a.name}</td><td className="quiet" style={{ fontSize: 13 }}>{a.how}</td><td className="quiet" style={{ fontSize: 13 }}>{a.proof}</td><td className="status" style={{ color: a.built ? "var(--teal)" : "var(--medium)" }}>{a.built ? "runs today" : "planned"}</td></tr>)}</tbody>
           </table>
         </div>
         <h3>5. Prove</h3>
         <ul className="list quiet">
           <li>Measures every account&apos;s SOL before and after each attack. Transaction fees paid by the attacker are not counted as loss.</li>
           <li>A finding needs the attack transaction to succeed and either SOL to reach an account the attacker controls, or the attacker&apos;s key to replace the owner&apos;s in program state. The transaction, its logs, the compute it used and the balance changes are kept as evidence.</li>
+          <li>For attacks the attacker runs as an ordinary user (unchecked CPI targets, close then reuse, PDA bumps, price accounts), the same calls are also made honestly, and the attack counts only if the attacker ends ahead on every asset: SOL, and each token held in attacker-owned accounts.</li>
           <li>Anything else that changed program state without permission, or made the program panic, is a lead: shown, never scored.</li>
         </ul>
         <h3>6. Grade</h3>

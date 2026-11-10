@@ -90,7 +90,10 @@ export function readIdl(idl) {
       else if (state) role = 'state';
       else if (writable) role = 'wallet';
       else role = 'other';
-      return { name: a.name, writable, signer, role, address: fixed || null, stateType: state ? state.name : null };
+      // Anchor 0.30 IDLs describe derived accounts (PDAs) by their seeds.
+      const pda = !fixed && a.pda && Array.isArray(a.pda.seeds) ? { seeds: a.pda.seeds, program: a.pda.program || null } : null;
+      if (pda && !signer && !state) role = 'pda';
+      return { name: a.name, writable, signer, role, address: fixed || null, stateType: state ? state.name : null, pda };
     });
     const args = (ix.args || []).map((a) => ({ name: a.name, type: a.type }));
     return { name: ix.name, discriminator, accounts, args };

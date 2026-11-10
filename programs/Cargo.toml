@@ -2,7 +2,7 @@
 # built with `--features fixed` it is the clean control. Zero dependencies:
 # `abi` reads the loader's input buffer (copied from Verafy Harness TinySVM).
 [workspace]
-members = ["abi", "example_vault"]
+members = ["abi", "example_vault", "example_pool", "drainer"]
 resolver = "2"
 
 [workspace.package]

@@ -6,6 +6,7 @@ import { recordInvocation } from './record.js';
 import * as k from '@solana/kit';
 import { createHash } from 'node:crypto';
 import { concat, encodeValue } from './borsh.js';
+import { DRAINER_SO } from './drainer.js';
 
 export const ACTORS = ['owner', 'attacker', 'stranger'];
 export const ACTOR_FUNDS = 10_000_000_000n;
@@ -27,6 +28,9 @@ export async function makeWorld({ program, seed, idl }) {
   const programId = (await signerFor(seed, 'program')).address;
   const fakeProgramId = (await signerFor(seed, 'fake-program')).address;
   svm.addProgram(programId, program);
+  // The do-nothing program passed in place of programs the target calls (unchecked CPI target).
+  const drainerId = (await signerFor(seed, 'cpi-drainer')).address;
+  svm.addProgram(drainerId, DRAINER_SO);
   const actors = {};
   for (const name of ACTORS) {
     actors[name] = await signerFor(seed, `actor:${name}`);
@@ -39,7 +43,7 @@ export async function makeWorld({ program, seed, idl }) {
     svm.setAccount({ address, data: new Uint8Array(st.size), executable: false, lamports: k.lamports(rent + STATE_FUNDS), programAddress: programId, space: BigInt(st.size) });
     states[st.key] = { address, type: st };
   }
-  return { svm, seed, programId, fakeProgramId, actors, states, idl };
+  return { svm, seed, programId, fakeProgramId, drainerId, actors, states, idl };
 }
 
 /** Resolve an account label to an address, creating fakes on demand. */
@@ -85,35 +89,141 @@ export async function breathe() {
   if (++sends % 8 === 0) await new Promise((resolve) => setImmediate(resolve));
 }
 
-export async function send(world, step) {
-  await breathe();
+const SYSTEM_PROGRAM = '11111111111111111111111111111111';
+const addrEnc = k.getAddressEncoder();
+const addrDec = k.getAddressDecoder();
+
+/** The program address for seeds and one bump, or null when that bump lands on the curve. */
+export function programAddress(seeds, bump, programId) {
+  const h = createHash('sha256');
+  for (const seed of seeds) h.update(Buffer.from(seed));
+  h.update(Buffer.from([bump])).update(Buffer.from(addrEnc.encode(programId))).update('ProgramDerivedAddress');
+  const address = addrDec.decode(h.digest());
+  return k.isOffCurveAddress(address) ? address : null;
+}
+
+/** Every valid bump for these seeds, canonical (highest) first. */
+export function validBumps(seeds, programId, limit = 4) {
+  const out = [];
+  for (let b = 255; b >= 0 && out.length < limit; b--) {
+    const address = programAddress(seeds, b, programId);
+    if (address) out.push({ bump: b, address });
+  }
+  return out;
+}
+
+const isBumpArg = (a) => /(^|_)bump$/i.test(a.name) && a.type === 'u8';
+
+/** The seed bytes for one IDL PDA account, given the step's other accounts and arguments. */
+async function pdaSeeds(world, ix, account, step, addresses) {
+  const seeds = [];
+  for (const seed of account.pda.seeds || []) {
+    if (seed.kind === 'const') seeds.push(Uint8Array.from(seed.value));
+    else if (seed.kind === 'account') {
+      const i = ix.accounts.findIndex((a) => a.name === String(seed.path).split('.')[0]);
+      if (i < 0 || !addresses[i]) return null;
+      seeds.push(addrEnc.encode(addresses[i]));
+    } else if (seed.kind === 'arg') {
+      const j = ix.args.findIndex((a) => a.name === String(seed.path).split('.')[0]);
+      if (j < 0) return null;
+      const resolveKey = (v) => addrEnc.encode(String(v).startsWith('actor:') ? world.actors[String(v).slice(6)].address : v);
+      seeds.push(encodeValue(ix.args[j].type, step.args[j], resolveKey, world.idl.types));
+    } else return null;
+  }
+  return seeds;
+}
+
+/** The derived (PDA) accounts in a step, with their valid bumps, canonical first. */
+export async function derivedAccounts(world, step) {
+  const ix = world?.idl ? world.idl.instructions.find((i) => i.name === step.ix) : null;
+  if (!ix) return [];
+  const addresses = [];
+  for (const [i, a] of step.accounts.entries()) if (!a.label.startsWith('pda:')) addresses[i] = await resolve(world, a.label);
+  const out = [];
+  for (const [i, a] of step.accounts.entries()) {
+    const def = ix.accounts[i];
+    if (!a.label.startsWith('pda:') || !def?.pda) continue;
+    const seeds = await pdaSeeds(world, ix, def, step, addresses);
+    if (!seeds) continue;
+    const programId = def.pda.program?.kind === 'const' ? addrDec.decode(Uint8Array.from(def.pda.program.value)) : world.programId;
+    out.push({ name: a.name, bumps: validBumps(seeds, programId, 3) });
+  }
+  return out;
+}
+
+/** Build one instruction for the target program, and note the accounts it touches. */
+async function buildIx(world, step, touched) {
   const ix = world.idl ? world.idl.instructions.find((i) => i.name === step.ix) : null;
+  // Resolve plain accounts first, then derived (PDA) accounts, which may depend on them.
+  const addresses = [];
+  for (const [i, a] of step.accounts.entries()) if (!a.label.startsWith('pda:')) addresses[i] = await resolve(world, a.label);
+  let bump = null;
+  for (const [i, a] of step.accounts.entries()) {
+    if (!a.label.startsWith('pda:')) continue;
+    const def = ix?.accounts[i];
+    const seeds = def?.pda ? await pdaSeeds(world, ix, def, step, addresses) : null;
+    const programId = def?.pda?.program?.kind === 'const' ? addrDec.decode(Uint8Array.from(def.pda.program.value)) : world.programId;
+    let address = step.pdaOverride?.[a.name];
+    if (!address && seeds) {
+      const [canonical] = validBumps(seeds, programId, 1);
+      address = canonical?.address;
+      if (bump === null && canonical) bump = canonical.bump;
+    }
+    if (!address) address = (await signerFor(world.seed, `pda:${a.name}`)).address;
+    // A derived account nobody has created yet is funded like a treasury users paid into,
+    // unless it is program state, which the program creates itself.
+    if (!step.pdaOverride?.[a.name] && !world.svm.getAccount(address).exists && !def?.stateType) world.svm.airdrop(address, k.lamports(STATE_FUNDS));
+    addresses[i] = address;
+  }
   let data;
   if (ix) {
-    const resolveKey = (v) => k.getAddressEncoder().encode(String(v).startsWith('actor:') ? world.actors[String(v).slice(6)].address : v);
-    data = concat([Uint8Array.from(ix.discriminator), ...ix.args.map((a, i) => encodeValue(a.type, step.args[i], resolveKey, world.idl.types))]);
+    const resolveKey = (v) => addrEnc.encode(String(v).startsWith('actor:') ? world.actors[String(v).slice(6)].address : v);
+    const args = ix.args.map((a, i) => (isBumpArg(a) && (step.bumpOverride ?? bump) !== null ? (step.bumpOverride ?? bump) : step.args[i]));
+    data = concat([Uint8Array.from(ix.discriminator), ...ix.args.map((a, i) => encodeValue(a.type, args[i], resolveKey, world.idl.types))]);
   } else {
     data = Uint8Array.from(step.raw || []);
   }
-  const metas = [];
-  const touched = new Map();
-  for (const a of step.accounts) {
-    const address = await resolve(world, a.label);
-    const meta = { address, role: role(a.signer, a.writable) };
+  const metas = step.accounts.map((a, i) => {
+    const meta = { address: addresses[i], role: role(a.signer, a.writable) };
     if (a.signer) meta.signer = world.actors[a.label.split(':')[1]];
-    metas.push(meta);
-    touched.set(address, a.label);
-  }
+    touched.set(addresses[i], a.label);
+    return meta;
+  });
+  recordInvocation(world.svm, world.programId, metas, data);
+  return { programAddress: world.programId, accounts: metas, data };
+}
+
+/** A System program transfer: { system: { from: 'actor:attacker', to: label, lamports } }. */
+async function systemIx(world, part, touched) {
+  const from = world.actors[part.system.from.split(':')[1]];
+  const to = await resolve(world, part.system.to);
+  touched.set(from.address, part.system.from);
+  touched.set(to, part.system.to);
+  const data = new Uint8Array(12);
+  data[0] = 2;
+  new DataView(data.buffer).setBigUint64(4, BigInt(part.system.lamports), true);
+  return { programAddress: SYSTEM_PROGRAM, accounts: [{ address: from.address, role: k.AccountRole.WRITABLE_SIGNER, signer: from }, { address: to, role: k.AccountRole.WRITABLE }], data };
+}
+
+/**
+ * Send one step, or several in one transaction (step.bundle). A step:
+ * { ix, args, accounts: [{ label, signer, writable }], payer }, or { system: { from, to, lamports } }.
+ * Returns the outcome with lamport changes for every account it touched.
+ */
+export async function send(world, step) {
+  await breathe();
+  const touched = new Map();
+  const instructions = [];
+  for (const part of step.bundle || [step]) instructions.push(part.system ? await systemIx(world, part, touched) : await buildIx(world, part, touched));
   const payer = world.actors[step.payer || 'owner'];
   touched.set(payer.address, `actor:${step.payer || 'owner'}`);
   const before = snapshot(world, touched);
-  recordInvocation(world.svm, world.programId, metas, data);
 
   const msg = k.pipe(
     k.createTransactionMessage({ version: 0 }),
     (m) => k.setTransactionMessageFeePayerSigner(payer, m),
     (m) => k.setTransactionMessageLifetimeUsingBlockhash({ blockhash: world.svm.latestBlockhash(), lastValidBlockHeight: 0n }, m),
-    (m) => k.appendTransactionMessageInstruction({ programAddress: world.programId, accounts: metas, data }, m),
+    (m) => k.appendTransactionMessageInstructions(instructions, m),
   );
   const tx = await k.signTransactionMessageWithSigners(msg);
   const res = world.svm.sendTransaction(tx);

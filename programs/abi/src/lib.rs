@@ -373,6 +373,32 @@ pub mod cpi {
         }
     }
 
+    /// The program address for `seeds` exactly as given (bump included), if it is off the curve.
+    /// Unlike `find_program_address`, this accepts any bump, canonical or not.
+    pub fn create_program_address(seeds: &[&[u8]], program_id: &[u8; 32]) -> Result<[u8; 32], u64> {
+        if seeds.len() > MAX {
+            return Err(super::err::BAD_INPUT);
+        }
+        let mut seed_bytes: [Bytes; MAX] = core::array::from_fn(|_| Bytes { addr: core::ptr::null(), len: 0 });
+        for (i, s) in seeds.iter().enumerate() {
+            seed_bytes[i] = Bytes { addr: s.as_ptr(), len: s.len() as u64 };
+        }
+        #[cfg(target_os = "solana")]
+        {
+            extern "C" {
+                fn sol_create_program_address(seeds: *const u8, seeds_len: u64, program_id: *const u8, address: *mut u8) -> u64;
+            }
+            let mut address = [0u8; 32];
+            let rc = unsafe { sol_create_program_address(seed_bytes.as_ptr() as *const u8, seeds.len() as u64, program_id.as_ptr(), address.as_mut_ptr()) };
+            if rc == 0 { Ok(address) } else { Err(super::err::BAD_INPUT) }
+        }
+        #[cfg(not(target_os = "solana"))]
+        {
+            let _ = (&seed_bytes, program_id);
+            Err(super::err::BAD_INPUT)
+        }
+    }
+
     /// Find this program's address for `seeds`, and its bump.
     pub fn find_program_address(seeds: &[&[u8]], program_id: &[u8; 32]) -> Result<([u8; 32], u8), u64> {
         if seeds.len() > MAX {

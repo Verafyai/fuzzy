@@ -11,9 +11,45 @@ import * as k from '@solana/kit';
 import { createHash } from 'node:crypto';
 import { signerFor, ACTOR_FUNDS, FEE_PER_SIGNATURE, breathe } from './world.js';
 import { fmtSol } from './sniff.js';
+import { DRAINER_SO } from './drainer.js';
 
 const UPGRADEABLE = 'BPFLoaderUpgradeab1e11111111111111111111111';
 const SYSTEM = '11111111111111111111111111111111';
+/** Programs the runtime always has; an account slot holding one of these is a program the target calls. */
+const BUILTIN_PROGRAMS = new Set([SYSTEM, 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA', 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb', 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL', 'MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr', 'Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo']);
+/** Price sources: accounts owned by these programs are oracles. */
+export const ORACLE_OWNERS = new Map([
+  ['rec5EKMGg6MxZYaMdyBfgwp4d5rB9T1VQH5pJv5LtFJ', 'pyth-update'], // Pyth receiver: PriceUpdateV2
+  ['pythWSnswVUd12oZpeFP8e9CVaEqJg25g1Vtc2biRsT', 'pyth-update'], // Pyth push oracle: PriceUpdateV2
+  ['FsJ3A3u2vn5cTVofAjvy6y5kwABJAqYWpe4975bi2epH', 'pyth-legacy'], // Pyth v2 price accounts
+  ['SBondMDrcV3K4kxZR1HNVT7osZxAHVHgYXL5Ze1oMUv', 'switchboard'], // Switchboard on-demand
+  ['SW1TCH7qEPTdLsDHRgPuMQjbQxKdH2aBStViMFnt64f', 'switchboard'], // Switchboard v2
+  ['HEvSKofvBgfaexv23kMabbYqxasxU3mQ4ibBMEmJWHny', 'chainlink'],
+  ['H7o7ZuXQgyjEqka3qGtZZ3ZxhQjFfZiHF3cHcLgeb8kT', 'fuzzy-bench'], // Fuzzy's benchmark oracle owner (example_pool)
+]);
+
+/** Where the price sits in an oracle account we know the layout of: [{ offset, kind }]. */
+function priceFields(layout, data) {
+  if (layout === 'pyth-update' && data.length >= 8 + 32 + 2 + 32 + 8) {
+    const vlen = data[40] === 0 ? 2 : 1; // VerificationLevel: Partial { num_signatures } or Full
+    const msg = 8 + 32 + vlen + 32;
+    return [{ offset: msg, kind: 'i64' }, { offset: msg + 8 + 8 + 4 + 8 + 8, kind: 'i64' }]; // price, ema_price
+  }
+  if (layout === 'pyth-legacy' && data.length >= 216 && data.readUInt32LE(0) === 0xa1b2c3d4) return [{ offset: 208, kind: 'i64' }, { offset: 48, kind: 'i64' }];
+  if (layout === 'fuzzy-bench' && data.length >= 16 && data.subarray(0, 8).toString() === 'FZPRICE1') return [{ offset: 8, kind: 'u64' }];
+  return [];
+}
+
+/** A copy of an oracle account's data with every price scaled by num/den. */
+function scaledPrice(layout, data, num, den) {
+  const out = Buffer.from(data);
+  for (const f of priceFields(layout, out)) {
+    const v = f.kind === 'i64' ? out.readBigInt64LE(f.offset) : out.readBigUInt64LE(f.offset);
+    const scaled = (v * BigInt(num)) / BigInt(den);
+    if (f.kind === 'i64') out.writeBigInt64LE(scaled, f.offset); else out.writeBigUInt64LE(scaled, f.offset);
+  }
+  return out;
+}
 
 async function rpc(url, method, params, tries = 3) {
   for (let i = 0; ; i++) {
@@ -126,7 +162,9 @@ async function makeHistoryWorld({ program, programId, history, seed }) {
   svm.airdrop(attacker.address, k.lamports(ACTOR_FUNDS));
   const loot = (await signerFor(seed, 'new:loot')).address;
   const fakeProgram = (await signerFor(seed, 'fake-program')).address;
-  return { svm, programId, attacker, loot, fakeProgram, seed };
+  const drainerId = (await signerFor(seed, 'cpi-drainer')).address;
+  svm.addProgram(drainerId, DRAINER_SO);
+  return { svm, programId, attacker, loot, fakeProgram, drainerId, seed };
 }
 
 /** Send one call. accounts: [{ address, signer, writable }]; payer: 'attacker' or an address. */
@@ -214,6 +252,17 @@ export async function runHistory({ program, programId, history, idl, seed, budge
       world.svm.setAccount({ address: placeholder, data: new Uint8Array(data), executable: false, lamports: k.lamports(BigInt(a.lamports)), programAddress: a.owner, space: BigInt(data.length) });
       world.lootTokens = { ...(world.lootTokens || {}), [placeholder]: original };
     }
+    // Attacker-owned copies of a user's token accounts holding the same balances: the attacker as an ordinary user.
+    for (const [placeholder, original] of Object.entries(call.cloneTokens || {})) {
+      const a = history.accounts[original];
+      const data = Buffer.from(a.data, 'base64');
+      Buffer.from(addrEncoder.encode(world.attacker.address)).copy(data, 32);
+      world.svm.setAccount({ address: placeholder, data: new Uint8Array(data), executable: false, lamports: k.lamports(BigInt(a.lamports)), programAddress: a.owner, space: BigInt(data.length) });
+    }
+    // Accounts the attacker made: a price account owned by the attacker's program, say.
+    for (const [address, sp] of Object.entries(call.spoofs || {})) {
+      world.svm.setAccount({ address, data: new Uint8Array(sp.data), executable: false, lamports: k.lamports(BigInt(sp.lamports)), programAddress: sp.owner, space: BigInt(sp.data.length) });
+    }
     const r = await sendCall(world, call, payer);
     txs++;
     if (txs % 10 === 0) onEvent({ type: 'progress', transactions: txs });
@@ -298,7 +347,119 @@ export async function runHistory({ program, programId, history, idl, seed, budge
         }
       }
     }
+    if (!outOfBudget()) await userAttacks(call, name, world0);
   }
+
+  async function userAttacks(call, name, world0) {
+    const isProgramAccount = (addr) => addr !== programId && (BUILTIN_PROGRAMS.has(addr) || Boolean(history.accounts[addr]?.executable) || addr in (history.programs || {}));
+    const cpiSlots = call.accounts.map((x, n) => ({ x, n })).filter(({ x }) => !x.signer && !x.writable && isProgramAccount(x.address));
+    const oracles = call.accounts.map((x, n) => ({ x, n })).filter(({ x }) => !x.writable && ORACLE_OWNERS.has(history.accounts[x.address]?.owner));
+    if (!cpiSlots.length && !oracles.length) return;
+    const userCall = await asUserCall(call, world0);
+    const base = await attempt(userCall, world0.attacker.address);
+    const baseAssets = base.r.ok ? assetsOf(base.world, base.r, userCall) : new Map();
+
+    // Unchecked CPI target: a do-nothing program in place of each program the call passes.
+    for (const { x, n } of cpiSlots) {
+      if (outOfBudget()) break;
+      tried.add('unchecked_cpi');
+      onEvent({ type: 'activity', text: `Unchecked CPI: ${name} with a do-nothing program in place of ${argName(call, n)}` });
+      const twist = { ...userCall, accounts: userCall.accounts.map((y, m) => (m === n ? { ...y, address: world0.drainerId } : y)) };
+      const t = await attempt(twist, world0.attacker.address);
+      mark(name, t.r.ok);
+      if (!t.r.ok || !t.r.logs.some((l) => l.includes('FUZZY_CPI_HIJACK'))) continue;
+      const ahead = dominance(assetsOf(t.world, t.r, twist), baseAssets);
+      if (ahead) {
+        findings.push(finding('unchecked_cpi', 'critical', name, argName(call, n), `${name} calls whatever program is passed as ${argName(call, n)}`,
+          `Replayed against cloned mainnet state with the attacker as the user, ${name} accepted a do-nothing program in place of ${argName(call, n)} (${x.address}) and went on as if it had run. The attacker ended ahead of making the same call honestly: ${ahead}.`,
+          `Check the program account's address before calling it.`, twist, t));
+      } else {
+        leads.push({ class: 'unchecked_cpi', instruction: name, title: `${name} calls whatever program is passed as ${argName(call, n)}`, detail: 'A do-nothing program in its place was called and the instruction still succeeded on cloned mainnet state. No funds moved in this run, so it is not counted.' });
+      }
+    }
+
+    // Price manipulation: price accounts the attacker made, owned by the attacker's program.
+    for (const { x, n } of oracles) {
+      if (outOfBudget()) break;
+      tried.add('price_manipulation');
+      const real = history.accounts[x.address];
+      const layout = ORACLE_OWNERS.get(real.owner);
+      const data = Buffer.from(real.data, 'base64');
+      const variants = [{ label: 'an exact copy', data }];
+      if (priceFields(layout, data).length) variants.push({ label: 'the price times 10', data: scaledPrice(layout, data, 10, 1) }, { label: 'the price divided by 10', data: scaledPrice(layout, data, 1, 10) });
+      for (const [v, variant] of variants.entries()) {
+        if (outOfBudget()) break;
+        onEvent({ type: 'activity', text: `Price: ${name} with ${variant.label} of ${argName(call, n)}, owned by the attacker's program` });
+        const spoof = (await signerFor(seed, `spoof:${x.address}:${v}`)).address;
+        const twist = { ...userCall, spoofs: { [spoof]: { data: variant.data, owner: world0.fakeProgram, lamports: real.lamports } }, accounts: userCall.accounts.map((y, m) => (m === n ? { ...y, address: spoof } : y)) };
+        const t = await attempt(twist, world0.attacker.address);
+        mark(name, t.r.ok);
+        if (!t.r.ok) continue;
+        const ahead = dominance(assetsOf(t.world, t.r, twist), baseAssets);
+        if (ahead) {
+          findings.push(finding('price_manipulation', 'critical', name, argName(call, n), `${name} takes its price from an account anyone can create`,
+            `Replayed against cloned mainnet state with the attacker as the user, ${name} accepted ${variant.label} of the ${layout} price account ${x.address}, made by the attacker and owned by the attacker's program. The attacker ended ahead of making the same call at the real price: ${ahead}.`,
+            `Check the price account's owner (and, for Pyth, the feed id and verification level) before reading it.`, twist, t));
+          break;
+        }
+        if (v === 0) leads.push({ class: 'price_manipulation', instruction: name, title: `${name} accepts a price account from any owner`, detail: `A copy of ${argName(call, n)} owned by the attacker's program was accepted on cloned mainnet state. With the real price no funds moved, so it is not counted.` });
+      }
+    }
+  }
+
+  /** The call with the attacker as the user: every signer becomes the attacker, payouts go to the attacker,
+   *  and the signers' token accounts become attacker-owned copies with the same balances. */
+  async function asUserCall(call, world0) {
+    const signers = new Set([...call.accounts, ...(call.prefix || []).flatMap((p) => p.accounts)].filter((x) => x.signer).map((x) => x.address));
+    const cloneTokens = {};
+    const map = async (x) => {
+      if (x.signer) return { ...x, address: world0.attacker.address };
+      const h = history.accounts[x.address];
+      if (!h) return x;
+      const t = tokenInfo(h.owner, Buffer.from(h.data, 'base64'));
+      if (t && signers.has(t.owner)) {
+        const placeholder = (await signerFor(seed, `user-token:${x.address}`)).address;
+        cloneTokens[placeholder] = x.address;
+        return { ...x, address: placeholder };
+      }
+      if (x.writable && h.owner === SYSTEM && !h.executable) return { ...x, address: world0.loot };
+      return x;
+    };
+    const accounts = [];
+    for (const x of call.accounts) accounts.push(await map(x));
+    const prefix = [];
+    for (const p of call.prefix || []) {
+      const pa = [];
+      for (const x of p.accounts) pa.push(await map(x));
+      prefix.push({ ...p, accounts: pa });
+    }
+    return { ...call, accounts, prefix, cloneTokens };
+  }
+
+  /** What the attacker gained, per asset: SOL, and each mint held in attacker-owned token copies. */
+  function assetsOf(world, r, call) {
+    const out = new Map([['SOL', gainOf(world, r)]]);
+    const mine = new Set(Object.keys(call.cloneTokens || {}));
+    for (const c of r.changes) {
+      if (!mine.has(c.address) || !(c.token || c.tokenBefore)) continue;
+      const mint = (c.token || c.tokenBefore).mint;
+      out.set(mint, (out.get(mint) || 0n) + (c.token?.amount ?? 0n) - (c.tokenBefore?.amount ?? 0n));
+    }
+    return out;
+  }
+
+  /** The attacker is ahead when no asset is worse than the honest run and at least one is better. */
+  function dominance(a, b) {
+    const keys = new Set([...a.keys(), ...b.keys()]);
+    const better = [];
+    for (const key of keys) {
+      const x = a.get(key) ?? 0n, y = b.get(key) ?? 0n;
+      if (x < y) return null;
+      if (x > y) better.push(key === 'SOL' ? `${fmtSol(x - y)} more` : `${x - y} more base units of mint ${key}`);
+    }
+    return better.length ? better.join(', ') : null;
+  }
+
   const replayed = [...kinds.values()].filter((k2) => k2.ok).length;
   onEvent({ type: 'note', text: `Replayed ${replayed} of ${kinds.size} instruction kinds on cloned mainnet state.` });
   tried.add('compute_exhaustion');

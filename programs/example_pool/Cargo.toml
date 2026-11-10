@@ -1,0 +1,16 @@
+[package]
+name = "example-pool"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "example_pool"
+crate-type = ["cdylib", "lib"]
+
+[features]
+# The clean control: every check below that the vulnerable build skips.
+fixed = []
+
+[dependencies]
+abi = { package = "tinysvm-abi", path = "../abi" }

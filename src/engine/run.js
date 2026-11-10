@@ -9,7 +9,7 @@ import { elfInfo, sha256Hex } from './ingest.js';
 import { fuzzyScore, SCORE_VERSION } from '../score.js';
 
 export const REPORT_VERSION = 'fuzzy-report/1';
-export const ENGINE_VERSION = 'fuzzy-engine/0.2.0';
+export const ENGINE_VERSION = 'fuzzy-engine/0.3.0';
 
 export const TIERS = {
   sniff: { name: 'Sniff', credits: 100, budget: { txs: 600, ms: 40_000 }, historyLimit: 10 },
@@ -67,8 +67,9 @@ export async function fuzz({ program, idl: rawIdl = null, name, source = {}, tie
     .sort((a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity]);
   const leads = [...(hist?.leads || []), ...(raw?.leads || [])];
 
-  const applicable = applicableClasses(idl);
   const triedAll = new Set([...(hist ? [...hist.tried] : []), ...(raw ? raw.classes.tried : [])]);
+  // A class applies if the IDL says so, or if replay found something to attack with it (an oracle read, say).
+  const applicable = [...new Set([...applicableClasses(idl), ...triedAll])];
   const tried = applicable.filter((c) => triedAll.has(c));
   const histIx = hist?.instructions || [];
   const sniffIx = raw?.instructions || [];

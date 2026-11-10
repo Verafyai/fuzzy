@@ -1,0 +1,27 @@
+{
+  "address": "11111111111111111111111111111111",
+  "metadata": { "name": "example_pool", "version": "0.1.0", "spec": "0.1.0", "description": "Fuzzy benchmark: a deliberately vulnerable pool for unchecked CPI targets, price manipulation, close-then-reuse, PDA bumps and reinitialization." },
+  "instructions": [
+    { "name": "init_receipt", "discriminator": [35,50,200,55,17,245,64,246],
+      "accounts": [ { "name": "receipt", "writable": true }, { "name": "owner", "signer": true } ], "args": [] },
+    { "name": "deposit", "discriminator": [242,35,198,137,82,225,242,182],
+      "accounts": [ { "name": "pool", "writable": true }, { "name": "receipt", "writable": true }, { "name": "owner", "writable": true, "signer": true }, { "name": "system_program", "address": "11111111111111111111111111111111" } ],
+      "args": [ { "name": "amount", "type": "u64" } ] },
+    { "name": "withdraw", "discriminator": [183,18,70,156,148,109,161,34],
+      "accounts": [ { "name": "pool", "writable": true }, { "name": "receipt", "writable": true }, { "name": "owner", "signer": true }, { "name": "recipient", "writable": true } ],
+      "args": [ { "name": "amount", "type": "u64" } ] },
+    { "name": "redeem", "discriminator": [184,12,86,149,70,196,97,225],
+      "accounts": [ { "name": "pool", "writable": true }, { "name": "user", "writable": true, "signer": true }, { "name": "oracle" }, { "name": "system_program", "address": "11111111111111111111111111111111" } ],
+      "args": [ { "name": "amount", "type": "u64" } ] },
+    { "name": "close_receipt", "discriminator": [126,254,244,203,124,164,134,89],
+      "accounts": [ { "name": "pool", "writable": true }, { "name": "receipt", "writable": true }, { "name": "owner", "signer": true }, { "name": "recipient", "writable": true } ], "args": [] },
+    { "name": "touch_treasury", "discriminator": [228,149,229,230,2,14,150,190],
+      "accounts": [ { "name": "treasury", "writable": true, "pda": { "seeds": [ { "kind": "const", "value": [116,114,101,97,115,117,114,121] } ] } }, { "name": "payer", "writable": true, "signer": true }, { "name": "system_program", "address": "11111111111111111111111111111111" } ],
+      "args": [ { "name": "bump", "type": "u8" } ] }
+  ],
+  "accounts": [ { "name": "Pool", "discriminator": [241,154,109,4,17,177,109,188] }, { "name": "Receipt", "discriminator": [39,154,73,106,80,102,145,153] } ],
+  "types": [
+    { "name": "Pool", "type": { "kind": "struct", "fields": [ { "name": "admin", "type": "pubkey" } ] } },
+    { "name": "Receipt", "type": { "kind": "struct", "fields": [ { "name": "owner", "type": "pubkey" }, { "name": "credit", "type": "u64" } ] } }
+  ]
+}

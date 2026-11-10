@@ -1,0 +1,12 @@
+[package]
+name = "fuzzy-drainer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "fuzzy_drainer"
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+abi = { package = "tinysvm-abi", path = "../abi" }
