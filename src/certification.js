@@ -11,6 +11,8 @@ export const RULING_PROGRAM = 'A6iZhDZASfQGCmzxXWW8JdnEhtz7EZE3gS4N1hkiJNNN';
 export const REGISTRY_PROGRAM = 'Bn6jV1CGK4WFibJcCVsEzHeVVhtph2xPsNkemWfgqn9R';
 export const DOMAIN = 'verafy-certification/1';
 export const CERT_SIZE = 192;
+export const RECORD_SIZE = 256;
+const ZERO = '11111111111111111111111111111111';
 
 /** What a level means. The jury's answer is the level. */
 export const LEVELS = [
@@ -58,13 +60,34 @@ export async function certificationAddress(program, bh, programId = CERTIFICATIO
   return pda;
 }
 
-export function certifyData({ program, bytecodeHash: bh, reportHash: rh, score }) {
-  return Buffer.concat([Buffer.from([0]), key(program), Buffer.from(bh), Buffer.from(rh), Buffer.from([score])]);
+/** Every verdict is also its own record at ["verdict", program, bytecode_hash, seq u32 LE]. */
+export async function recordAddress(program, bh, seq, programId = CERTIFICATION_PROGRAM) {
+  const n = Buffer.alloc(4); n.writeUInt32LE(seq);
+  const [pda] = await k.getProgramDerivedAddress({ programAddress: programId, seeds: [Buffer.from('verdict'), key(program), Buffer.from(bh), n] });
+  return pda;
 }
 
-export function decodeCertification(data) {
-  const b = Buffer.from(data);
-  if (b.length < CERT_SIZE || b.subarray(0, 8).toString() !== 'VRFYCRT1') return null;
+/** Tag 1, certify. Accounts: cert, ruling, payer, system, the next record, the previous record (or, for the first, the certification program's own address), then the jurors' harnesses. */
+export function certifyData({ program, bytecodeHash: bh, reportHash: rh, score }) {
+  return Buffer.concat([Buffer.from([1]), key(program), Buffer.from(bh), Buffer.from(rh), Buffer.from([score])]);
+}
+
+/** Tag 2: copy a version 1 certification's verdict into record 0. Accounts: cert, payer, system, record 0. */
+export const recordData = () => Buffer.from([2]);
+
+/**
+ * The record a certify should write and the one it supersedes, from the current
+ * certification account's data (or null when there is none yet). `needsRecord`
+ * means a version 1 certification that must be recorded (tag 2) first.
+ */
+export async function nextRecords(program, bh, certData, programId = CERTIFICATION_PROGRAM) {
+  const d = certData ? decodeCertification(certData) : null;
+  const n = d ? d.records : 0;
+  if (d && n === 0) return { needsRecord: true, record: await recordAddress(program, bh, 0, programId), previous: null };
+  return { needsRecord: false, record: await recordAddress(program, bh, n, programId), previous: n > 0 ? await recordAddress(program, bh, n - 1, programId) : programId, first: n === 0 };
+}
+
+function decodeFields(b) {
   const addr = (o) => k.getAddressDecoder().decode(b.subarray(o, o + 32));
   const level = b[8];
   return {
@@ -81,6 +104,39 @@ export function decodeCertification(data) {
     releasableAfterSlot: b.readBigUInt64LE(176).toString(),
     certifiedSlot: b.readBigUInt64LE(184).toString(),
   };
+}
+
+/** The current verdict for one build. `records` counts its verdict records (0 for a version 1 certification not yet recorded). */
+export function decodeCertification(data) {
+  const b = Buffer.from(data);
+  if (b.length < CERT_SIZE || b.subarray(0, 8).toString() !== 'VRFYCRT1') return null;
+  return { ...decodeFields(b), records: b.readUInt32LE(12) };
+}
+
+/** One verdict, kept for good. `supersededBy` is null while it is the current verdict. */
+export function decodeRecord(data) {
+  const b = Buffer.from(data);
+  if (b.length < RECORD_SIZE || b.subarray(0, 8).toString() !== 'VRFYVRD1') return null;
+  const addr = (o) => { const a = k.getAddressDecoder().decode(b.subarray(o, o + 32)); return a === ZERO ? null : a; };
+  return { ...decodeFields(b), seq: b.readUInt32LE(12), supersedes: addr(192), supersededBy: addr(224), current: addr(224) === null };
+}
+
+/**
+ * From any verdict record, an old receipt included, follow superseded_by to the
+ * current verdict. Returns every record walked, oldest first; the last is current.
+ */
+export async function followSupersession(record, { rpcUrl = 'https://api.devnet.solana.com', certificationProgram = CERTIFICATION_PROGRAM, max = 64 } = {}) {
+  const chain = [];
+  let at = record;
+  while (at && chain.length < max) {
+    const acct = await rpc(rpcUrl, 'getAccountInfo', [at, { encoding: 'base64' }]);
+    if (!acct?.value || acct.value.owner !== certificationProgram) throw new Error(`${at} is not a verdict record`);
+    const d = decodeRecord(Buffer.from(acct.value.data[0], 'base64'));
+    if (!d) throw new Error(`${at} is not a verdict record`);
+    chain.push({ address: at, ...d });
+    at = d.supersededBy;
+  }
+  return chain;
 }
 
 async function rpc(url, method, params) {
@@ -121,13 +177,55 @@ export async function lookupCertification(program, { rpcUrl = 'https://api.devne
       continue;
     }
     const d = decodeCertification(Buffer.from(cert.value.data[0], 'base64'));
+    const currentRecord = d.records > 0 ? await recordAddress(program, bh, d.records - 1, certificationProgram) : null;
     const settled = BigInt(slot) >= BigInt(d.releasableAfterSlot);
     return {
-      program, programCluster: c, bytecodeHash: hex(bh), certificationAddress: address,
+      program, programCluster: c, bytecodeHash: hex(bh), certificationAddress: address, currentRecord,
       certified: d.level > 0 && settled,
       reason: d.level === 0 ? 'the jury did not certify this build' : settled ? `certified ${d.levelName}` : 'certified, but still inside the challenge window',
       ...d,
     };
   }
   return first || { program, certified: false, reason: 'not a program on devnet or mainnet' };
+}
+
+/**
+ * The accounts for a tag 1 certify, in the shape verafyHarness's tx builder takes.
+ * `sol` is packages/solana/src/index.js; `certData` is the current certification account's data, or null.
+ */
+export async function certifyKeys(sol, { program, bytecodeHash: bh, ruling, payer, harnesses, certData, programId = CERTIFICATION_PROGRAM }) {
+  const next = await nextRecords(program, bh, certData, programId);
+  if (next.needsRecord) throw new Error('this certification was written by version 1; record it first (tag 2)');
+  const cert = await certificationAddress(program, bh, programId);
+  return {
+    cert, record: next.record, previous: next.first ? null : next.previous,
+    keys: [
+      { pubkey: sol.b58decode(cert), isSigner: false, isWritable: true },
+      { pubkey: sol.b58decode(ruling), isSigner: false, isWritable: false },
+      { pubkey: payer.publicKey, isSigner: true, isWritable: true },
+      { pubkey: sol.SYSTEM_PROGRAM, isSigner: false, isWritable: false },
+      { pubkey: sol.b58decode(next.record), isSigner: false, isWritable: true },
+      { pubkey: sol.b58decode(next.previous), isSigner: false, isWritable: !next.first },
+      ...harnesses.map((h) => ({ pubkey: sol.b58decode(h), isSigner: false, isWritable: false })),
+    ],
+  };
+}
+
+/** A tag 2 instruction that records a version 1 certification's verdict as record 0. */
+export async function recordIx(sol, { program, bytecodeHash: bh, payer, programId = CERTIFICATION_PROGRAM }) {
+  const cert = await certificationAddress(program, bh, programId);
+  const record = await recordAddress(program, bh, 0, programId);
+  return {
+    record,
+    ix: {
+      programId: sol.b58decode(programId),
+      keys: [
+        { pubkey: sol.b58decode(cert), isSigner: false, isWritable: true },
+        { pubkey: payer.publicKey, isSigner: true, isWritable: true },
+        { pubkey: sol.SYSTEM_PROGRAM, isSigner: false, isWritable: false },
+        { pubkey: sol.b58decode(record), isSigner: false, isWritable: true },
+      ],
+      data: recordData(),
+    },
+  };
 }

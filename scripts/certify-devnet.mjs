@@ -12,7 +12,7 @@ import { join } from 'node:path';
 import { fuzz } from '../src/engine/run.js';
 import {
   CERTIFICATION_PROGRAM, RULING_PROGRAM, REGISTRY_PROGRAM, LEVELS,
-  bytecodeHash, reportHash, certificationContractHash, certificationAddress, certifyData, lookupCertification,
+  bytecodeHash, reportHash, certificationContractHash, certificationAddress, certifyData, certifyKeys, lookupCertification,
 } from '../src/certification.js';
 
 const arg = (name) => { const i = process.argv.indexOf(`--${name}`); return i > 0 ? process.argv[i + 1] : undefined; };
@@ -64,17 +64,12 @@ const settled = await sol.settleRuling({
 say(`ruling ${settled.ruling}: ${settled.state.status}, answer ${settled.state.answer}`);
 
 // 4. The certification.
-const cert = await certificationAddress(program, bh);
+const certNow = await rpc.account(await certificationAddress(program, bh));
 const harnesses = jurors.map((j) => sol.harnessAccount(j.keypair.publicKey, REGISTRY_PROGRAM).address);
+const { cert, record, previous, keys } = await certifyKeys(sol, { program: program, bytecodeHash: bh, ruling: settled.ruling, payer, harnesses, certData: certNow?.data ?? null });
 const ix = {
   programId: sol.b58decode(CERTIFICATION_PROGRAM),
-  keys: [
-    { pubkey: sol.b58decode(cert), isSigner: false, isWritable: true },
-    { pubkey: sol.b58decode(settled.ruling), isSigner: false, isWritable: false },
-    { pubkey: payer.publicKey, isSigner: true, isWritable: true },
-    { pubkey: sol.SYSTEM_PROGRAM, isSigner: false, isWritable: false },
-    ...harnesses.map((h) => ({ pubkey: sol.b58decode(h), isSigner: false, isWritable: false })),
-  ],
+  keys,
   data: certifyData({ program, bytecodeHash: bh, reportHash: rh, score: report.score.score }),
 };
 const certSig = await rpc.send(sol.buildTx([ix], payer, [payer], await rpc.blockhash()));

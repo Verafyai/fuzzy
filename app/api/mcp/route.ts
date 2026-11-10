@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const lookup = cert.lookupCertification as (program: string, opts: any) => Promise<any>;
+const follow = cert.followSupersession as (record: string, opts: any) => Promise<any[]>;
 const rows: any[] = (registry.programs as any[]).filter(Boolean);
 const SITE = "https://fuzzy.verafy.ai";
 const CORS = { "access-control-allow-origin": "*", "access-control-allow-headers": "content-type, mcp-session-id, mcp-protocol-version", "access-control-allow-methods": "POST, GET, OPTIONS" };
@@ -24,8 +25,8 @@ const TOOLS = [
   },
   {
     name: "fuzzy_certification",
-    description: "Check whether this exact build of a Solana program has a Verafy Certification on Solana devnet. Hashes the program's deployed bytecode (devnet, then mainnet) and reads the certification account. Devnet certifications today are not full certifications: their jurors voted by script.",
-    inputSchema: { type: "object", properties: { program: ADDRESS }, required: ["program"] },
+    description: "Check whether this exact build of a Solana program has a Verafy Certification on Solana devnet. Hashes the program's deployed bytecode (devnet, then mainnet) and reads the certification account, which holds the latest verdict and currentRecord. Every verdict is also kept as its own record; a replaced one points to its replacement with supersededBy. Pass record (a verdict record from an earlier receipt) to get supersession: every record from that one to the current verdict. Devnet certifications today are not full certifications: their jurors voted by script.",
+    inputSchema: { type: "object", properties: { program: ADDRESS, record: { type: "string", description: "Optional. A verdict record address from an earlier receipt, to follow to the current verdict." } }, required: ["program"] },
   },
   {
     name: "fuzzy_registry_search",
@@ -55,7 +56,7 @@ function summary(r: any) {
     scannedAt: r.scannedAt, bytecodeSha256: r.bytecodeSha256, upgradeable: r.upgradeable,
     verifiedBuild: r.addons?.verified ? { verified: Boolean(r.addons.verified.verified), repo: r.addons.verified.repo, commit: r.addons.verified.commit } : null,
     dependencyAdvisories: r.advisoryCounts || null,
-    certification: r.devnetCertification ? { scope: "devnet only, jurors scripted, not a full certification", level: r.devnetCertification.levelName, account: r.devnetCertification.certification, ruling: r.devnetCertification.ruling } : null,
+    certification: r.devnetCertification ? { scope: "devnet only, jurors scripted, not a full certification", level: r.devnetCertification.levelName, account: r.devnetCertification.certification, ruling: r.devnetCertification.ruling, record: r.devnetCertification.record ?? null } : null,
     reportCard: `${SITE}/programs/${r.address}`,
   };
 }
@@ -73,14 +74,19 @@ async function call(name: string, args: any) {
     }
     case "fuzzy_certification": {
       if (!validAddress) return text("Pass program: a Solana program address.", true);
-      const res = await lookup(program, { rpcUrl: process.env.DEVNET_RPC_URL || "https://api.devnet.solana.com", programRpcUrl: process.env.MAINNET_RPC_URL || "https://api.mainnet-beta.solana.com" });
-      return text({ network: "devnet", note: "Devnet certification only; not a full certification.", ...res });
+      const rpcUrl = process.env.DEVNET_RPC_URL || "https://api.devnet.solana.com";
+      const res = await lookup(program, { rpcUrl, programRpcUrl: process.env.MAINNET_RPC_URL || "https://api.mainnet-beta.solana.com" });
+      const record = typeof args?.record === "string" ? args.record.trim() : "";
+      if (record && !/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(record)) return text("record must be a verdict record address.", true);
+      const supersession = record ? await follow(record, { rpcUrl }) : null;
+      if (supersession && supersession[0]?.program !== program) return text("That record is for a different program.", true);
+      return text({ network: "devnet", note: "Devnet certification only; not a full certification.", ...res, ...(supersession ? { supersession } : {}) });
     }
     case "fuzzy_registry_search": {
       const q = String(args?.query || "").toLowerCase();
       const cat = String(args?.category || "").toLowerCase();
       const min = Number.isFinite(args?.minScore) ? Number(args.minScore) : -1;
-      const list = rows.filter((r) => (!q || r.name.toLowerCase().includes(q) || r.address.toLowerCase().includes(q)) && (!cat || r.category.toLowerCase() === cat) && (r.score ?? -1) >= min && (!args?.certifiedOnly || r.devnetCertification));
+      const list = rows.filter((r) => (!q || r.name.toLowerCase().includes(q) || r.address.toLowerCase().includes(q)) && (!cat || r.category.toLowerCase() === cat) && (r.score ?? -1) >= min && (!args?.certifiedOnly || (r.devnetCertification?.level ?? 1) > 0));
       return text({ total: list.length, programs: list.slice(0, 25).map(summary) });
     }
     case "fuzzy_scan_instructions":

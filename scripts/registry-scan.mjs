@@ -97,7 +97,7 @@ for (const row of results) {
   const c = certs.find((x) => x.program === row.address);
   if (c) {
     row.certification = c.level > 0 ? `Devnet: ${c.levelName}` : 'Recorded, not certified';
-    row.devnetCertification = { level: c.level ?? 1, levelName: c.levelName, score: c.score, program: c.program, tier: c.tier, history: c.history || [], certification: c.certification, ruling: c.ruling, certifySignature: c.certifySignature, certifiedAt: c.certifiedAt, jurors: c.jurors, families: c.families, jurorsScripted: c.jurorsScripted, bytecodeHash: c.bytecodeHash, reportHash: c.reportHash };
+    row.devnetCertification = { level: c.level ?? 1, levelName: c.levelName, score: c.score, program: c.program, tier: c.tier, history: c.history || [], certification: c.certification, ruling: c.ruling, certifySignature: c.certifySignature, certifiedAt: c.certifiedAt, jurors: c.jurors, families: c.families, jurorsScripted: c.jurorsScripted, bytecodeHash: c.bytecodeHash, reportHash: c.reportHash, record: c.record, records: c.records, supersedes: c.supersedes ?? null };
   }
 }
 writeFileSync('data/registry.json', JSON.stringify({ kind: 'fuzzy.registry/1', engine: 'fuzzy-score/1', source, generatedAt: new Date().toISOString(), programs: results }, null, 1) + '\n');

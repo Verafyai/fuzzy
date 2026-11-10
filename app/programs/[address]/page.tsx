@@ -80,11 +80,14 @@ export default async function ProgramPage({ params }: { params: Promise<{ addres
               <dt>Certify transaction</dt><dd><a className="mono" href={devnetTx(cert.certifySignature)}>{cert.certifySignature.slice(0, 32)}…</a></dd>
               <dt>Bytecode hash</dt><dd className="mono">{cert.bytecodeHash}</dd>
               <dt>Report hash</dt><dd className="mono">{cert.reportHash}</dd>
+              {cert.record ? <><dt>Verdict record</dt><dd><a className="mono" href={devnet(cert.record)}>{cert.record}</a> <span className="muted">(verdict {cert.records} for this build)</span></dd></> : null}
+              {cert.supersedes ? <><dt>Supersedes</dt><dd><a className="mono" href={devnet(cert.supersedes)}>{cert.supersedes}</a></dd></> : null}
             </dl>
+            <p className="quiet" style={{ fontSize: 14 }}>Every verdict is kept on chain as its own record. When a newer verdict replaces one for the same build, the old record points to it, so a receipt for an earlier verdict leads here.</p>
             {cert.history?.length ? (
               <div className="stack" style={{ gap: 6 }}>
-                <h3>Earlier certifications for this build</h3>
-                <ul className="list quiet" style={{ fontSize: 14 }}>{cert.history.map((h: any) => <li key={h.ruling}>Grade {gradeFor(h).grade}, {date(h.certifiedAt)}: <a className="mono" href={devnet(h.ruling)}>{h.ruling.slice(0, 10)}…</a> (replaced {date(h.replacedAt)})</li>)}</ul>
+                <h3>Earlier certifications</h3>
+                <ul className="list quiet" style={{ fontSize: 14 }}>{cert.history.map((h: any) => <li key={h.ruling}>Grade {gradeFor(h).grade}, {date(h.certifiedAt)}: <a className="mono" href={devnet(h.ruling)}>{h.ruling.slice(0, 10)}…</a> (replaced {date(h.replacedAt)}{h.record ? "" : ", before verdict records"})</li>)}</ul>
               </div>
             ) : null}
           </>

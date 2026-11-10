@@ -10,7 +10,7 @@ import { join } from 'node:path';
 import { fetchProgram } from '../src/engine/ingest.js';
 import {
   CERTIFICATION_PROGRAM, RULING_PROGRAM, REGISTRY_PROGRAM, LEVELS,
-  bytecodeHash, reportHash, certificationContractHash, certificationAddress, certifyData, lookupCertification,
+  bytecodeHash, reportHash, certificationContractHash, certificationAddress, certifyData, certifyKeys, lookupCertification,
 } from '../src/certification.js';
 
 const arg = (name, d) => { const i = process.argv.indexOf(`--${name}`); return i > 0 ? process.argv[i + 1] : d; };
@@ -45,16 +45,11 @@ for (const p of picks) {
       votes: jurors.map((j) => ({ keypair: j.keypair, answer: level, reasoningHash: rh.toString('hex') })),
       say: () => {},
     });
-    const cert = await certificationAddress(p.address, bh);
+    const certNow = await rpc.account(await certificationAddress(p.address, bh));
+    const { cert, record, previous, keys } = await certifyKeys(sol, { program: p.address, bytecodeHash: bh, ruling: settled.ruling, payer, harnesses, certData: certNow?.data ?? null });
     const ix = {
       programId: sol.b58decode(CERTIFICATION_PROGRAM),
-      keys: [
-        { pubkey: sol.b58decode(cert), isSigner: false, isWritable: true },
-        { pubkey: sol.b58decode(settled.ruling), isSigner: false, isWritable: false },
-        { pubkey: payer.publicKey, isSigner: true, isWritable: true },
-        { pubkey: sol.SYSTEM_PROGRAM, isSigner: false, isWritable: false },
-        ...harnesses.map((h) => ({ pubkey: sol.b58decode(h), isSigner: false, isWritable: false })),
-      ],
+      keys,
       data: certifyData({ program: p.address, bytecodeHash: bh, reportHash: rh, score: report.score.score }),
     };
     const sig = await rpc.send(sol.buildTx([ix], payer, [payer], await rpc.blockhash()));
@@ -62,7 +57,7 @@ for (const p of picks) {
     out.certifications.push({
       program: p.address, name: p.name, level, levelName: LEVELS[level].name, score: report.score.score,
       bytecodeHash: bh.toString('hex'), reportHash: rh.toString('hex'),
-      ruling: settled.ruling, certification: cert, certifySignature: sig,
+      ruling: settled.ruling, certification: cert, record, supersedes: previous, certifySignature: sig,
       jurors: jurors.length, families: new Set(jurors.map((j) => j.family)).size, jurorsScripted: true,
       certifiedAt: new Date().toISOString(), lookup: seen.reason,
     });

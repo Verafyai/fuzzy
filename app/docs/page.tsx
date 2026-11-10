@@ -124,9 +124,10 @@ npm run fuzzy -- replay report.json F1 --program program.so   # re-run a finding
           <li>Read the program account. For the upgradeable loader, read its program data account and skip the 45-byte header.</li>
           <li>Hash the ELF: SHA-256 of the bytes up to the end of the section header table, without trailing padding.</li>
           <li>Derive the account at seeds <code>[&quot;cert&quot;, program, bytecode hash]</code> under the certification program, and read it on devnet.</li>
-          <li>No account means no certification for this build. Otherwise the account holds the level, score, report hash, ruling and jury size.</li>
+          <li>No account means no certification for this build. Otherwise the account holds the latest verdict: level, score, report hash, ruling and jury size, and in bytes 12 to 16 how many verdicts this build has had.</li>
         </ol>
-        <p className="quiet">The <a href="https://github.com/Verafyai/verafyHarness">Verafy Harness</a> package <code>@verafyharness/solana</code> exports <code>lookupCertification</code>, which does all four.</p>
+        <p className="quiet">Every verdict is also kept as its own record at <code>[&quot;verdict&quot;, program, bytecode hash, n]</code>, numbered from 0. When a rescan replaces a verdict without a bytecode change, the program sets the old record&apos;s <code>superseded_by</code> to the new one, and the new one names the record it <code>supersedes</code>. A receipt for an old verdict stays checkable, and following <code>superseded_by</code> from it reaches the current one. <code>GET /api/certification?program=&lt;address&gt;&amp;record=&lt;record&gt;</code> and the MCP tool&apos;s <code>record</code> argument do that walk for you. An upgrade changes the bytecode hash, so a new build starts its own chain.</p>
+        <p className="quiet">The <a href="https://github.com/Verafyai/verafyHarness">Verafy Harness</a> package <code>@verafyharness/solana</code> exports <code>lookupCertification</code>, which does all four, and <code>followSupersession</code>.</p>
       </section>
 
       <section className="stack" style={{ gap: 12 }}>
