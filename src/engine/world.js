@@ -2,6 +2,8 @@
 // a run, and every finding in it, replays to the same addresses and outcomes.
 // Nothing here ever talks to a network.
 import { LiteSVM } from 'litesvm';
+import v8 from 'node:v8';
+import vm from 'node:vm';
 import { recordInvocation } from './record.js';
 import * as k from '@solana/kit';
 import { createHash } from 'node:crypto';
@@ -87,6 +89,19 @@ let sends = 0;
 /** Give the event loop a turn every few transactions, so progress streams out while a run is busy. */
 export async function breathe() {
   if (++sends % 8 === 0) await new Promise((resolve) => setImmediate(resolve));
+  if (sends % 64 === 0) reclaim();
+}
+
+// Each LiteSVM world holds its programs and accounts in native memory, which V8 only frees when it collects
+// the JS wrapper. The JS heap stays small, so without a nudge V8 rarely collects and a replay with hundreds of
+// cloned accounts runs out of memory. reclaim() forces a collection.
+let gc = null;
+try {
+  v8.setFlagsFromString('--expose-gc');
+  gc = vm.runInNewContext('gc');
+} catch { gc = globalThis.gc || null; }
+export function reclaim() {
+  if (gc) gc();
 }
 
 const SYSTEM_PROGRAM = '11111111111111111111111111111111';

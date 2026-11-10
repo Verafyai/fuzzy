@@ -9,7 +9,7 @@ import { LiteSVM } from 'litesvm';
 import { recordInvocation } from './record.js';
 import * as k from '@solana/kit';
 import { createHash } from 'node:crypto';
-import { signerFor, ACTOR_FUNDS, FEE_PER_SIGNATURE, breathe } from './world.js';
+import { signerFor, ACTOR_FUNDS, FEE_PER_SIGNATURE, breathe, reclaim } from './world.js';
 import { fmtSol } from './sniff.js';
 import { DRAINER_SO } from './drainer.js';
 
@@ -265,6 +265,7 @@ export async function runHistory({ program, programId, history, idl, seed, budge
     }
     const r = await sendCall(world, call, payer);
     txs++;
+    if (txs % 4 === 0) reclaim();
     if (txs % 10 === 0) onEvent({ type: 'progress', transactions: txs });
     return { world, r };
   }
